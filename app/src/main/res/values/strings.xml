@@ -84,6 +84,11 @@
     <string name="room_wallpaper_clear">✕ Премахни фона</string>
 
     <string name="keep_screen_on">Екранът да не заспива</string>
+    <string name="setting_overlay">🪟 Плаващ прозорец (над другите приложения)</string>
+    <string name="overlay_perm_needed">Разреши „Показване над други приложения“ за Emotion Pet, после включи плаващия прозорец пак.</string>
+    <string name="overlay_channel_name">Плаващ любимец</string>
+    <string name="overlay_notif_title">Любимецът плава над другите приложения</string>
+    <string name="overlay_notif_text">Докосни, за да отвориш приложението. Задръж балона, за да го изключиш.</string>
     <string name="reset_pet">♻️ Нулирай любимеца</string>
     <string name="reset_done">Готово — любимецът е като нов!</string>
     <string name="photo_error">Не мога да отворя тази картинка.</string>
