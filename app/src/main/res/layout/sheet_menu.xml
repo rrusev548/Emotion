@@ -230,11 +230,15 @@
                     <TextView
                         android:id="@+id/sleepIcon"
                         style="@style/Text.EmotionPet.TileEmoji"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="😴" />
 
                     <TextView
                         android:id="@+id/sleepLabel"
                         style="@style/Text.EmotionPet.TileLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="@string/tile_sleep" />
                 </LinearLayout>
 
@@ -397,7 +401,6 @@
                     style="@style/Widget.EmotionPet.Chip"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:layout_weight="1"
                     android:gravity="center"
@@ -408,7 +411,6 @@
                     android:id="@+id/roomOcean"
                     style="@style/Widget.EmotionPet.Chip"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:layout_weight="1"
