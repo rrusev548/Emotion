@@ -184,6 +184,7 @@ class MainActivity : AppCompatActivity(),
         val now = SystemClock.uptimeMillis()
         if (now - lastTapAt <= 2000L) return
         lastTapAt = now
+        Haptics.tick(this)
         prefs.mood = prefs.mood + 4
         val line = binding.petView.needsLine(this)
         sayNow(
@@ -203,6 +204,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onCare(action: String) {
+        Haptics.bump(this)
         when (action) {
             "feed" -> {
                 prefs.fullness = prefs.fullness + 25
@@ -289,10 +291,13 @@ class MainActivity : AppCompatActivity(),
             setText(prefs.petName)
             hint = getString(R.string.rename_hint)
             setSelection(text.length)
+            val h = Ui.dp(this@MainActivity, 20)
+            val v = Ui.dp(this@MainActivity, 8)
+            setPadding(h, v, h, 0)
         }
         AlertDialog.Builder(this)
             .setTitle(R.string.rename_title)
-            .setView(input, Ui.dp(this, 20), Ui.dp(this, 8), Ui.dp(this, 20), 0)
+            .setView(input)
             .setPositiveButton(R.string.save) { _, _ ->
                 val name = input.text.toString().trim()
                 if (name.isNotEmpty()) {

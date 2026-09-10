@@ -5,8 +5,12 @@ import android.os.Looper
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.BufferedReader
+import java.net.ConnectException
 import java.net.HttpURLConnection
+import java.net.MalformedURLException
+import java.net.SocketTimeoutException
 import java.net.URL
+import java.net.UnknownHostException
 import java.util.concurrent.Executors
 
 /**
@@ -77,10 +81,19 @@ object AiClient {
                 }
                 conn.disconnect()
             } catch (e: Exception) {
-                text = e.message ?: e.javaClass.simpleName
+                text = friendlyError(e)
             }
             main.post { onResult(ok, text) }
         }
+    }
+
+    /** Превръща честите мрежови грешки в разбираемо съобщение вместо суров стектрейс. */
+    private fun friendlyError(e: Exception): String = when (e) {
+        is UnknownHostException -> "Няма връзка с интернет (или грешен Base URL)."
+        is SocketTimeoutException -> "Изтече времето за връзка — сървърът не отговори."
+        is ConnectException -> "Връзката е отказана — провери Base URL-а и дали сървърът работи."
+        is MalformedURLException -> "Невалиден Base URL."
+        else -> e.message ?: e.javaClass.simpleName
     }
 
     private fun parseError(code: Int, raw: String): String = try {
