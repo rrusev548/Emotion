@@ -19,7 +19,7 @@ object Ui {
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         ).apply { rightMargin = dp(context, 8) }
-        setBackgroundResource(R.drawable.bg_choice)
+        setBackgroundResource(R.drawable.bg_chip_soft)
         setTextColor(ContextCompat.getColorStateList(context, R.color.choice_text))
         this.text = text
         textSize = 14f

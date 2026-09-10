@@ -1,6 +1,5 @@
 package com.emotion.pet
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-/** Менюто: грижа, образ, стая, ИИ и настройки. */
+/** Менюто: грижа, образ, стая, движение, ИИ и настройки. */
 class MenuSheet : BottomSheetDialogFragment() {
 
     interface Listener {
@@ -25,8 +24,10 @@ class MenuSheet : BottomSheetDialogFragment() {
         fun onClearWallpaper()
         fun onOpenAi()
         fun onKeepAwake(enabled: Boolean)
+        fun onMotionChanged()
         fun onResetPet()
         fun onRename()
+        fun onChoosePet()
     }
 
     private var _binding: SheetMenuBinding? = null
@@ -46,14 +47,15 @@ class MenuSheet : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         val prefs = Prefs(requireContext())
 
-        refreshHeader(prefs)
-
         parentFragmentManager.setFragmentResultListener(
             AiSheet.RESULT_KEY,
             viewLifecycleOwner
         ) { _, _ -> refreshAiStatus(Prefs(requireContext())) }
 
+        refreshHeader(prefs)
+
         binding.renameBtn.setOnClickListener { listener?.onRename() }
+        binding.changePetBtn.setOnClickListener { listener?.onChoosePet() }
         binding.feedBtn.setOnClickListener { listener?.onCare("feed") }
         binding.playBtn.setOnClickListener { listener?.onCare("play") }
         binding.sleepBtn.setOnClickListener { listener?.onCare("sleep") }
@@ -76,7 +78,6 @@ class MenuSheet : BottomSheetDialogFragment() {
             override fun onStopTrackingTouch(seekBar: SeekBar) = Unit
         })
 
-        binding.speedSeek.max = 170
         binding.speedSeek.progress = ((prefs.speed * 100f).toInt() - 30).coerceIn(0, 170)
         binding.speedValue.text = getString(R.string.speed_value, prefs.speed)
         binding.speedSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -98,28 +99,25 @@ class MenuSheet : BottomSheetDialogFragment() {
             listener?.onAppearanceChanged()
         }
 
-        val emojiAdapter = EmojiAdapter(Presets.EMOJIS, prefs.emoji) { emoji ->
-            prefs.spriteType = Prefs.TYPE_EMOJI
-            prefs.emoji = emoji
-            listener?.onAppearanceChanged()
-        }
         binding.emojiList.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        binding.emojiList.adapter = emojiAdapter
-
-        binding.uploadBtn.setOnClickListener { listener?.onPickImage() }
+        binding.emojiList.adapter = EmojiAdapter(Presets.EMOJIS, prefs.emoji) { emoji ->
+            prefs.spriteType = Prefs.TYPE_EMOJI
+            prefs.emoji = emoji
+            SpriteStore.clear(requireContext())
+            listener?.onAppearanceChanged()
+        }
 
         // ---- стая ----
         val paletteButtons = mapOf(
             Presets.Palette.NIGHT to binding.roomNight,
             Presets.Palette.DAWN to binding.roomDawn,
-            Presets.Palette.MINT to binding.roomMint
+            Presets.Palette.MINT to binding.roomMint,
+            Presets.Palette.OCEAN to binding.roomOcean
         )
         fun refreshPalette() {
             val current = Presets.Palette.of(prefs.palette)
-            paletteButtons.forEach { (palette, view) ->
-                view.isSelected = palette == current
-            }
+            paletteButtons.forEach { (palette, view) -> view.isSelected = palette == current }
         }
         paletteButtons.forEach { (palette, view) ->
             view.setOnClickListener {
@@ -136,6 +134,18 @@ class MenuSheet : BottomSheetDialogFragment() {
             listener?.onClearWallpaper()
         }
 
+        // ---- движение ----
+        binding.bounceSwitch.isChecked = prefs.bounce
+        binding.bounceSwitch.setOnCheckedChangeListener { _, checked ->
+            prefs.bounce = checked
+            listener?.onMotionChanged()
+        }
+        binding.particlesSwitch.isChecked = prefs.particles
+        binding.particlesSwitch.setOnCheckedChangeListener { _, checked ->
+            prefs.particles = checked
+            listener?.onMotionChanged()
+        }
+
         // ---- ИИ ----
         refreshAiStatus(prefs)
         binding.aiBtn.setOnClickListener { listener?.onOpenAi() }
@@ -150,16 +160,27 @@ class MenuSheet : BottomSheetDialogFragment() {
 
     override fun onResume() {
         super.onResume()
-        refreshHeader(Prefs(requireContext()))
-        refreshAiStatus(Prefs(requireContext()))
+        val prefs = Prefs(requireContext())
+        refreshHeader(prefs)
+        refreshAiStatus(prefs)
     }
 
     private fun refreshHeader(prefs: Prefs) {
+        val pet = Presets.pet(prefs.petId)
         binding.nameText.text = prefs.petName
-        binding.statsText.text =
-            getString(R.string.stats_format, prefs.fullness, prefs.energy, prefs.mood)
-        binding.sleepBtn.text =
-            getString(if (prefs.sleeping) R.string.action_wake else R.string.action_sleep)
+        binding.petTagline.text =
+            if (prefs.spriteType == Prefs.TYPE_IMAGE) getString(R.string.pets_custom_image)
+            else pet.tagline
+        binding.petAvatar.text =
+            if (prefs.spriteType == Prefs.TYPE_IMAGE) "🖼" else prefs.emoji.ifBlank { pet.emoji }
+        binding.statsText.text = getString(R.string.stats_detail, prefs.fullness, prefs.energy, prefs.mood)
+        binding.barFull.setProgressCompat(prefs.fullness, true)
+        binding.barEnergy.setProgressCompat(prefs.energy, true)
+        binding.barMood.setProgressCompat(prefs.mood, true)
+        val sleeping = prefs.sleeping
+        binding.sleepIcon.text = if (sleeping) "🌞" else "😴"
+        binding.sleepLabel.text =
+            getString(if (sleeping) R.string.tile_wake else R.string.tile_sleep)
     }
 
     private fun refreshAiStatus(prefs: Prefs) {
@@ -167,7 +188,7 @@ class MenuSheet : BottomSheetDialogFragment() {
         binding.aiStatus.text = if (prefs.aiKey.isBlank()) {
             getString(R.string.ai_no_key_title)
         } else {
-            getString(R.string.ai_current, provider.label, Presets.effectiveModel(prefs))
+            "${provider.label} · ${Presets.effectiveModel(prefs)}"
         }
     }
 
@@ -175,11 +196,8 @@ class MenuSheet : BottomSheetDialogFragment() {
         super.onStart()
         val sheet = (dialog as? BottomSheetDialog)
             ?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) ?: return
-        val height = (resources.displayMetrics.heightPixels * 0.86f).toInt()
-        sheet.layoutParams?.let { lp ->
-            lp.height = height
-            sheet.layoutParams = lp
-        }
+        val height = (resources.displayMetrics.heightPixels * 0.88f).toInt()
+        sheet.layoutParams?.let { lp -> lp.height = height; sheet.layoutParams = lp }
         BottomSheetBehavior.from(sheet).apply {
             state = BottomSheetBehavior.STATE_EXPANDED
             skipCollapsed = true
@@ -216,8 +234,5 @@ class MenuSheet : BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "menu_sheet"
-
-        @Suppress("unused")
-        fun dp(context: Context, value: Int): Int = Ui.dp(context, value)
     }
 }

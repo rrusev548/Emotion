@@ -45,7 +45,8 @@ class ScreenshotTest {
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
         prefs = Prefs(context)
-        prefs.petName = "Моки"
+        prefs.petId = "shiba"
+        prefs.nameCustomized = false
         prefs.sizeDp = 120
         prefs.speed = 1f
         prefs.mirrored = false
@@ -214,6 +215,9 @@ class ScreenshotTest {
         shotChat()
         shotSheet("04-ai.png") { activity ->
             AiSheet().also { it.show(activity.supportFragmentManager, AiSheet.TAG) }
+        }
+        shotSheet("05-pets.png") { activity ->
+            PetPickerSheet().also { it.show(activity.supportFragmentManager, PetPickerSheet.TAG) }
         }
         if (errors.isNotEmpty()) {
             File(outDir, "errors.txt").writeText(errors.toString())

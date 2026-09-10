@@ -29,9 +29,20 @@ class ChatActivity : AppCompatActivity() {
         adapter.petBitmap = if (hasImage) SpriteStore.loadBitmap(this, 128) else null
         adapter.petEmoji = if (hasImage) null else prefs.emoji
 
-        binding.toolbar.title = prefs.petName
-        binding.toolbar.subtitle = getString(R.string.chat_subtitle)
-        binding.toolbar.setNavigationOnClickListener { finish() }
+        binding.nameText.text = prefs.petName
+        binding.avatarEmoji.text = prefs.emoji.ifBlank { Presets.pet(prefs.petId).emoji }
+        binding.subtitleText.text = if (prefs.aiKey.isBlank()) {
+            getString(R.string.chat_offline_short)
+        } else {
+            Presets.provider(prefs.aiProvider).label
+        }
+        if (hasImage) {
+            binding.avatarImage.visibility = View.VISIBLE
+            binding.avatarEmoji.visibility = View.GONE
+            binding.avatarImage.setImageBitmap(adapter.petBitmap)
+        }
+        binding.backBtn.setOnClickListener { finish() }
+        binding.newChatBtn.setOnClickListener { clearChat() }
 
         binding.recycler.layoutManager = LinearLayoutManager(this).apply { stackFromEnd = true }
         binding.recycler.adapter = adapter
@@ -67,28 +78,27 @@ class ChatActivity : AppCompatActivity() {
 
     private fun restoreHistory() {
         val saved = ChatStore.load(prefs)
-        val rows = saved.map { ChatAdapter.Row(it.role, it.content) }
-        adapter.setAll(rows)
-        updateEmptyState()
-        if (rows.isEmpty()) {
+        adapter.setAll(saved.map { ChatAdapter.Row(it.role, it.content, ts = it.ts) })
+        if (saved.isEmpty()) {
             val greeting = getString(R.string.chat_greeting, prefs.petName)
-            adapter.add(ChatAdapter.Row(ChatStore.ROLE_PET, greeting))
-            ChatStore.append(prefs, ChatStore.Msg(ChatStore.ROLE_PET, greeting))
+            val now = System.currentTimeMillis()
+            adapter.add(ChatAdapter.Row(ChatStore.ROLE_PET, greeting, ts = now))
+            ChatStore.append(prefs, ChatStore.Msg(ChatStore.ROLE_PET, greeting, now))
         }
+        updateEmptyState()
         scrollToBottom()
     }
 
     private fun buildQuickChips() {
         val container = binding.chipsContainer
         container.removeAllViews()
-        val chips = listOf(
+        listOf(
             getString(R.string.chip_joke),
             getString(R.string.chip_howareyou),
             getString(R.string.chip_tip),
             getString(R.string.chip_game),
             getString(R.string.chip_feed)
-        )
-        chips.forEach { label ->
+        ).forEach { label ->
             val chip = Ui.chip(this, label)
             chip.setOnClickListener { submit(label) }
             container.addView(chip)
@@ -103,11 +113,13 @@ class ChatActivity : AppCompatActivity() {
         ChatStore.append(prefs, ChatStore.Msg(ChatStore.ROLE_USER, text))
         scrollToBottom()
         updateEmptyState()
-        respond(text)
+        respond(text, index)
     }
 
-    private fun respond(userText: String) {
+    private fun respond(userText: String, userIndex: Int) {
+        // "пише…" с анимирани точки
         val typingIndex = adapter.add(ChatAdapter.Row(ChatStore.ROLE_PET, "", typing = true))
+        animateTyping(typingIndex)
         scrollToBottom()
 
         val key = prefs.aiKey
@@ -119,7 +131,7 @@ class ChatActivity : AppCompatActivity() {
                 if (isFinishing || isDestroyed) return@postDelayed
                 val reply = SmallBrain.reply(this, userText, prefs)
                 finishReply(typingIndex, reply, persist = true)
-            }, 550L)
+            }, 650L)
             return
         }
 
@@ -129,39 +141,74 @@ class ChatActivity : AppCompatActivity() {
             if (ok) {
                 finishReply(typingIndex, text, persist = true)
             } else {
-                finishReply(
-                    typingIndex,
-                    getString(R.string.ai_test_fail, text),
-                    persist = false
-                )
+                finishReply(typingIndex, getString(R.string.ai_test_fail, text), persist = false)
             }
+        }
+        binding.recycler.post { adapter.notifyItemChanged(userIndex) }
+    }
+
+    private val typingRunnable = object : Runnable {
+        private var step = 0
+        override fun run() {
+            val index = adapter.indexOfTyping()
+            if (index < 0) return
+            step = (step + 1) % 4
+            binding.recycler.post {
+                val holder = binding.recycler.findViewHolderForAdapterPosition(index)
+                if (holder is ChatAdapter.PetVH) {
+                    holder.binding.dot1.alpha = if (step >= 1) 1f else 0.28f
+                    holder.binding.dot2.alpha = if (step >= 2) 1f else 0.28f
+                    holder.binding.dot3.alpha = if (step >= 3) 1f else 0.28f
+                }
+            }
+            handler.postDelayed(this, 320L)
         }
     }
 
+    private fun animateTyping(index: Int) {
+        handler.removeCallbacks(typingRunnable)
+        handler.postDelayed(typingRunnable, 300L)
+    }
+
     private fun finishReply(index: Int, text: String, persist: Boolean) {
+        handler.removeCallbacks(typingRunnable)
         adapter.update(index) {
             it.text = text
             it.typing = false
+            it.ts = System.currentTimeMillis()
         }
         if (persist) {
-            ChatStore.append(prefs, ChatStore.Msg(ChatStore.ROLE_PET, text))
+            ChatStore.append(
+                prefs,
+                ChatStore.Msg(ChatStore.ROLE_PET, text, System.currentTimeMillis())
+            )
         }
         scrollToBottom()
+        updateEmptyState()
+    }
+
+    private fun clearChat() {
+        ChatStore.clear(prefs)
+        adapter.setAll(emptyList())
+        val greeting = getString(R.string.chat_greeting, prefs.petName)
+        adapter.add(ChatAdapter.Row(ChatStore.ROLE_PET, greeting))
+        ChatStore.append(prefs, ChatStore.Msg(ChatStore.ROLE_PET, greeting))
         updateEmptyState()
     }
 
     private fun updateEmptyState() {
         val empty = adapter.itemCount == 0
         binding.emptyText.visibility = if (empty) View.VISIBLE else View.GONE
-        if (empty) {
-            binding.emptyText.text = getString(R.string.chat_offline_hint)
-        }
+        if (empty) binding.emptyText.text = getString(R.string.chat_offline_hint)
     }
 
     private fun scrollToBottom() {
         if (adapter.itemCount == 0) return
-        binding.recycler.post {
-            binding.recycler.scrollToPosition(adapter.itemCount - 1)
-        }
+        binding.recycler.post { binding.recycler.scrollToPosition(adapter.itemCount - 1) }
+    }
+
+    override fun onDestroy() {
+        handler.removeCallbacks(typingRunnable)
+        super.onDestroy()
     }
 }

@@ -20,8 +20,10 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import com.emotion.pet.databinding.ActivityMainBinding
 
-/** Основен екран: стаята с любимеца, бързите бутони и менюто. */
-class MainActivity : AppCompatActivity(), MenuSheet.Listener {
+/** Основен екран: стаята с любимеца, HUD-ът и бързите бутони. */
+class MainActivity : AppCompatActivity(),
+    MenuSheet.Listener,
+    PetPickerSheet.Listener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var prefs: Prefs
@@ -64,20 +66,10 @@ class MainActivity : AppCompatActivity(), MenuSheet.Listener {
         binding.petView.applyPrefs(prefs)
         refreshHud()
 
-        binding.petView.onPetTap = {
-            val now = SystemClock.uptimeMillis()
-            if (now - lastTapAt > 2500L) {
-                lastTapAt = now
-                prefs.mood = prefs.mood + 4
-                sayNow(binding.petView.needsLine(this).let { line ->
-                    if (line == getString(R.string.pet_sleep_line)) getString(R.string.pet_tap_line) else line
-                })
-                syncPet()
-            }
-        }
+        binding.petView.onPetTap = { onPetTapped() }
         binding.petView.onPetLongPress = { showMenu() }
-        binding.menuFab.setOnClickListener { showMenu() }
-        binding.chatFab.setOnClickListener {
+        binding.menuBtn.setOnClickListener { showMenu() }
+        binding.chatBtn.setOnClickListener {
             startActivity(Intent(this, ChatActivity::class.java))
         }
 
@@ -122,7 +114,7 @@ class MainActivity : AppCompatActivity(), MenuSheet.Listener {
         ViewCompat.setOnApplyWindowInsetsListener(binding.topBar) { v, insets ->
             val top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
             v.updateLayoutParams<FrameLayout.LayoutParams> {
-                topMargin = top + Ui.dp(this@MainActivity, 14)
+                topMargin = top + Ui.dp(this@MainActivity, 12)
             }
             insets
         }
@@ -136,10 +128,16 @@ class MainActivity : AppCompatActivity(), MenuSheet.Listener {
     }
 
     private fun refreshHud() {
+        val pet = Presets.pet(prefs.petId)
+        val customImage = prefs.spriteType == Prefs.TYPE_IMAGE && SpriteStore.exists(this)
         binding.petNameText.text =
             if (prefs.sleeping) "😴 ${prefs.petName}" else prefs.petName
+        binding.petAvatar.text = if (customImage) "🖼" else prefs.emoji.ifBlank { pet.emoji }
         binding.statsText.text =
-            getString(R.string.stats_format, prefs.fullness, prefs.energy, prefs.mood)
+            getString(R.string.stats_hud, prefs.fullness, prefs.energy, prefs.mood)
+        binding.barFull.setProgressCompat(prefs.fullness, true)
+        binding.barEnergy.setProgressCompat(prefs.energy, true)
+        binding.barMood.setProgressCompat(prefs.mood, true)
     }
 
     private fun syncPet() {
@@ -182,9 +180,26 @@ class MainActivity : AppCompatActivity(), MenuSheet.Listener {
 
     // =================== действия ===================
 
+    private fun onPetTapped() {
+        val now = SystemClock.uptimeMillis()
+        if (now - lastTapAt <= 2000L) return
+        lastTapAt = now
+        prefs.mood = prefs.mood + 4
+        val line = binding.petView.needsLine(this)
+        sayNow(
+            if (line == getString(R.string.pet_sleep_line)) getString(R.string.pet_tap_line) else line
+        )
+        syncPet()
+    }
+
     private fun showMenu() {
         if (supportFragmentManager.findFragmentByTag(MenuSheet.TAG) != null) return
         MenuSheet().show(supportFragmentManager, MenuSheet.TAG)
+    }
+
+    private fun showPetPicker() {
+        if (supportFragmentManager.findFragmentByTag(PetPickerSheet.TAG) != null) return
+        PetPickerSheet().show(supportFragmentManager, PetPickerSheet.TAG)
     }
 
     override fun onCare(action: String) {
@@ -202,6 +217,13 @@ class MainActivity : AppCompatActivity(), MenuSheet.Listener {
                 prefs.fullness = prefs.fullness - 4
                 prefs.sleeping = false
                 sayNow(getString(R.string.pet_play_line))
+                // играем си — любимецът хвърчи през стаята
+                val angle = Math.toRadians((Math.random() * 360).toDouble())
+                val power = resources.displayMetrics.density * 900f
+                binding.petView.flick(
+                    (Math.cos(angle) * power).toFloat(),
+                    (Math.sin(angle) * power).toFloat()
+                )
             }
 
             "sleep" -> {
@@ -223,9 +245,9 @@ class MainActivity : AppCompatActivity(), MenuSheet.Listener {
         syncPet()
     }
 
-    override fun onAppearanceChanged() {
-        syncPet()
-    }
+    override fun onAppearanceChanged() = syncPet()
+
+    override fun onMotionChanged() = syncPet()
 
     override fun onPickImage() {
         pickSprite.launch("image/*")
@@ -276,11 +298,23 @@ class MainActivity : AppCompatActivity(), MenuSheet.Listener {
                 if (name.isNotEmpty()) {
                     prefs.petName = name
                     refreshHud()
-                    Toast.makeText(this, prefs.petName, Toast.LENGTH_SHORT).show()
                 }
             }
             .setNegativeButton(R.string.cancel, null)
             .show()
+    }
+
+    override fun onChoosePet() {
+        showPetPicker()
+    }
+
+    // ---- избор на любимец от галерията ----
+
+    override fun onPetChosen(pet: Presets.Pet) {
+        prefs.aiPersonality = ""
+        syncPet()
+        sayNow(getString(R.string.pets_chosen, pet.name))
+        Toast.makeText(this, getString(R.string.pets_chosen, pet.name), Toast.LENGTH_SHORT).show()
     }
 
     // =================== избор на картинки ===================

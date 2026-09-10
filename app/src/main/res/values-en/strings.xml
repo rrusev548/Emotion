@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Emotion Pet</string>
+    <string name="chat_offline_short">offline mode</string>
+    <string name="chat_new">New chat</string>
+    <string name="stats_hud">%1$d · %2$d · %3$d</string>
+    <string name="pets_title">Choose a pet</string>
+    <string name="pets_subtitle">Each one has its own personality — it shapes the AI chat too.</string>
+    <string name="pets_count">12 characters</string>
+    <string name="pets_change">Change</string>
+    <string name="pets_custom_image">Your image</string>
+    <string name="pets_pick_title">Who should it be?</string>
+    <string name="pets_chosen">%1$s is here! 🎉</string>
+    <string name="upload_hint_short">Photo, PNG or animated GIF</string>
+
+    <string name="section_motion">Motion</string>
+    <string name="setting_bounce">🐾 Bounce off walls</string>
+    <string name="setting_particles">✨ Sparkles &amp; particles</string>
+
+    <string name="tile_feed">Feed</string>
+    <string name="tile_play">Play</string>
+    <string name="tile_sleep">Sleep</string>
+    <string name="tile_wake">Wake</string>
+    <string name="tile_pet">Pet</string>
+
+    <string name="room_palette_ocean">🌊 Ocean</string>
+    <string name="stats_detail">🍎 %1$d%%   ⚡ %2$d%%   💞 %3$d%%</string>
+    <string name="pet_bounce_line">Ouch! 🐾</string>
     <string name="size_value">%1$d dp</string>
     <string name="speed_value">%1$s×  speed</string>
     <string name="action_wake">🌞 Wake up</string>

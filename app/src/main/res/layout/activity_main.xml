@@ -12,69 +12,169 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <!-- HUD: аватар, име и трите стата -->
     <LinearLayout
         android:id="@+id/topBar"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|start"
-        android:layout_marginStart="12dp"
+        android:layout_gravity="top"
+        android:layout_marginStart="14dp"
         android:layout_marginTop="14dp"
-        android:background="@drawable/bg_pill"
+        android:layout_marginEnd="14dp"
+        android:background="@drawable/bg_glass_pill"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="14dp"
-        android:paddingTop="8dp"
+        android:paddingStart="12dp"
+        android:paddingTop="10dp"
         android:paddingEnd="14dp"
-        android:paddingBottom="8dp">
+        android:paddingBottom="10dp">
 
-        <TextView
-            android:id="@+id/petNameText"
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:id="@+id/avatarTile"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/bg_circle_soft">
+
+            <TextView
+                android:id="@+id/petAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="20sp"
+                tools:text="🐶" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/text_primary"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            tools:text="Моки" />
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/petNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_primary"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:text="Моки" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/barFull"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:max="100"
+                    app:indicatorColor="#FF9A5C"
+                    app:trackColor="#26FFFFFF"
+                    app:trackCornerRadius="3dp"
+                    app:trackThickness="5dp" />
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/barEnergy"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:max="100"
+                    app:indicatorColor="#7BE0A8"
+                    app:trackColor="#26FFFFFF"
+                    app:trackCornerRadius="3dp"
+                    app:trackThickness="5dp" />
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/barMood"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:max="100"
+                    app:indicatorColor="#FF7BA9"
+                    app:trackColor="#26FFFFFF"
+                    app:trackCornerRadius="3dp"
+                    app:trackThickness="5dp" />
+            </LinearLayout>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/statsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="8dp"
             android:textColor="@color/text_secondary"
-            android:textSize="13sp"
-            tools:text="🍎 70  ⚡ 80  💞 90" />
+            android:textSize="11sp"
+            tools:text="72·84·91" />
     </LinearLayout>
 
+    <!-- Долу вдясно: чат + меню -->
     <LinearLayout
         android:id="@+id/actionColumn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="18dp"
+        android:layout_marginBottom="20dp"
         android:gravity="end"
         android:orientation="vertical">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/menuFab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:id="@+id/menuBtn"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:background="@drawable/bg_glass_pill"
+            android:clickable="true"
             android:contentDescription="@string/menu"
-            app:backgroundTint="@color/surface_2"
-            app:srcCompat="@drawable/ic_apps"
-            app:tint="@color/icon_tint" />
+            android:elevation="6dp"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center">
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/chatFab"
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/menu"
+                android:src="@drawable/ic_apps"
+                app:tint="@color/text_primary" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/chatBtn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:text="@string/chat"
-            android:textColor="@color/on_accent"
-            app:backgroundTint="@color/accent"
-            app:icon="@drawable/ic_chat"
-            app:iconTint="@color/on_accent" />
+            android:layout_height="54dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_grad_accent"
+            android:clickable="true"
+            android:elevation="10dp"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="20dp"
+            android:paddingEnd="22dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="@string/chat"
+                android:src="@drawable/ic_chat"
+                app:tint="#1A1024" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="9dp"
+                android:text="@string/chat"
+                android:textColor="#1A1024"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
 
 </FrameLayout>

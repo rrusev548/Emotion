@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emotion.pet.databinding.ItemMsgPetBinding
 import com.emotion.pet.databinding.ItemMsgUserBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 /** Списък със съобщенията: потребител отдясно, любимец отляво. */
 class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -14,10 +17,12 @@ class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     class Row(
         val role: String,
         var text: String,
-        var typing: Boolean = false
+        var typing: Boolean = false,
+        var ts: Long = System.currentTimeMillis()
     )
 
     private val rows = mutableListOf<Row>()
+    private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
     var petEmoji: String? = null
     var petBitmap: Bitmap? = null
@@ -40,7 +45,7 @@ class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyItemChanged(index)
     }
 
-    fun rowAt(index: Int): Row? = rows.getOrNull(index)
+    fun indexOfTyping(): Int = rows.indexOfFirst { it.typing }
 
     override fun getItemCount(): Int = rows.size
 
@@ -60,9 +65,12 @@ class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val row = rows[position]
         if (holder is UserVH) {
             holder.binding.text.text = row.text
+            holder.binding.time.text = timeFormat.format(Date(row.ts))
         } else if (holder is PetVH) {
             holder.binding.text.text = row.text
+            holder.binding.text.visibility = if (row.typing) View.GONE else View.VISIBLE
             holder.binding.typing.visibility = if (row.typing) View.VISIBLE else View.GONE
+            holder.binding.time.text = if (row.typing) "" else timeFormat.format(Date(row.ts))
             val bmp = petBitmap
             if (bmp != null) {
                 holder.binding.avatarImage.visibility = View.VISIBLE

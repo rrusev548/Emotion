@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="start"
     android:orientation="horizontal"
-    android:paddingStart="10dp"
-    android:paddingTop="4dp"
-    android:paddingEnd="56dp"
-    android:paddingBottom="4dp">
+    android:paddingStart="12dp"
+    android:paddingTop="5dp"
+    android:paddingEnd="64dp"
+    android:paddingBottom="5dp">
 
     <FrameLayout
         android:layout_width="34dp"
         android:layout_height="34dp"
         android:layout_marginTop="2dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/bg_avatar">
+        android:layout_marginEnd="9dp"
+        android:background="@drawable/bg_circle_soft">
 
         <ImageView
             android:id="@+id/avatarImage"
@@ -29,38 +30,70 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:text="🐶" />
     </FrameLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_bubble_pet"
-        android:orientation="vertical"
-        android:paddingStart="14dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="14dp"
-        android:paddingBottom="10dp">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/text"
+        <LinearLayout
+            android:id="@+id/bubble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="2dp"
-            android:maxWidth="270dp"
-            android:textColor="@color/text_primary"
-            android:textSize="15sp" />
+            android:background="@drawable/bg_bubble_pet"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="11dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="11dp">
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="3dp"
+                android:maxWidth="268dp"
+                android:textColor="@color/text_primary"
+                android:textSize="15sp"
+                tools:text="Да! Обичам да тичам из екрана 🎾" />
+
+            <LinearLayout
+                android:id="@+id/typing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/dot1"
+                    style="@style/Text.EmotionPet.TypingDot"
+                    android:text="●" />
+
+                <TextView
+                    android:id="@+id/dot2"
+                    style="@style/Text.EmotionPet.TypingDot"
+                    android:text="●" />
+
+                <TextView
+                    android:id="@+id/dot3"
+                    style="@style/Text.EmotionPet.TypingDot"
+                    android:text="●" />
+            </LinearLayout>
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/typing"
+            android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:text="@string/chat_typing"
+            android:layout_marginTop="3dp"
+            android:layout_marginStart="6dp"
             android:textColor="@color/text_secondary"
-            android:textSize="12sp"
-            android:textStyle="italic"
-            android:visibility="gone" />
+            android:textSize="10sp"
+            tools:text="18:42" />
     </LinearLayout>
 
 </LinearLayout>

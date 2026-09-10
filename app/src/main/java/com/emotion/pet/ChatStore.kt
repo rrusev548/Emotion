@@ -52,7 +52,7 @@ object ChatStore {
         messages.map { AiClient.Msg(if (it.role == ROLE_USER) "user" else "assistant", it.content) }
 
     fun systemPrompt(ctx: Context, prefs: Prefs): String {
-        val persona = prefs.aiPersonality.ifBlank { ctx.getString(R.string.ai_personality_hint) }
+        val persona = Presets.personality(prefs)
         return """
             Ти си "${prefs.petName}" — малък виртуален любимец, който живее на екрана на телефона на потребителя.
             Характер: $persona

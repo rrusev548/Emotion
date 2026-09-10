@@ -11,12 +11,23 @@ class Prefs(context: Context) {
 
     private val app = context.applicationContext
     private val sp: SharedPreferences = app.getSharedPreferences(FILE, Context.MODE_PRIVATE)
-    private val defaultName: String = app.getString(R.string.default_pet_name)
 
     // ---------- любимец ----------
+    var petId: String
+        get() = sp.getString(K_PET_ID, Presets.PETS.first().id) ?: Presets.PETS.first().id
+        set(v) = sp.edit().putString(K_PET_ID, v).apply()
+
+    /** Име: собственото, ако потребителят е преименувал, иначе името от каталога. */
     var petName: String
-        get() = sp.getString(K_NAME, null)?.takeIf { it.isNotBlank() } ?: defaultName
-        set(v) = sp.edit().putString(K_NAME, v.trim()).apply()
+        get() = sp.getString(K_NAME, null)?.takeIf { it.isNotBlank() } ?: Presets.pet(petId).name
+        set(v) {
+            sp.edit().putString(K_NAME, v.trim()).putBoolean(K_NAME_CUSTOM, true).apply()
+        }
+
+    /** true, ако потребителят сам е избрал име (тогава смяната на любимец не го пипа). */
+    var nameCustomized: Boolean
+        get() = sp.getBoolean(K_NAME_CUSTOM, false)
+        set(v) = sp.edit().putBoolean(K_NAME_CUSTOM, v).apply()
 
     /** "emoji" или "image" */
     var spriteType: String
@@ -38,6 +49,16 @@ class Prefs(context: Context) {
     var mirrored: Boolean
         get() = sp.getBoolean(K_MIRROR, false)
         set(v) = sp.edit().putBoolean(K_MIRROR, v).apply()
+
+    /** Отскачане от стените (DVD-стил) + squash анимация при удар. */
+    var bounce: Boolean
+        get() = sp.getBoolean(K_BOUNCE, true)
+        set(v) = sp.edit().putBoolean(K_BOUNCE, v).apply()
+
+    /** Плаващи частици в стаята. */
+    var particles: Boolean
+        get() = sp.getBoolean(K_PARTICLES, true)
+        set(v) = sp.edit().putBoolean(K_PARTICLES, v).apply()
 
     // ---------- стая ----------
     var palette: String
@@ -107,7 +128,11 @@ class Prefs(context: Context) {
     companion object {
         private const val FILE = "emotion_pet"
 
+        private const val K_PET_ID = "pet_id"
         private const val K_NAME = "pet_name"
+        private const val K_NAME_CUSTOM = "pet_name_custom"
+        private const val K_BOUNCE = "bounce"
+        private const val K_PARTICLES = "particles"
         private const val K_SPRITE_TYPE = "sprite_type"
         private const val K_EMOJI = "emoji"
         private const val K_SIZE = "size_dp"
