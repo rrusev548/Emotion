@@ -39,18 +39,20 @@ class LayoutInflateTest {
 
     @Test
     fun `всички layouts се inflate-ват без грешка`() {
-        val layouts = listOf(
-            "activity_main", "activity_chat",
-            "sheet_menu", "sheet_ai", "sheet_pets",
-            "item_msg_user", "item_msg_pet", "item_emoji", "item_pet"
+        // директни R.layout константи (в debug build packageName е с наставка .debug)
+        val layouts = mapOf(
+            "activity_main" to R.layout.activity_main,
+            "activity_chat" to R.layout.activity_chat,
+            "sheet_menu" to R.layout.sheet_menu,
+            "sheet_ai" to R.layout.sheet_ai,
+            "sheet_pets" to R.layout.sheet_pets,
+            "item_msg_user" to R.layout.item_msg_user,
+            "item_msg_pet" to R.layout.item_msg_pet,
+            "item_emoji" to R.layout.item_emoji,
+            "item_pet" to R.layout.item_pet
         )
         val failures = mutableListOf<String>()
-        layouts.forEach { name ->
-            val id = context.resources.getIdentifier(name, "layout", context.packageName)
-            if (id == 0) {
-                failures += "$name — няма такъв layout"
-                return@forEach
-            }
+        layouts.forEach { (name, id) ->
             try {
                 val view = inflate(id)
                 // размери: ако някой елемент няма layout_height, findViewById минава,
@@ -64,6 +66,8 @@ class LayoutInflateTest {
                 failures += "$name → ${t.javaClass.simpleName}: ${t.message?.take(200)}"
             }
         }
+        println("LayoutInflateTest: проверени ${layouts.size} layouts, проблеми: ${failures.size}")
+        failures.forEach { println("  ✗ $it") }
         assertTrue("Счупени layouts:\n" + failures.joinToString("\n"), failures.isEmpty())
     }
 }
