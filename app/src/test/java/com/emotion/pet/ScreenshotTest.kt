@@ -163,7 +163,26 @@ class ScreenshotTest {
                 val dialogBmp = Bitmap.createBitmap(screenW, screenH, Bitmap.Config.ARGB_8888)
                 dialogDecor.draw(Canvas(dialogBmp))
                 if (hasVisibleContent(dialogBmp)) {
-                    writePng(dialogBmp, File(outDir, name))
+                    // сглобяваме както изглежда на живо: стаята + затъмнение + листът
+                    val ratio = when {
+                        name.startsWith("05") -> 0.82f
+                        name.startsWith("04") -> 0.88f
+                        else -> 0.86f
+                    }
+                    val top = (screenH * (1 - ratio)).toInt()
+                    val out = room.copy(Bitmap.Config.ARGB_8888, true)
+                    val canvas = Canvas(out)
+                    canvas.drawRect(
+                        0f, top.toFloat(), screenW.toFloat(), screenH.toFloat(),
+                        Paint().apply { color = 0x8C000000.toInt() }
+                    )
+                    canvas.drawBitmap(
+                        dialogBmp,
+                        android.graphics.Rect(0, top, screenW, screenH),
+                        android.graphics.Rect(0, top, screenW, screenH),
+                        null
+                    )
+                    writePng(out, File(outDir, name))
                     return@use
                 }
             }
@@ -204,6 +223,46 @@ class ScreenshotTest {
         return distinct.size > 24
     }
 
+    /** Сглобява обзорна картинка от всички екрани. */
+    private fun buildOverview() = runCatching {
+        val shots = listOf("01-room.png", "02-menu.png", "03-chat.png", "04-ai.png", "05-pets.png")
+            .map { File(outDir, it) }
+            .filter { it.isFile }
+            .map { android.graphics.BitmapFactory.decodeFile(it.absolutePath) }
+        if (shots.isEmpty()) return@runCatching
+        val scale = 0.38f
+        val gap = 28
+        val pad = 36
+        val titleH = 84
+        val widths = shots.map { (it.width * scale).toInt() }
+        val heights = shots.map { (it.height * scale).toInt() }
+        val totalW = pad * 2 + widths.sum() + gap * (shots.size - 1)
+        val totalH = pad + titleH + heights.max()
+        val out = Bitmap.createBitmap(totalW, totalH, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(out)
+        canvas.drawColor(android.graphics.Color.rgb(16, 11, 30))
+        val title = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = android.graphics.Color.rgb(255, 214, 232)
+            textSize = 24f
+            isFakeBoldText = true
+            textAlign = Paint.Align.CENTER
+        }
+        canvas.drawText(
+            "Emotion Pet — екрани от истинския код (Robolectric)",
+            totalW / 2f, pad + 26f, title
+        )
+        var x = pad.toFloat()
+        val top = (pad + titleH).toFloat()
+        shots.forEachIndexed { i, shot ->
+            val w = widths[i]
+            val h = heights[i]
+            val sc = Bitmap.createScaledBitmap(shot, w, h, true)
+            canvas.drawBitmap(sc, x, top, null)
+            x += w + gap
+        }
+        writePng(out, File(outDir, "00-overview.png"))
+    }.onFailure { record("00-overview.png", it) }
+
     @Test
     fun `рендерира екраните`() {
         val errorsFile = File(outDir, "errors.txt")
@@ -219,6 +278,7 @@ class ScreenshotTest {
         shotSheet("05-pets.png") { activity ->
             PetPickerSheet().also { it.show(activity.supportFragmentManager, PetPickerSheet.TAG) }
         }
+        buildOverview()
         if (errors.isNotEmpty()) {
             File(outDir, "errors.txt").writeText(errors.toString())
             println("SCREENSHOT ERRORS:\n$errors")
