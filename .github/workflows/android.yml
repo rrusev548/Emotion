@@ -32,24 +32,21 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Unit tests & debug APK
-        run: gradle testDebugUnitTest assembleDebug --no-daemon --stacktrace --continue 2>&1 | tee ci-build.log
-
-      - name: Show failing output
-        if: failure()
+        shell: bash
         run: |
-          echo "================= последни редове от лога ================="
-          tail -n 120 ci-build.log || true
+          set -o pipefail
+          gradle testDebugUnitTest assembleDebug --no-daemon --stacktrace --continue 2>&1 | tee ci-build.log
 
-      # Мрежата в sandbox-а не стига до логовете на Actions, затова при грешка
-      # логът се записва в самото репо, за да може да се прочете.
-      - name: Publish build log on failure
-        if: failure()
+      - name: Diagnostics
+        if: always()
+        shell: bash
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f ci-build.log
-          git commit -m "ci: build log [skip ci]" || exit 0
-          git push || exit 0
+          echo "=== APK файлове ==="
+          find . -name "*.apk" -not -path "./.git/*" || true
+          echo "=== Успешни задачи ==="
+          grep -E "^> Task|BUILD (SUCCESSFUL|FAILED)|^e: |^w: " ci-build.log | tail -n 60 || true
+          echo "=== Последни редове ==="
+          tail -n 150 ci-build.log || true
 
       - name: Rename APK
         if: success()
@@ -76,3 +73,15 @@ jobs:
             Автоматично компилиран debug APK от commit ${{ github.sha }}.
             Инсталирай го на телефона си (разреши „Инсталиране от неизвестни източници“).
           files: artifacts/EmotionPet-debug.apk
+
+      # Мрежата в sandbox-а не стига до логовете на Actions, затова при грешка
+      # логът се записва в самото репо, за да може да се прочете.
+      - name: Publish build log on failure
+        if: failure()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f ci-build.log
+          git commit -m "ci: build log [skip ci]" || exit 0
+          git push || exit 0
