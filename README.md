@@ -111,8 +111,8 @@ app/src/main/java/com/emotion/pet/
 
 ## Идеи за следващо
 
+- [x] Widget на home screen — аватар + статове, тап отваря приложението (`PetWidgetProvider`)
 - [ ] Нативен Android **overlay** — любимецът да плува над другите приложения (изисква `SYSTEM_ALERT_WINDOW`)
-- [ ] Widget на home screen
 - [ ] Разучаване на нови думи/команди („хайде навън")
 - [ ] Синхронизация на образа с любима снимка чрез AI стилизация
 

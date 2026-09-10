@@ -143,6 +143,7 @@ class MainActivity : AppCompatActivity(),
     private fun syncPet() {
         binding.petView.applyPrefs(prefs)
         refreshHud()
+        PetWidgetProvider.requestUpdate(this)
     }
 
     private fun refreshStats() {
