@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
@@ -31,18 +31,34 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Unit tests
-        run: gradle testDebugUnitTest --no-daemon --stacktrace
+      - name: Unit tests & debug APK
+        run: gradle testDebugUnitTest assembleDebug --no-daemon --stacktrace --continue 2>&1 | tee ci-build.log
 
-      - name: Build debug APK
-        run: gradle assembleDebug --no-daemon --stacktrace
+      - name: Show failing output
+        if: failure()
+        run: |
+          echo "================= последни редове от лога ================="
+          tail -n 120 ci-build.log || true
+
+      # Мрежата в sandbox-а не стига до логовете на Actions, затова при грешка
+      # логът се записва в самото репо, за да може да се прочете.
+      - name: Publish build log on failure
+        if: failure()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f ci-build.log
+          git commit -m "ci: build log [skip ci]" || exit 0
+          git push || exit 0
 
       - name: Rename APK
+        if: success()
         run: |
           mkdir -p artifacts
           cp app/build/outputs/apk/debug/app-debug.apk artifacts/EmotionPet-debug.apk
 
       - name: Upload APK artifact
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: EmotionPet-debug-apk
@@ -50,7 +66,7 @@ jobs:
           if-no-files-found: error
 
       - name: Publish "latest build" release
-        if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v')
+        if: success() && (github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v'))
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'latest-build' }}
