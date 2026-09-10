@@ -1,6 +1,5 @@
 package com.emotion.pet
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -37,6 +36,7 @@ class ScreenshotTest {
     private lateinit var context: Context
     private lateinit var prefs: Prefs
     private val outDir = File("../docs/screenshots").apply { mkdirs() }
+    private val errors = StringBuilder()
 
     private val screenW: Int get() = context.resources.displayMetrics.widthPixels
     private val screenH: Int get() = context.resources.displayMetrics.heightPixels
@@ -84,6 +84,15 @@ class ScreenshotTest {
         view.layout(0, 0, w, h)
     }
 
+    private fun record(name: String, t: Throwable?) {
+        if (t == null) return
+        errors.append("== ").append(name).append(" ==\n")
+            .append(t.toString()).append('\n')
+        t.stackTrace.take(12).forEach { errors.append("   at ").append(it).append('\n') }
+        errors.append('\n')
+        println("SCREENSHOT_FAIL $name: $t")
+    }
+
     private fun writePng(bitmap: Bitmap, file: File) {
         FileOutputStream(file).use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
         println("Screenshot → ${file.absolutePath} (${bitmap.width}x${bitmap.height})")
@@ -98,7 +107,7 @@ class ScreenshotTest {
             scenario.onActivity { a -> a.window.decorView.draw(Canvas(bmp)) }
             writePng(bmp, File(outDir, "01-room.png"))
         }
-    }.onFailure { it.printStackTrace() }
+    }.onFailure { record("01-room.png", it) }
 
     private fun shotChat() = runCatching {
         ChatStore.save(
@@ -119,23 +128,47 @@ class ScreenshotTest {
             scenario.onActivity { a -> a.window.decorView.draw(Canvas(bmp)) }
             writePng(bmp, File(outDir, "03-chat.png"))
         }
-    }.onFailure { it.printStackTrace() }
+    }.onFailure { record("03-chat.png", it) }
 
-    /** Рисува стаята, добавя затъмнение и слага bottom sheet-а отгоре — както изглежда на живо. */
+    /** Снима стаята + отворения bottom sheet (истинският диалогов прозорец, ако може). */
     private fun shotSheet(name: String, show: (MainActivity) -> BottomSheetDialogFragment) = runCatching {
         ActivityScenario.launch(MainActivity::class.java).use { scenario ->
-            idle(1500)
+            idle(1200)
             scenario.onActivity { a -> forceLayout(a.window.decorView, screenW, screenH) }
             idle(200)
 
             val room = Bitmap.createBitmap(screenW, screenH, Bitmap.Config.ARGB_8888)
             scenario.onActivity { a -> a.window.decorView.draw(Canvas(room)) }
 
-            var sheetView: View? = null
-            scenario.onActivity { a -> sheetView = show(a).view }
-            idle(200)
-            val sv = sheetView ?: error("bottom sheet-ът не се отвори")
+            var sheet: BottomSheetDialogFragment? = null
+            var showError: Throwable? = null
+            scenario.onActivity { a ->
+                try {
+                    sheet = show(a)
+                } catch (t: Throwable) {
+                    showError = t
+                }
+            }
+            if (showError != null) throw showError!!
 
+            idle(600)
+            val fragment = sheet ?: error("bottom sheet-ът не се създаде")
+            val dialogDecor: View? = fragment.dialog?.window?.decorView
+
+            if (dialogDecor != null) {
+                // истинският прозорец на диалога (стъклото + затъмнението са нарисувани от системата)
+                forceLayout(dialogDecor, screenW, screenH)
+                idle(300)
+                val dialogBmp = Bitmap.createBitmap(screenW, screenH, Bitmap.Config.ARGB_8888)
+                dialogDecor.draw(Canvas(dialogBmp))
+                if (hasVisibleContent(dialogBmp)) {
+                    writePng(dialogBmp, File(outDir, name))
+                    return@use
+                }
+            }
+
+            // резерва: съставяме стаята + sheet-а ръчно
+            val sv = fragment.view ?: error("sheet-ът няма view")
             val sheetH = (screenH * 0.86f).roundToInt()
             forceLayout(sv, screenW, sheetH)
             idle(200)
@@ -145,10 +178,6 @@ class ScreenshotTest {
             val out = Bitmap.createBitmap(screenW, screenH, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(out)
             canvas.drawBitmap(room, 0f, 0f, null)
-            canvas.drawRect(
-                0f, 0f, screenW.toFloat(), screenH.toFloat(),
-                Paint().apply { color = 0x59000000 }
-            )
             val radius = 28f * context.resources.displayMetrics.density
             val path = Path().apply {
                 addRoundRect(
@@ -164,10 +193,20 @@ class ScreenshotTest {
             canvas.restore()
             writePng(out, File(outDir, name))
         }
-    }.onFailure { it.printStackTrace() }
+    }.onFailure { record(name, it) }
+
+    /** Проверява дали в картинката има реално съдържание (не е само фон). */
+    private fun hasVisibleContent(bitmap: Bitmap): Boolean {
+        val pixels = IntArray(bitmap.width * bitmap.height)
+        bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+        val distinct = pixels.toHashSet()
+        return distinct.size > 24
+    }
 
     @Test
     fun `рендерира екраните`() {
+        val errorsFile = File(outDir, "errors.txt")
+        if (errorsFile.exists()) errorsFile.delete()
         shotMain()
         shotSheet("02-menu.png") { activity ->
             MenuSheet().also { it.show(activity.supportFragmentManager, MenuSheet.TAG) }
@@ -176,8 +215,9 @@ class ScreenshotTest {
         shotSheet("04-ai.png") { activity ->
             AiSheet().also { it.show(activity.supportFragmentManager, AiSheet.TAG) }
         }
+        if (errors.isNotEmpty()) {
+            File(outDir, "errors.txt").writeText(errors.toString())
+            println("SCREENSHOT ERRORS:\n$errors")
+        }
     }
-
-    @Suppress("unused")
-    private fun unusedActivityType(): Class<out Activity> = MainActivity::class.java
 }
