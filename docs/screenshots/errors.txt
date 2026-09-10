@@ -1,0 +1,3 @@
+== 02-menu.png ==
+android.view.InflateException: Binary XML file line #349 in com.emotion.pet.debug:layout/sheet_menu: Binary XML file line #349: You must supply a layout_height attribute., theme={InheritanceMap=[id=0x7f11022ecom.emotion.pet.debug:style/Theme.EmotionPet.BottomSheet], Themes=[com.emotion.pet.debug:style/Theme.EmotionPet.BottomSheet, forced, com.emotion.pet.debug:style/Theme.EmotionPet, forced, android:style/Theme.DeviceDefault.Light.DarkActionBar, forced]}
+
