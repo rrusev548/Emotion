@@ -88,6 +88,7 @@ class AiSheet : BottomSheetDialogFragment() {
             binding.testResult.text = getString(R.string.ai_testing)
             binding.testBtn.isEnabled = false
             AiClient.test(
+                providerId,
                 base,
                 prefs.aiKey,
                 model,

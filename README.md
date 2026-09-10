@@ -62,8 +62,12 @@
 |---|---|---|
 | **Groq** (най-бърз) | console.groq.com/keys | `llama-3.1-8b-instant` |
 | **OpenRouter** | openrouter.ai/keys | `meta-llama/llama-3.3-70b-instruct:free` |
-| **OpenAI** | platform.openai.com/api-keys | — |
+| **OpenAI** (GPT) | platform.openai.com/api-keys | — |
+| **Gemini** | aistudio.google.com/apikey | безплатен таван през AI Studio |
+| **Claude** | console.anthropic.com/settings/keys | — |
 | **Custom** | всеки OpenAI-съвместим сървър | Ollama, LM Studio, локален прокси |
+
+> Gemini минава през официалния OpenAI-съвместим ендпойнт на Google. Claude ползва нативния Anthropic Messages API (различен формат — вграден директно в `AiClient`).
 
 1. Избери доставчик (чип).
 2. Постави ключа в полето **API ключ**.

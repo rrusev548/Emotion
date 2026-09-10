@@ -136,7 +136,7 @@ class ChatActivity : AppCompatActivity() {
         }
 
         val history = ChatStore.toApi(ChatStore.load(prefs))
-        AiClient.chat(baseUrl, key, model, ChatStore.systemPrompt(this, prefs), history) { ok, text ->
+        AiClient.chat(prefs.aiProvider, baseUrl, key, model, ChatStore.systemPrompt(this, prefs), history) { ok, text ->
             if (isFinishing || isDestroyed) return@chat
             if (ok) {
                 finishReply(typingIndex, text, persist = true)
