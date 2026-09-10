@@ -63,10 +63,17 @@ jobs:
           if-no-files-found: error
 
       - name: Publish "latest build" release
-        if: success() && (github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v'))
+        if: |
+          success() && (
+            github.event_name == 'workflow_dispatch' ||
+            github.ref == 'refs/heads/main' ||
+            github.ref == 'refs/heads/arena/01a08c73-emotion' ||
+            startsWith(github.ref, 'refs/tags/v')
+          )
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'latest-build' }}
+          make_latest: false
           name: Emotion Pet — latest build
           prerelease: true
           body: |
