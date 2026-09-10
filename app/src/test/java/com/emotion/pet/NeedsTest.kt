@@ -15,10 +15,10 @@ class NeedsTest {
     }
 
     @Test
-    fun `ситостта намалява с времето`() {
-        val after = Needs.decay(Needs.Stats(100, 100, 100, false), 25)
-        assertEquals(99, after.fullness)
-        assertTrue(after.energy < 100)
+    fun `ситостта намалява по-бързо от енергията`() {
+        val after = Needs.decay(Needs.Stats(100, 100, 100, false), 70)
+        assertEquals(98, after.fullness)   // -70/25
+        assertEquals(98, after.energy)     // -70/35
     }
 
     @Test
@@ -35,9 +35,10 @@ class NeedsTest {
         assertEquals(0, empty.energy)
         assertEquals(0, empty.mood)
 
+        // сънят пълни енергията, но не над 100
         val full = Needs.decay(Needs.Stats(100, 95, 50, true), 60 * 24)
         assertEquals(100, full.energy)
-        assertEquals(100, full.fullness)
+        assertEquals(76, full.fullness)    // -1440/60
     }
 
     @Test
