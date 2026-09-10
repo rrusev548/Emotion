@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="accent">#FF7BA9</color>
+    <color name="accent_dark">#E85C8C</color>
+    <color name="accent2">#8E7BFF</color>
+    <color name="on_accent">#1A1024</color>
+
+    <color name="sheet_bg">#1C1530</color>
+    <color name="surface_1">#241B3C</color>
+    <color name="surface_2">#2E234A</color>
+    <color name="chip_bg">#332858</color>
+    <color name="chip_bg_active">#8E7BFF</color>
+
+    <color name="text_primary">#F3EDFF</color>
+    <color name="text_secondary">#B9ABD6</color>
+    <color name="divider">#3A2E5C</color>
+
+    <color name="bubble_user">#7C5CFF</color>
+    <color name="bubble_pet">#2A2140</color>
+    <color name="pill_bg">#B3221A34</color>
+    <color name="icon_tint">#F3EDFF</color>
+
+    <color name="ic_launcher_background">#2B1B4A</color>
+</resources>

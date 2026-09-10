@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Emotion Pet</string>
+    <string name="chat_offline_short">офлайн режим</string>
+    <string name="chat_new">Нов чат</string>
+    <string name="stats_hud">%1$d · %2$d · %3$d</string>
+    <string name="pets_title">Избери любимец</string>
+    <string name="pets_subtitle">Всеки има свой характер — и той влияе на чата с ИИ.</string>
+    <string name="pets_count">12 character-а</string>
+    <string name="pets_change">Смени</string>
+    <string name="pets_custom_image">Твоят образ</string>
+    <string name="pets_pick_title">Кой да е любимецът?</string>
+    <string name="pets_chosen">%1$s дойде при теб! 🎉</string>
+    <string name="upload_hint_short">Снимка, PNG или анимиран GIF</string>
+
+    <string name="section_motion">Движение</string>
+    <string name="setting_bounce">🐾 Отскачане от стените</string>
+    <string name="setting_particles">✨ Светлинки и частици</string>
+
+    <string name="tile_feed">Храни</string>
+    <string name="tile_play">Играй</string>
+    <string name="tile_sleep">Сън</string>
+    <string name="tile_wake">Събуди</string>
+    <string name="tile_pet">Погали</string>
+
+    <string name="room_palette_ocean">🌊 Океан</string>
+    <string name="stats_detail">🍎 %1$d%%   ⚡ %2$d%%   💞 %3$d%%</string>
+    <string name="pet_bounce_line">Ау! 🐾</string>
+    <string name="size_value">%1$d dp</string>
+    <string name="speed_value">%1$s×  скорост</string>
+    <string name="action_wake">🌞 Събуди</string>
+    <string name="ai_free_model">🎁 Безплатен модел: %1$s</string>
+    <string name="ai_base_required">За Custom доставчик Base URL е задължителен.</string>
+    <string name="ai_no_key_url">За този доставчик няма линк за ключ.</string>
+    <string name="ai_test_prompt">Кажи „здравей“ с една дума.</string>
+    <string name="default_pet_name">Моки</string>
+    <string name="toast_sprite_saved">Готово! Любимецът има нов образ 🎨</string>
+    <string name="toast_wallpaper_saved">Нова стая! 🖼</string>
+    <string name="chat_offline_hint">Още не познавам ИИ — отговарям с малкия си мозък 🐾 Добави API ключ от менюто → Настройки на ИИ, за да стана наистина умен.</string>
+    <string name="chat_greeting">Здравей! Аз съм %1$s. Как си? 🐾</string>
+    <string name="need_key_hint">Липсва API ключ — отговорът е от вградената ми логика.</string>
+
+    <!-- Основни действия -->
+    <string name="chat">Чат</string>
+    <string name="menu">Меню</string>
+    <string name="send">Изпрати</string>
+    <string name="save">Запази</string>
+    <string name="cancel">Отказ</string>
+    <string name="ok">Добре</string>
+    <string name="close">Затвори</string>
+    <string name="back">Назад</string>
+
+    <!-- Статове -->
+    <string name="stats_format">🍎 %1$d  ⚡ %2$d  💞 %3$d</string>
+    <string name="stat_fullness">🍎 Ситост</string>
+    <string name="stat_energy">⚡ Енергия</string>
+    <string name="stat_mood">💞 Настроение</string>
+
+    <!-- Меню -->
+    <string name="section_care">Грижа</string>
+    <string name="section_look">Образ</string>
+    <string name="section_room">Стая</string>
+    <string name="section_ai">Изкуствен интелект</string>
+    <string name="section_other">Други</string>
+
+    <string name="action_feed">🍎 Храни</string>
+    <string name="action_play">🎾 Играй</string>
+    <string name="action_sleep">😴 Сън</string>
+    <string name="action_pet">🤗 Погали</string>
+    <string name="quick_actions">Какво да правим?</string>
+
+    <string name="label_name">Име</string>
+    <string name="label_size">Размер</string>
+    <string name="label_speed">Скорост</string>
+    <string name="label_mirror">Огледален образ</string>
+    <string name="emoji_presets">Готови образи</string>
+    <string name="upload_image">🖼 Качи снимка или GIF</string>
+    <string name="upload_hint">PNG, JPG или анимиран GIF — образът се пази само на телефона ти.</string>
+
+    <string name="room_palette_night">🌙 Нощ</string>
+    <string name="room_palette_day">🌅 Зора</string>
+    <string name="room_palette_mint">🌿 Мента</string>
+    <string name="room_wallpaper">🖼 Фон от галерия</string>
+    <string name="room_wallpaper_clear">✕ Премахни фона</string>
+
+    <string name="keep_screen_on">Екранът да не заспива</string>
+    <string name="reset_pet">♻️ Нулирай любимеца</string>
+    <string name="reset_done">Готово — любимецът е като нов!</string>
+    <string name="photo_error">Не мога да отворя тази картинка.</string>
+
+    <string name="rename_title">Как се казва любимецът?</string>
+    <string name="rename_hint">Име</string>
+
+    <!-- ИИ -->
+    <string name="ai_settings">🤖 Настройки на ИИ</string>
+    <string name="ai_provider">Доставчик</string>
+    <string name="ai_model">Модел</string>
+    <string name="ai_api_key">API ключ</string>
+    <string name="ai_base_url">Base URL (за Custom)</string>
+    <string name="ai_personality">Характер</string>
+    <string name="ai_personality_hint">Грижовен, закачлив и леко саркастичен.</string>
+    <string name="ai_saved">Запазено ✓</string>
+    <string name="ai_test">🔌 Тествай връзката</string>
+    <string name="ai_testing">Проверявам…</string>
+    <string name="ai_test_ok">Връзката работи ✓</string>
+    <string name="ai_test_fail">Грешка: %1$s</string>
+    <string name="ai_clear_chat">🗑 Изчисти чата</string>
+    <string name="ai_key_note">Ключът се пази само на това устройство и се използва директно от приложението — не минава през наш сървър.</string>
+    <string name="ai_get_key">Вземи ключ →</string>
+    <string name="ai_no_key_title">Няма API ключ</string>
+    <string name="ai_no_key_body">Добави ключ, за да говорим с истински ИИ. Дотогава отговарям сам, с моя малък мозък. 🙂</string>
+    <string name="ai_no_key_action">Отвори настройките</string>
+    <string name="ai_current">Активно: %1$s · %2$s</string>
+    <string name="chat_typing">пише…</string>
+    <string name="chat_hint">Напиши съобщение…</string>
+    <string name="chat_subtitle">винаги насреща</string>
+
+    <!-- Бързи въпроси -->
+    <string name="chip_joke">Разкажи виц</string>
+    <string name="chip_howareyou">Как си?</string>
+    <string name="chip_tip">Съвет за деня</string>
+    <string name="chip_game">Да поиграем?</string>
+    <string name="chip_feed">Гладен ли си?</string>
+
+    <!-- Реплики на любимеца -->
+    <string-array name="pet_lines_idle">
+        <item>Какво правим днес? 🐾</item>
+        <item>Тука съм, ако ме потърсиш.</item>
+        <item>Хайде да поиграем! 🎾</item>
+        <item>Обичам те! ❤️</item>
+        <item>Скучно ми е малко…</item>
+        <item>Мога ли да ме погалиш?</item>
+        <item>Изглеждаш добре днес! ✨</item>
+        <item>Да отидем ли на разходка? 🚶</item>
+        <item>Аз съм най-добрият любимец, нали?</item>
+    </string-array>
+
+    <string-array name="pet_lines_hungry">
+        <item>Гладен съм… 🍎</item>
+        <item>Коремчето ми курка!</item>
+        <item>Има ли нещо за хапване?</item>
+        <item>🍽️ Моля те, дай ми нещичко.</item>
+    </string-array>
+
+    <string-array name="pet_lines_sleepy">
+        <item>Очите ми се затварят… 😴</item>
+        <item>Малко сън няма да ми е излишен.</item>
+        <item>Zzz… сънувам тревичка.</item>
+    </string-array>
+
+    <string-array name="pet_lines_happy">
+        <item>Това беше забавно! 🎉</item>
+        <item>Още веднъж! Още веднъж!</item>
+        <item>Ти си най-добрият! 💖</item>
+        <item>Урааа! 🐾</item>
+    </string-array>
+
+    <string name="pet_tap_line">Хи-хи! 🤗</string>
+    <string name="pet_feed_line">Ням ням! 😋</string>
+    <string name="pet_play_line">Ураа! 🎉</string>
+    <string name="pet_sleep_line">Лека нощ… 💤</string>
+    <string name="pet_wake_line">Ох… събудих се! 🥱</string>
+
+    <!-- Малък мозък без ключ -->
+    <string-array name="brain_greeting">
+        <item>Здравей! Как си? 🐾</item>
+        <item>О, здравей! Липсваше ми!</item>
+    </string-array>
+    <string-array name="brain_how">
+        <item>Добре съм! Ситост: %1$d%, енергия: %2$d%. А ти как си?</item>
+        <item>Живея си на екрана ти. Не е зле! 😄</item>
+    </string-array>
+    <string-array name="brain_food">
+        <item>Да! Много обичам да похапвам 🍎 Натисни «Храни»!</item>
+        <item>Винаги съм гладен за нещо вкусно 😋</item>
+    </string-array>
+    <string-array name="brain_play">
+        <item>Да поиграем! Натисни «Играй» 🎾</item>
+        <item>Обожавам игри! Хайде!</item>
+    </string-array>
+    <string-array name="brain_joke">
+        <item>Защо кучето не ползва компютър? Щото не може да си намери мишката! 🐭</item>
+        <item>Какво каза котката, като видя мишката с лаптоп? „Айде стига си гуглил!“ 🐱</item>
+    </string-array>
+    <string-array name="brain_love">
+        <item>И аз те обичам! ❤️</item>
+        <item>Ти си моят човек. 🥰</item>
+    </string-array>
+    <string-array name="brain_thanks">
+        <item>Няма защо! 🐾</item>
+        <item>Винаги насреща!</item>
+    </string-array>
+    <string-array name="brain_default">
+        <item>Интересно! Разкажи ми още.</item>
+        <item>Съгласен съм! 🐾</item>
+        <item>Хм… не съм сигурен, но звучи важно.</item>
+        <item>Аз съм само малък любимец, но те подкрепям! 💖</item>
+        <item>Добави API ключ в менюто и ще ти отговарям много по-умно. 🤖</item>
+    </string-array>
+    <string name="brain_hello_prompt">Здравей!</string>
+</resources>

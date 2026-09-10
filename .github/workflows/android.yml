@@ -1,0 +1,112 @@
+name: Android CI
+
+on:
+  push:
+    branches: ['**']
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build & test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Unit tests & debug APK
+        shell: bash
+        run: |
+          set -o pipefail
+          gradle testDebugUnitTest assembleDebug --no-daemon --stacktrace --continue 2>&1 | tee ci-build.log
+
+      - name: Diagnostics
+        if: always()
+        shell: bash
+        run: |
+          echo "=== APK файлове ==="
+          find . -name "*.apk" -not -path "./.git/*" || true
+          echo "=== Успешни задачи ==="
+          grep -E "^> Task|BUILD (SUCCESSFUL|FAILED)|^e: |^w: " ci-build.log | tail -n 60 || true
+          echo "=== Последни редове ==="
+          tail -n 150 ci-build.log || true
+
+      - name: Upload UI screenshots
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-screenshots
+          path: docs/screenshots
+          if-no-files-found: ignore
+
+      - name: Commit UI screenshots
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/arena/01a08c73-emotion'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f docs/screenshots
+          git commit -m "ci: обнови UI снимките [skip ci]" || exit 0
+          git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || exit 0
+          git push || exit 0
+
+      - name: Rename APK
+        if: success()
+        run: |
+          mkdir -p artifacts
+          cp app/build/outputs/apk/debug/app-debug.apk artifacts/EmotionPet-debug.apk
+
+      - name: Upload APK artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmotionPet-debug-apk
+          path: artifacts/EmotionPet-debug.apk
+          if-no-files-found: error
+
+      - name: Publish "latest build" release
+        if: |
+          success() && (
+            github.event_name == 'workflow_dispatch' ||
+            github.ref == 'refs/heads/main' ||
+            github.ref == 'refs/heads/arena/01a08c73-emotion' ||
+            startsWith(github.ref, 'refs/tags/v')
+          )
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'latest-build' }}
+          make_latest: false
+          name: Emotion Pet — latest build
+          prerelease: true
+          body: |
+            Автоматично компилиран debug APK от commit ${{ github.sha }}.
+            Инсталирай го на телефона си (разреши „Инсталиране от неизвестни източници“).
+          files: artifacts/EmotionPet-debug.apk
+
+      # Мрежата в sandbox-а не стига до логовете на Actions, затова при грешка
+      # логът се записва в самото репо, за да може да се прочете.
+      - name: Publish build log on failure
+        if: failure()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f ci-build.log
+          git commit -m "ci: build log [skip ci]" || exit 0
+          git push || exit 0
