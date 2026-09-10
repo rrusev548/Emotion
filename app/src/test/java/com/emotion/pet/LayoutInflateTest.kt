@@ -4,12 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.appcompat.view.ContextThemeWrapper
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
 
 /**
@@ -20,12 +19,11 @@ import org.robolectric.annotation.Config
 @Config(sdk = [34], qualifiers = "bg-rBG-w411dp-h891dp-xhdpi")
 class LayoutInflateTest {
 
-    // Material компонентите искат темата на приложението (иначе inflate-ът гърми)
-    private val context: android.content.Context =
-        ContextThemeWrapper(
-            ApplicationProvider.getApplicationContext(),
-            R.style.Theme_EmotionPet
-        )
+    // Само LayoutInflater-ът на реална Activity има инсталиран AppCompat factory —
+    // без него Material компонентите (и app:tint върху обикновен ImageView) гърмят.
+    private val activity = Robolectric.buildActivity(MainActivity::class.java).create().get()
+    private val context: android.content.Context = activity
+    private val inflater: LayoutInflater = activity.layoutInflater
 
     private val root = FrameLayout(context).apply {
         layoutParams = ViewGroup.LayoutParams(
@@ -35,7 +33,6 @@ class LayoutInflateTest {
     }
 
     private fun inflate(id: Int, attachToRoot: Boolean = true): View {
-        val inflater = LayoutInflater.from(context)
         return if (attachToRoot) {
             inflater.inflate(id, root, false)
         } else {
