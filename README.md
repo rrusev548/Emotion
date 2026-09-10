@@ -6,6 +6,18 @@
 
 ---
 
+## Екрани
+
+![Екрани на Emotion Pet](docs/screenshots/00-overview.png)
+
+| Стаята | Менюто | Чатът | Настройки на ИИ |
+|---|---|---|---|
+| [![Стая](docs/screenshots/01-room.png)](docs/screenshots/01-room.png) | [![Меню](docs/screenshots/02-menu.png)](docs/screenshots/02-menu.png) | [![Чат](docs/screenshots/03-chat.png)](docs/screenshots/03-chat.png) | [![ИИ](docs/screenshots/04-ai.png)](docs/screenshots/04-ai.png) |
+
+> Снимките не са монтаж — истинските `MainActivity`, `MenuSheet`, `ChatActivity` и `AiSheet` се рендерират в PNG от `ScreenshotTest` (Robolectric) при всеки push, а CI ги качва в `docs/screenshots/`.
+
+---
+
 ## Какво може
 
 | | |
