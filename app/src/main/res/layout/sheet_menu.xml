@@ -266,7 +266,7 @@
                     android:id="@+id/sizeSeek"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:max="300"
+                    android:max="140"
                     android:progressDrawable="@drawable/bg_seek"
                     android:splitTrack="false"
                     android:thumb="@drawable/bg_thumb" />

@@ -111,7 +111,7 @@ class MenuSheet : BottomSheetDialogFragment() {
         // ---- стая ----
         val paletteButtons = mapOf(
             Presets.Palette.NIGHT to binding.roomNight,
-            Presets.Palette.DAWN to binding.roomDawn,
+            Presets.Palette.SUNSET to binding.roomDawn,
             Presets.Palette.MINT to binding.roomMint,
             Presets.Palette.OCEAN to binding.roomOcean
         )
