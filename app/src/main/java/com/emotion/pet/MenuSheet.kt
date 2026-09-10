@@ -176,7 +176,10 @@ class MenuSheet : BottomSheetDialogFragment() {
         val sheet = (dialog as? BottomSheetDialog)
             ?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) ?: return
         val height = (resources.displayMetrics.heightPixels * 0.86f).toInt()
-        sheet.layoutParams = sheet.layoutParams.apply { this.height = height }
+        sheet.layoutParams?.let { lp ->
+            lp.height = height
+            sheet.layoutParams = lp
+        }
         BottomSheetBehavior.from(sheet).apply {
             state = BottomSheetBehavior.STATE_EXPANDED
             skipCollapsed = true
