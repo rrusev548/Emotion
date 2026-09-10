@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Emotion Pet</string>
+    <string name="size_value">%1$d dp</string>
+    <string name="speed_value">%1$s×  speed</string>
+    <string name="action_wake">🌞 Wake up</string>
+    <string name="ai_free_model">🎁 Free model: %1$s</string>
+    <string name="ai_base_required">Base URL is required for the Custom provider.</string>
+    <string name="ai_no_key_url">This provider has no key link.</string>
+    <string name="ai_test_prompt">Say \u201chello\u201d in one word.</string>
+    <string name="default_pet_name">Mochi</string>
+    <string name="toast_sprite_saved">Done! Your pet has a new look 🎨</string>
+    <string name="toast_wallpaper_saved">New room! 🖼</string>
+    <string name="chat_offline_hint">I don\'t know AI yet — I answer with my tiny brain 🐾 Add an API key from the menu → AI settings to make me really smart.</string>
+    <string name="chat_greeting">Hi! I\'m %1$s. How are you? 🐾</string>
+    <string name="need_key_hint">No API key — this reply comes from my built-in logic.</string>
+
+    <string name="chat">Chat</string>
+    <string name="menu">Menu</string>
+    <string name="send">Send</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="close">Close</string>
+    <string name="back">Back</string>
+
+    <string name="stats_format">🍎 %1$d  ⚡ %2$d  💞 %3$d</string>
+    <string name="stat_fullness">🍎 Fullness</string>
+    <string name="stat_energy">⚡ Energy</string>
+    <string name="stat_mood">💞 Mood</string>
+
+    <string name="section_care">Care</string>
+    <string name="section_look">Looks</string>
+    <string name="section_room">Room</string>
+    <string name="section_ai">AI</string>
+    <string name="section_other">Other</string>
+
+    <string name="action_feed">🍎 Feed</string>
+    <string name="action_play">🎾 Play</string>
+    <string name="action_sleep">😴 Sleep</string>
+    <string name="action_pet">🤗 Pet</string>
+    <string name="quick_actions">What shall we do?</string>
+
+    <string name="label_name">Name</string>
+    <string name="label_size">Size</string>
+    <string name="label_speed">Speed</string>
+    <string name="label_mirror">Mirrored</string>
+    <string name="emoji_presets">Built-in looks</string>
+    <string name="upload_image">🖼 Upload a photo or GIF</string>
+    <string name="upload_hint">PNG, JPG or animated GIF — the image stays on your phone.</string>
+
+    <string name="room_palette_night">🌙 Night</string>
+    <string name="room_palette_day">🌅 Dawn</string>
+    <string name="room_palette_mint">🌿 Mint</string>
+    <string name="room_wallpaper">🖼 Wallpaper from gallery</string>
+    <string name="room_wallpaper_clear">✕ Remove wallpaper</string>
+
+    <string name="keep_screen_on">Keep screen awake</string>
+    <string name="reset_pet">♻️ Reset pet</string>
+    <string name="reset_done">Done — your pet is brand new!</string>
+    <string name="photo_error">I can\'t open that image.</string>
+
+    <string name="rename_title">What\'s your pet\'s name?</string>
+    <string name="rename_hint">Name</string>
+
+    <string name="ai_settings">🤖 AI settings</string>
+    <string name="ai_provider">Provider</string>
+    <string name="ai_model">Model</string>
+    <string name="ai_api_key">API key</string>
+    <string name="ai_base_url">Base URL (Custom)</string>
+    <string name="ai_personality">Personality</string>
+    <string name="ai_personality_hint">Caring, playful and a little sarcastic.</string>
+    <string name="ai_saved">Saved ✓</string>
+    <string name="ai_test">🔌 Test connection</string>
+    <string name="ai_testing">Testing…</string>
+    <string name="ai_test_ok">Connection works ✓</string>
+    <string name="ai_test_fail">Error: %1$s</string>
+    <string name="ai_clear_chat">🗑 Clear chat</string>
+    <string name="ai_key_note">The key is stored only on this device and used directly by the app — it never touches our servers.</string>
+    <string name="ai_get_key">Get a key →</string>
+    <string name="ai_no_key_title">No API key</string>
+    <string name="ai_no_key_body">Add a key and we\'ll chat with a real AI. Until then I answer with my own tiny brain. 🙂</string>
+    <string name="ai_no_key_action">Open settings</string>
+    <string name="ai_current">Active: %1$s · %2$s</string>
+    <string name="chat_typing">typing…</string>
+    <string name="chat_hint">Type a message…</string>
+    <string name="chat_subtitle">always here</string>
+
+    <string name="chip_joke">Tell me a joke</string>
+    <string name="chip_howareyou">How are you?</string>
+    <string name="chip_tip">Tip of the day</string>
+    <string name="chip_game">Shall we play?</string>
+    <string name="chip_feed">Are you hungry?</string>
+
+    <string-array name="pet_lines_idle">
+        <item>What are we doing today? 🐾</item>
+        <item>I\'m here if you need me.</item>
+        <item>Let\'s play! 🎾</item>
+        <item>I love you! ❤️</item>
+        <item>I\'m a bit bored…</item>
+        <item>Will you pet me?</item>
+        <item>You look great today! ✨</item>
+        <item>Shall we go for a walk? 🚶</item>
+        <item>I\'m the best pet, right?</item>
+    </string-array>
+
+    <string-array name="pet_lines_hungry">
+        <item>I\'m hungry… 🍎</item>
+        <item>My tummy is rumbling!</item>
+        <item>Is there anything to eat?</item>
+        <item>🍽️ Please, just a little something.</item>
+    </string-array>
+
+    <string-array name="pet_lines_sleepy">
+        <item>My eyes are closing… 😴</item>
+        <item>A little nap wouldn\'t hurt.</item>
+        <item>Zzz… dreaming of grass.</item>
+    </string-array>
+
+    <string-array name="pet_lines_happy">
+        <item>That was fun! 🎉</item>
+        <item>Again! Again!</item>
+        <item>You\'re the best! 💖</item>
+        <item>Yaaay! 🐾</item>
+    </string-array>
+
+    <string name="pet_tap_line">Hehe! 🤗</string>
+    <string name="pet_feed_line">Nom nom! 😋</string>
+    <string name="pet_play_line">Woohoo! 🎉</string>
+    <string name="pet_sleep_line">Good night… 💤</string>
+    <string name="pet_wake_line">Oh… I\'m awake! 🥱</string>
+
+    <string-array name="brain_greeting">
+        <item>Hi! How are you? 🐾</item>
+        <item>Oh hey! I missed you!</item>
+    </string-array>
+    <string-array name="brain_how">
+        <item>I\'m good! Fullness: %1$d%, energy: %2$d%. How about you?</item>
+        <item>I live on your screen. Not bad! 😄</item>
+    </string-array>
+    <string-array name="brain_food">
+        <item>Yes! I love snacks 🍎 Tap “Feed”!</item>
+        <item>I\'m always hungry for something tasty 😋</item>
+    </string-array>
+    <string-array name="brain_play">
+        <item>Let\'s play! Tap “Play” 🎾</item>
+        <item>I love games! Come on!</item>
+    </string-array>
+    <string-array name="brain_joke">
+        <item>Why don\'t dogs use computers? They can\'t find the mouse! 🐭</item>
+        <item>What did the cat say when it saw the mouse with a laptop? “Stop googling me!” 🐱</item>
+    </string-array>
+    <string-array name="brain_love">
+        <item>I love you too! ❤️</item>
+        <item>You\'re my human. 🥰</item>
+    </string-array>
+    <string-array name="brain_thanks">
+        <item>Any time! 🐾</item>
+        <item>Always here for you!</item>
+    </string-array>
+    <string-array name="brain_default">
+        <item>Interesting! Tell me more.</item>
+        <item>I agree! 🐾</item>
+        <item>Hmm… I\'m not sure, but it sounds important.</item>
+        <item>I\'m just a small pet, but I\'ve got your back! 💖</item>
+        <item>Add an API key in the menu and I\'ll answer much more cleverly. 🤖</item>
+    </string-array>
+    <string name="brain_hello_prompt">Hello!</string>
+</resources>
