@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertTrue
@@ -19,7 +20,12 @@ import org.robolectric.annotation.Config
 @Config(sdk = [34], qualifiers = "bg-rBG-w411dp-h891dp-xhdpi")
 class LayoutInflateTest {
 
-    private val context = ApplicationProvider.getApplicationContext<android.content.Context>()
+    // Material компонентите искат темата на приложението (иначе inflate-ът гърми)
+    private val context: android.content.Context =
+        ContextThemeWrapper(
+            ApplicationProvider.getApplicationContext(),
+            R.style.Theme_EmotionPet
+        )
 
     private val root = FrameLayout(context).apply {
         layoutParams = ViewGroup.LayoutParams(
