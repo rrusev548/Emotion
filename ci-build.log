@@ -23,18 +23,18 @@ w: file:///home/runner/work/Emotion/Emotion/app/build.gradle.kts:37:5: 'fun Base
 > Task :app:generateDebugResources
 > Task :app:packageDebugResources
 > Task :app:mergeDebugResources
-> Task :app:mapDebugSourceSetPaths
 > Task :app:checkDebugAarMetadata
+> Task :app:mapDebugSourceSetPaths
 > Task :app:parseDebugLocalResources
 > Task :app:createDebugCompatibleScreenManifests
 > Task :app:dataBindingGenBaseClassesDebug
 > Task :app:extractDeepLinksDebug
 > Task :app:processDebugMainManifest
 > Task :app:processDebugManifest
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest
 > Task :app:processDebugManifestForPackage
 > Task :app:javaPreCompileDebug
-> Task :app:preDebugUnitTestBuild UP-TO-DATE
-> Task :app:javaPreCompileDebugUnitTest FROM-CACHE
 > Task :app:mergeDebugShaders
 > Task :app:compileDebugShaders NO-SOURCE
 > Task :app:generateDebugAssets UP-TO-DATE
@@ -43,19 +43,21 @@ w: file:///home/runner/work/Emotion/Emotion/app/build.gradle.kts:37:5: 'fun Base
 > Task :app:compressDebugAssets
 > Task :app:desugarDebugFileDependencies
 > Task :app:mergeDebugJniLibFolders
-> Task :app:processDebugResources
 > Task :app:checkDebugDuplicateClasses
 > Task :app:mergeDebugNativeLibs NO-SOURCE
+> Task :app:processDebugResources
+> Task :app:mergeExtDexDebug
 > Task :app:packageDebugUnitTestForUnitTest
 > Task :app:generateDebugUnitTestConfig
+> Task :app:stripDebugDebugSymbols NO-SOURCE
+> Task :app:mergeLibDexDebug
+> Task :app:validateSigningDebug
+> Task :app:writeDebugAppMetadata
+> Task :app:writeDebugSigningConfigVersions
 
 > Task :app:compileDebugKotlin
 e: The daemon has terminated unexpectedly on startup attempt #1 with error code: 0. The daemon process output:
     1. Kotlin compile daemon is ready
-
-> Task :app:mergeExtDexDebug
-
-> Task :app:compileDebugKotlin
 w: file:///home/runner/work/Emotion/Emotion/app/src/main/java/com/emotion/pet/MainActivity.kt:295:14 'fun setView(p0: View!, p1: Int, p2: Int, p3: Int, p4: Int): AlertDialog.Builder!' is deprecated. Deprecated in Java.
 
 > Task :app:compileDebugJavaWithJavac
@@ -64,29 +66,54 @@ w: file:///home/runner/work/Emotion/Emotion/app/src/main/java/com/emotion/pet/Ma
 > Task :app:processDebugJavaRes
 > Task :app:dexBuilderDebug
 > Task :app:mergeDebugGlobalSynthetics
-> Task :app:mergeLibDexDebug
-> Task :app:stripDebugDebugSymbols NO-SOURCE
 > Task :app:mergeProjectDexDebug
 > Task :app:mergeDebugJavaResource
 > Task :app:compileDebugUnitTestKotlin
-> Task :app:validateSigningDebug
 > Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
 > Task :app:processDebugUnitTestJavaRes
 
 > Task :app:testDebugUnitTest
 
+LayoutInflateTest > всички layouts се inflate-ват без грешка STANDARD_OUT
+    LayoutInflateTest: проверени 9 layouts, проблеми: 6
+      ✗ activity_main → InflateException: Binary XML file line #78 in com.emotion.pet.debug:layout/activity_main: Binary XML file line #78 in com.emotion.pet.debug:layout/activity_main: Error inflating class com.google.android.material.progre
+      ✗ activity_chat → InflateException: Binary XML file line #35 in com.emotion.pet.debug:layout/activity_chat: Binary XML file line #35 in com.emotion.pet.debug:layout/activity_chat: Error inflating class android.widget.ImageView
+      ✗ sheet_menu → InflateException: Binary XML file line #73 in com.emotion.pet.debug:layout/sheet_menu: Binary XML file line #73 in com.emotion.pet.debug:layout/sheet_menu: Error inflating class <unknown>
+      ✗ sheet_ai → InflateException: Binary XML file line #164 in com.emotion.pet.debug:layout/sheet_ai: Binary XML file line #164 in com.emotion.pet.debug:layout/sheet_ai: Error inflating class <unknown>
+      ✗ sheet_pets → InflateException: Binary XML file line #82 in com.emotion.pet.debug:layout/sheet_pets: Binary XML file line #82 in com.emotion.pet.debug:layout/sheet_pets: Error inflating class com.google.android.material.card.Materia
+      ✗ item_pet → InflateException: Binary XML file line #15 in com.emotion.pet.debug:layout/item_pet: Binary XML file line #15 in com.emotion.pet.debug:layout/item_pet: Error inflating class <unknown>
+
 LayoutInflateTest > всички layouts се inflate-ват без грешка FAILED
-    java.lang.AssertionError at LayoutInflateTest.kt:67
+    java.lang.AssertionError: Счупени layouts:
+    activity_main → InflateException: Binary XML file line #78 in com.emotion.pet.debug:layout/activity_main: Binary XML file line #78 in com.emotion.pet.debug:layout/activity_main: Error inflating class com.google.android.material.progre
+    activity_chat → InflateException: Binary XML file line #35 in com.emotion.pet.debug:layout/activity_chat: Binary XML file line #35 in com.emotion.pet.debug:layout/activity_chat: Error inflating class android.widget.ImageView
+    sheet_menu → InflateException: Binary XML file line #73 in com.emotion.pet.debug:layout/sheet_menu: Binary XML file line #73 in com.emotion.pet.debug:layout/sheet_menu: Error inflating class <unknown>
+    sheet_ai → InflateException: Binary XML file line #164 in com.emotion.pet.debug:layout/sheet_ai: Binary XML file line #164 in com.emotion.pet.debug:layout/sheet_ai: Error inflating class <unknown>
+    sheet_pets → InflateException: Binary XML file line #82 in com.emotion.pet.debug:layout/sheet_pets: Binary XML file line #82 in com.emotion.pet.debug:layout/sheet_pets: Error inflating class com.google.android.material.card.Materia
+    item_pet → InflateException: Binary XML file line #15 in com.emotion.pet.debug:layout/item_pet: Binary XML file line #15 in com.emotion.pet.debug:layout/item_pet: Error inflating class <unknown>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.emotion.pet.LayoutInflateTest.всички layouts се inflate-ват без грешка(LayoutInflateTest.kt:71)
+
+ScreenshotTest > рендерира екраните STANDARD_OUT
+    Screenshot → /home/runner/work/Emotion/Emotion/app/../docs/screenshots/01-room.png (822x1782)
+    Screenshot → /home/runner/work/Emotion/Emotion/app/../docs/screenshots/02-menu.png (822x1782)
+
+ScreenshotTest > рендерира екраните STANDARD_ERROR
+    Invalid ID 0x00000000.
+
+ScreenshotTest > рендерира екраните STANDARD_OUT
+    Screenshot → /home/runner/work/Emotion/Emotion/app/../docs/screenshots/03-chat.png (822x1782)
+    Screenshot → /home/runner/work/Emotion/Emotion/app/../docs/screenshots/04-ai.png (822x1782)
+    Screenshot → /home/runner/work/Emotion/Emotion/app/../docs/screenshots/05-pets.png (822x1782)
 
 7 tests completed, 1 failed
 
 > Task :app:testDebugUnitTest FAILED
-> Task :app:writeDebugAppMetadata
-> Task :app:writeDebugSigningConfigVersions
 > Task :app:packageDebug
 > Task :app:createDebugApkListingFileRedirect
 > Task :app:assembleDebug
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run-1789070172008.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run-1789070488446.json
 
 [Incubating] Problems report is available at: file:///home/runner/work/Emotion/Emotion/build/reports/problems/problems-report.html
 
@@ -252,5 +279,5 @@ You can use '--warning-mode all' to show the individual deprecation warnings and
 
 For more on this, please refer to https://docs.gradle.org/9.7.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
 
-BUILD FAILED in 2m 59s
-44 actionable tasks: 43 executed, 1 from cache
+BUILD FAILED in 2m 45s
+44 actionable tasks: 44 executed
