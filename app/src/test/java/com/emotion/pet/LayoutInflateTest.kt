@@ -52,7 +52,9 @@ class LayoutInflateTest {
             "item_msg_user" to R.layout.item_msg_user,
             "item_msg_pet" to R.layout.item_msg_pet,
             "item_emoji" to R.layout.item_emoji,
-            "item_pet" to R.layout.item_pet
+            "item_pet" to R.layout.item_pet,
+            "widget_pet" to R.layout.widget_pet,
+            "overlay_pet" to R.layout.overlay_pet
         )
         val failures = mutableListOf<String>()
         layouts.forEach { (name, id) ->

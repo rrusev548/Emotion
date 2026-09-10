@@ -96,8 +96,13 @@ class MainActivity : AppCompatActivity(),
         binding.petView.applyPrefs(prefs)
         refreshHud()
         applyKeepAwake(prefs.keepAwake)
-        if (prefs.overlayEnabled && Settings.canDrawOverlays(this)) {
-            OverlayService.start(this)
+        if (prefs.overlayEnabled) {
+            if (Settings.canDrawOverlays(this)) {
+                OverlayService.start(this)
+            } else {
+                // разрешението още не е дадено (или е отказано) — не лъжи превключвателя, че е включено
+                prefs.overlayEnabled = false
+            }
         }
         handler.removeCallbacks(ticker)
         handler.removeCallbacks(chatter)

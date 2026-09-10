@@ -137,10 +137,11 @@ class OverlayService : Service() {
                 }
 
                 MotionEvent.ACTION_UP -> {
-                    val heldLong = System.currentTimeMillis() - downAt >= 500L
+                    // влаченето никога не гаси балона, дори да е продължило над 500ms
                     when {
-                        heldLong -> disableOverlay()
-                        !moved -> openApp()
+                        moved -> Unit
+                        System.currentTimeMillis() - downAt >= 500L -> disableOverlay()
+                        else -> openApp()
                     }
                     true
                 }
