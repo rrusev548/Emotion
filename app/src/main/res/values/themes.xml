@@ -64,18 +64,12 @@
     </style>
 
     <style name="Text.EmotionPet.TypingDot" parent="">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/text_secondary</item>
         <item name="android:textSize">11sp</item>
         <item name="android:paddingEnd">3dp</item>
     </style>
 
     <style name="Widget.EmotionPet.Tile" parent="">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">4dp</item>
-        <item name="android:layout_marginEnd">4dp</item>
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/bg_glass_card</item>
@@ -87,14 +81,10 @@
     </style>
 
     <style name="Text.EmotionPet.TileEmoji" parent="">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">24sp</item>
     </style>
 
     <style name="Text.EmotionPet.TileLabel" parent="">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">4dp</item>
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:textSize">12sp</item>

@@ -183,26 +183,48 @@
                 <LinearLayout
                     android:id="@+id/feedBtn"
                     style="@style/Widget.EmotionPet.Tile"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <TextView style="@style/Text.EmotionPet.TileEmoji" android:text="🍎" />
+                    <TextView
+                        style="@style/Text.EmotionPet.TileEmoji"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🍎" />
 
-                    <TextView style="@style/Text.EmotionPet.TileLabel" android:text="@string/tile_feed" />
+                    <TextView
+                        style="@style/Text.EmotionPet.TileLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tile_feed" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/playBtn"
                     style="@style/Widget.EmotionPet.Tile"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <TextView style="@style/Text.EmotionPet.TileEmoji" android:text="🎾" />
+                    <TextView
+                        style="@style/Text.EmotionPet.TileEmoji"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🎾" />
 
-                    <TextView style="@style/Text.EmotionPet.TileLabel" android:text="@string/tile_play" />
+                    <TextView
+                        style="@style/Text.EmotionPet.TileLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tile_play" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/sleepBtn"
                     style="@style/Widget.EmotionPet.Tile"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <TextView
@@ -219,11 +241,21 @@
                 <LinearLayout
                     android:id="@+id/petBtn"
                     style="@style/Widget.EmotionPet.Tile"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <TextView style="@style/Text.EmotionPet.TileEmoji" android:text="🤗" />
+                    <TextView
+                        style="@style/Text.EmotionPet.TileEmoji"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🤗" />
 
-                    <TextView style="@style/Text.EmotionPet.TileLabel" android:text="@string/tile_pet" />
+                    <TextView
+                        style="@style/Text.EmotionPet.TileLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tile_pet" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -343,6 +375,7 @@
                     android:id="@+id/roomNight"
                     style="@style/Widget.EmotionPet.Chip"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/room_palette_night"
@@ -364,6 +397,7 @@
                     style="@style/Widget.EmotionPet.Chip"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:layout_weight="1"
                     android:gravity="center"
@@ -374,6 +408,7 @@
                     android:id="@+id/roomOcean"
                     style="@style/Widget.EmotionPet.Chip"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:layout_weight="1"
