@@ -238,3 +238,4 @@ captures/
 *.jks
 .idea/
 *.iml
+ci-build.log

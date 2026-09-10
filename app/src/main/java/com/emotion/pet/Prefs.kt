@@ -41,7 +41,8 @@ class Prefs(context: Context) {
 
     // ---------- стая ----------
     var palette: String
-        get() = sp.getString(K_PALETTE, Palette.NIGHT.name) ?: Palette.NIGHT.name
+        get() = sp.getString(K_PALETTE, Presets.Palette.NIGHT.name)
+            ?: Presets.Palette.NIGHT.name
         set(v) = sp.edit().putString(K_PALETTE, v).apply()
 
     var wallpaperPath: String?
