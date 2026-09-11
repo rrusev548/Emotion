@@ -4,12 +4,15 @@
 
 ## Текущо състояние
 
-- **PR:** [#2](https://github.com/rrusev548/Emotion/pull/2) — `claude/emotion-pet-continuation-dojdfy` → `main`. Open, draft: не, `mergeable_state: clean`, 14 commit-а, CI зелено на всеки push.
-- **PR #1** (клон `arena/01a08c73-emotion`) вече е merge-нат в `main` преди тази сесия — не го пипай/reuse-вай.
-- **Public APK:** https://github.com/rrusev548/Emotion/releases/download/latest-build/EmotionPet-debug.apk — обновява се само чрез `workflow_dispatch` на `android.yml` (виж по-долу защо push сам по себе си не го обновява).
-- Локалната среда (тази sandbox) **няма Android SDK/emulator** — само JDK + `keytool`. Валидацията минава изцяло през GitHub Actions CI (unit тестове + `assembleDebug`). Никога не е тествано на реално устройство от мен — само от потребителя.
+- **Клон на тази сесия:** `arena/01a08ea3-emotion` (разклонен от merge commit-а на PR #2). Тук е направен fix + нов release `v1.1`.
+- **PR #2** (`claude/emotion-pet-continuation-dojdfy`) вече е **MERGED** в `main`. **PR #1** (`arena/01a08c73-emotion`) също е merge-нат — не го пипай/reuse-вай.
+- **`main`** е 1 commit напред спрямо базата на този клон (автоматичен `ci: обнови UI снимките` след merge-а).
+- **Release `v1.1`** (таг `v1.1` → commit `22bffbc`): https://github.com/rrusev548/Emotion/releases/download/v1.1/EmotionPet-debug.apk — това е най-новият APK с фиксовете по-долу.
+- **Public APK** (`latest-build`): https://github.com/rrusev548/Emotion/releases/download/latest-build/EmotionPet-debug.apk — обновява се само чрез `workflow_dispatch` на `android.yml` или push към `main`/tag. Push към `arena/*` клон НЕ го обновява; затова се използва таг `v*` (той създава отделен release).
+- Локалната среда (тази sandbox) **няма Android SDK/JDK/emulator** (и `apt-get` е блокиран — няма root) — само git/gh/curl. Валидацията минава изцяло през GitHub Actions CI. `gh workflow run` дава 403 (токенът няма `workflow` scope) → НЕ може да се пуска workflow_dispatch; използвай push/tag.
+- Мрежата в sandbox-а **не стига** до `objects.githubusercontent.com` / `release-assets.githubusercontent.com` (файловите хостове на GitHub) → APK не може да се свали/провери локално; достъпни са само api.github.com и github.com.
 
-## Какво е направено тази сесия (по ред)
+## Какво е направено в предишната сесия (PR #2, по ред)
 
 1. **Оправен счупен build** — `LayoutInflateTest` ползваше ръчен `ContextThemeWrapper` без AppCompat factory → Material компоненти гърмяха при inflate. Вече взима `layoutInflater` от реална `Robolectric.buildActivity(MainActivity::class.java)`.
 2. **CI поправка** — "Commit UI screenshots" стъпката в `.github/workflows/android.yml` проверяваше твърдо `github.ref == 'refs/heads/arena/01a08c73-emotion'` (стар, вече merge-нат клон) → никой нов continuation branch не получаваше обновени `docs/screenshots`. Вече е `startsWith(github.ref, 'refs/heads/')`.
@@ -24,21 +27,24 @@
 
 Всичко по-горе е push-нато, CI зелено на всеки етап.
 
-## ⚠️ Нерешен проблем: "Приложението не е инсталирано" на телефона на потребителя
+## ⚠️ Текущ проблем: crash при стартиране (Samsung) — статус след тази сесия
 
-Потребителят **все още** получава инсталационна грешка **след** фикса на keystore-а (commit `bbf29c4` и по-нови) и след многократни инструкции да деинсталира старата версия първо. Не е потвърдено дали:
+**Инсталационната грешка „Приложението не е инсталирано“ е РЕШЕНА** — фиксът на debug keystore-а подейства: потребителят потвърди, че вече се инсталира.
 
-- (а) наистина е направил деинсталиране на старата версия преди последния опит (най-вероятната причина — повтарящ се пропуск в разговора),
-- (б) APK файлът се е свалил коректно (частично/повредено сваляне),
-- (в) устройството има скрит втори профил/Secure Folder с друг инстанс на приложението, невидим в основния Settings → Apps,
-- (г) "Install unknown apps" разрешението липсва за конкретното приложение, през което той отваря файла (Files vs Chrome vs друг браузър — разрешението е per-app-source, не глобално),
-- (д) нещо специфично за устройството/Android версията му (модел непознат от нас — Samsung One UI по скрийншотите).
+**Нов проблем:** приложението се инсталира, но **крашва при стартиране** на Samsung (One UI) телефон.
 
-**Следващи стъпки за новия агент/сесия:**
-1. Поискай **точен нов скрийншот** на грешката (работи добре досега — предишен скрийншот директно разкри Play Protect блока).
-2. Потвърди изрично: "деинсталира ли старата версия преди да пробваш пак?" — не приемай мълчаливо "не работи" без да върнеш този въпрос.
-3. Ако наистина е чисто устройство (никаква стара версия): провери размера на свалени файл (~6.0-6.1 MB), провери "Install unknown apps" разрешение за точното приложение, през което отваря APK-а.
-4. Ако нищо от горното не помогне — обмисли `adb` инструкции (ако потребителят може да свърже телефона към компютър) за по-детайлна диагностика (`adb install -r EmotionPet-debug.apk` дава точен грешка код вместо генеричния UI диалог).
+**Направено тази сесия (когато стана ясно, че крашва при старт):**
+1. **`PetView.kt`** — добавен `setLayerType(View.LAYER_TYPE_SOFTWARE, null)` в `init`. Хипотеза: Samsung крашва нативно (SIGSEGV в Skia), когато emoji се рисува с `canvas.drawText` върху hardware-accelerated Canvas (любимецът се рисува с `drawText` всяка рамка). Software слой е документираният fix за точно този клас крашове.
+2. **`CrashLog.kt` (нов)** — `Thread.setDefaultUncaughtExceptionHandler` записва Java изключенията в `filesDir/crash_log.txt`; `MainActivity.maybeReportCrash()` показва диалог с първите редове + бутон „Копирай“ при следващо пускане. Така потребителят може да прати точния stack trace без adb. (Нативните SIGSEGV не минават през този handler.)
+3. **`values-en/strings.xml`** — добавени 5 липсващи overlay ключа (`setting_overlay`, `overlay_perm_needed`, `overlay_channel_name`, `overlay_notif_title`, `overlay_notif_text`). Преди това менюто/overlay-я биха хвърлили `Resources.NotFoundException` на **английско** устройство.
+4. **`app/build.gradle.kts`** — `versionCode` 1→2, `versionName` "1.0"→"1.1" (гладък ъпгрейд със същия ключ).
+
+Всичко е push-нато в `arena/01a08ea3-emotion` + таг `v1.1` (release с APK). CI зелен на клона и на тага.
+
+**Следващи стъпки за новия агент/сесия (ако v1.1 пак крашва):**
+1. Поискай от потребителя **текста от crash диалога** („Копирай“ → праща го в чата). Той показва точния Java stack trace.
+2. Ако диалог НЕ се появява, а крашът остава → почти сигурно е **нативен** crash (SIGSEGV). Тогава: накарай потребителя да пусне **bug report** (Settings → Developer options → „Take bug report“) или `adb logcat` от компютър; потърси `FATAL EXCEPTION` / `SIGSEGV` / `libskia`/`libhwui` в лога.
+3. Други кандидати за native crash при нужда: `saveLayerAlpha` върху голям canvas (в `drawBubble`), `BitmapShader` с огромна снимка за фон (`loadWallpaper` decode-ва на пълна резолюция без downsample).
 
 ## Известни ограничения
 
