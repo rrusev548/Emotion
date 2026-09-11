@@ -11,10 +11,10 @@ android {
 
     defaultConfig {
         applicationId = "com.emotion.pet"
-        minSdk = 24
+        minSdk = 21
         targetSdk = 35
-        versionCode = 3
-        versionName = "1.2"
+        versionCode = 4
+        versionName = "1.3"
     }
 
     signingConfigs {
@@ -26,6 +26,15 @@ android {
             storePassword = "android"
             keyAlias = "androiddebugkey"
             keyPassword = "android"
+        }
+        create("release") {
+            // Фиксиран release ключ (keystore/release.p12, PKCS12). Release APK-то не е
+            // debuggable — някои устройства/политики отказват debuggable приложения.
+            storeFile = rootProject.file("keystore/release.p12")
+            storeType = "PKCS12"
+            storePassword = "emotionpet"
+            keyAlias = "emotionpet"
+            keyPassword = "emotionpet"
         }
     }
 
@@ -39,6 +48,7 @@ android {
             versionNameSuffix = "-debug"
         }
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

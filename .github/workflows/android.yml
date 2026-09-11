@@ -35,7 +35,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          gradle testDebugUnitTest assembleDebug --no-daemon --stacktrace --continue 2>&1 | tee ci-build.log
+          gradle testDebugUnitTest assembleDebug assembleRelease --no-daemon --stacktrace --continue 2>&1 | tee ci-build.log
 
       - name: Diagnostics
         if: always()
@@ -71,13 +71,16 @@ jobs:
         run: |
           mkdir -p artifacts
           cp app/build/outputs/apk/debug/app-debug.apk artifacts/EmotionPet-debug.apk
+          cp app/build/outputs/apk/release/app-release.apk artifacts/EmotionPet.apk
 
       - name: Upload APK artifact
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: EmotionPet-debug-apk
-          path: artifacts/EmotionPet-debug.apk
+          name: EmotionPet-apks
+          path: |
+            artifacts/EmotionPet.apk
+            artifacts/EmotionPet-debug.apk
           if-no-files-found: error
 
       - name: Publish "latest build" release
@@ -95,9 +98,13 @@ jobs:
           name: Emotion Pet — latest build
           prerelease: true
           body: |
-            Автоматично компилиран debug APK от commit ${{ github.sha }}.
+            Автоматично компилиран APK от commit ${{ github.sha }}.
             Инсталирай го на телефона си (разреши „Инсталиране от неизвестни източници“).
-          files: artifacts/EmotionPet-debug.apk
+            • EmotionPet.apk — препоръчан (release, подписан, не-debuggable)
+            • EmotionPet-debug.apk — debug вариант
+          files: |
+            artifacts/EmotionPet.apk
+            artifacts/EmotionPet-debug.apk
 
       # Мрежата в sandbox-а не стига до логовете на Actions, затова при грешка
       # логът се записва в самото репо, за да може да се прочете.
