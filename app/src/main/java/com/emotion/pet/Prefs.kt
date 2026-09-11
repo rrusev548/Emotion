@@ -126,9 +126,22 @@ class Prefs(context: Context) {
         get() = sp.getString(K_CHAT, "[]") ?: "[]"
         set(v) = sp.edit().putString(K_CHAT, v).apply()
 
+    var tasksLog: String
+        get() = sp.getString(K_TASKS, "[]") ?: "[]"
+        set(v) = sp.edit().putString(K_TASKS, v).apply()
+
+    var memoryLog: String
+        get() = sp.getString(K_MEMORY, "[]") ?: "[]"
+        set(v) = sp.edit().putString(K_MEMORY, v).apply()
+
     var greeted: Boolean
         get() = sp.getBoolean(K_GREETED, false)
         set(v) = sp.edit().putBoolean(K_GREETED, v).apply()
+
+    /** Показан ли е onboarding екранът при първо пускане. */
+    var onboarded: Boolean
+        get() = sp.getBoolean(K_ONBOARDED, false)
+        set(v) = sp.edit().putBoolean(K_ONBOARDED, v).apply()
 
     companion object {
         private const val FILE = "emotion_pet"
@@ -158,7 +171,10 @@ class Prefs(context: Context) {
         private const val K_AI_BASE = "ai_base_url"
         private const val K_AI_PERSONA = "ai_personality"
         private const val K_CHAT = "chat_log"
+        private const val K_TASKS = "tasks_log"
+        private const val K_MEMORY = "memory_log"
         private const val K_GREETED = "greeted"
+        private const val K_ONBOARDED = "onboarded"
 
         const val TYPE_EMOJI = "emoji"
         const val TYPE_IMAGE = "image"

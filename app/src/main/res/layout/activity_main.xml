@@ -113,7 +113,7 @@
             tools:text="72·84·91" />
     </LinearLayout>
 
-    <!-- Долу вдясно: чат + меню -->
+    <!-- Долу вдясно: чат бутон -->
     <LinearLayout
         android:id="@+id/actionColumn"
         android:layout_width="wrap_content"
@@ -125,30 +125,9 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/menuBtn"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:background="@drawable/bg_glass_pill"
-            android:clickable="true"
-            android:contentDescription="@string/menu"
-            android:elevation="6dp"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:contentDescription="@string/menu"
-                android:src="@drawable/ic_apps"
-                app:tint="@color/text_primary" />
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/chatBtn"
             android:layout_width="wrap_content"
             android:layout_height="54dp"
-            android:layout_marginTop="12dp"
             android:background="@drawable/bg_grad_accent"
             android:clickable="true"
             android:elevation="10dp"
@@ -176,5 +155,38 @@
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
+
+    <!-- Бързи действия при tap върху Peta -->
+    <HorizontalScrollView
+        android:id="@+id/quickActionsScroll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="86dp"
+        android:visibility="gone"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/quickActionsRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_glass_pill"
+            android:elevation="8dp"
+            android:orientation="horizontal"
+            android:padding="6dp" />
+    </HorizontalScrollView>
+
+    <!-- Долна навигация: Начало / Задачи / Агенти / Памет / Още -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/surface_1"
+        android:elevation="12dp"
+        app:itemIconTint="@color/nav_item_color"
+        app:itemTextColor="@color/nav_item_color"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_main" />
 
 </FrameLayout>

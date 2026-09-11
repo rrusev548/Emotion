@@ -1,14 +1,18 @@
 package com.emotion.pet
 
+import android.animation.ValueAnimator
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.PixelFormat
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -19,14 +23,29 @@ import androidx.core.app.NotificationCompat
 import kotlin.math.abs
 
 /**
- * Плаващ балон с любимеца над другите приложения (изисква SYSTEM_ALERT_WINDOW).
- * Пуска се/спира от менюто → „Плаващ прозорец“. Тап отваря приложението,
- * задържане изключва балона.
+ * Peta наднича от края на екрана над другите приложения (Edge Pop, изисква
+ * SYSTEM_ALERT_WINDOW). По-голямата част от балона стои извън видимата
+ * област — влачиш го и при пускане пак се "прибира" (snap) към най-близкия
+ * край. Пуска се/спира от менюто → „Плаващ прозорец“. Тап отваря
+ * приложението, задържане на едно място изключва балона.
  */
 class OverlayService : Service() {
 
     private var windowManager: WindowManager? = null
     private var bubble: View? = null
+    private var params: WindowManager.LayoutParams? = null
+    private val handler = Handler(Looper.getMainLooper())
+    private var bubbleSizePx = 0
+    private var peekVisiblePx = 0
+    private var screenWidthPx = 0
+    private var snapAnimator: ValueAnimator? = null
+
+    private val peekNudge = object : Runnable {
+        override fun run() {
+            nudge()
+            handler.postDelayed(this, 6000L)
+        }
+    }
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -34,11 +53,26 @@ class OverlayService : Service() {
         super.onCreate()
         startForeground(NOTIF_ID, buildNotification())
         addBubble()
+        handler.postDelayed(peekNudge, 6000L)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_STICKY
 
+    /** При завъртане на екрана размерите за snap-ване към край са невалидни — преизчисляваме ги. */
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        val view = bubble ?: return
+        val lp = params ?: return
+        val wm = windowManager ?: return
+        val wasLeft = lp.x < screenWidthPx / 2
+        screenWidthPx = resources.displayMetrics.widthPixels
+        lp.x = if (wasLeft) leftEdgeX() else rightEdgeX()
+        runCatching { wm.updateViewLayout(view, lp) }
+    }
+
     override fun onDestroy() {
+        handler.removeCallbacksAndMessages(null)
+        snapAnimator?.cancel()
         removeBubble()
         super.onDestroy()
     }
@@ -78,6 +112,11 @@ class OverlayService : Service() {
         view.findViewById<TextView>(R.id.overlayEmoji).text =
             if (customImage) "🖼" else prefs.emoji.ifBlank { pet.emoji }
 
+        val density = resources.displayMetrics.density
+        bubbleSizePx = (64 * density).toInt()
+        peekVisiblePx = (bubbleSizePx * PEEK_VISIBLE_FRACTION).toInt()
+        screenWidthPx = resources.displayMetrics.widthPixels
+
         val overlayType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
         } else {
@@ -94,17 +133,21 @@ class OverlayService : Service() {
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.START
-            x = 0
+            x = rightEdgeX()
             y = 220
         }
 
         val wm = getSystemService(WINDOW_SERVICE) as WindowManager
         windowManager = wm
         bubble = view
+        params = lp
         attachDragHandling(view, wm, lp)
 
         runCatching { wm.addView(view, lp) }
     }
+
+    private fun leftEdgeX(): Int = -(bubbleSizePx - peekVisiblePx)
+    private fun rightEdgeX(): Int = screenWidthPx - peekVisiblePx
 
     private fun attachDragHandling(view: View, wm: WindowManager, lp: WindowManager.LayoutParams) {
         var downX = 0f
@@ -117,6 +160,8 @@ class OverlayService : Service() {
         view.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    snapAnimator?.cancel()
+                    handler.removeCallbacks(peekNudge)
                     downX = event.rawX
                     downY = event.rawY
                     startX = lp.x
@@ -139,15 +184,51 @@ class OverlayService : Service() {
                 MotionEvent.ACTION_UP -> {
                     // влаченето никога не гаси балона, дори да е продължило над 500ms
                     when {
-                        moved -> Unit
+                        moved -> snapToNearestEdge(wm, view, lp)
                         System.currentTimeMillis() - downAt >= 500L -> disableOverlay()
                         else -> openApp()
                     }
+                    handler.postDelayed(peekNudge, 6000L)
                     true
                 }
 
                 else -> false
             }
+        }
+    }
+
+    /** При пускане Peta се "прибира" (snap) обратно към най-близкия край — Edge Pop. */
+    private fun snapToNearestEdge(wm: WindowManager, view: View, lp: WindowManager.LayoutParams) {
+        val center = lp.x + bubbleSizePx / 2
+        val targetX = if (center < screenWidthPx / 2) leftEdgeX() else rightEdgeX()
+        snapAnimator?.cancel()
+        snapAnimator = ValueAnimator.ofInt(lp.x, targetX).apply {
+            duration = 220L
+            addUpdateListener { a ->
+                lp.x = a.animatedValue as Int
+                runCatching { wm.updateViewLayout(view, lp) }
+            }
+            start()
+        }
+    }
+
+    /** Лек "поглед към теб" — балонът леко се измества навътре и се връща, за да не изглежда забравен. */
+    private fun nudge() {
+        val wm = windowManager ?: return
+        val view = bubble ?: return
+        val lp = params ?: return
+        val atLeft = lp.x < screenWidthPx / 2
+        val nudgeBy = (12 * resources.displayMetrics.density).toInt()
+        val out = if (atLeft) leftEdgeX() else rightEdgeX()
+        val inward = if (atLeft) out + nudgeBy else out - nudgeBy
+        snapAnimator?.cancel()
+        snapAnimator = ValueAnimator.ofInt(out, inward, out).apply {
+            duration = 900L
+            addUpdateListener { a ->
+                lp.x = a.animatedValue as Int
+                runCatching { wm.updateViewLayout(view, lp) }
+            }
+            start()
         }
     }
 
@@ -166,12 +247,14 @@ class OverlayService : Service() {
         val wm = windowManager ?: return
         bubble?.let { runCatching { wm.removeView(it) } }
         bubble = null
+        params = null
         windowManager = null
     }
 
     companion object {
         private const val CHANNEL_ID = "overlay_pet"
         private const val NOTIF_ID = 42
+        private const val PEEK_VISIBLE_FRACTION = 0.55f
 
         fun start(context: Context) {
             val intent = Intent(context, OverlayService::class.java)
