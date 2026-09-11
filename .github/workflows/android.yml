@@ -57,7 +57,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Commit UI screenshots
-        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/arena/01a08c73-emotion'
+        if: success() && github.event_name == 'push' && startsWith(github.ref, 'refs/heads/')
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

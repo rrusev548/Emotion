@@ -33,6 +33,12 @@
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
+    <style name="Theme.EmotionPet.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/sheet_bg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.EmotionPet</item>
+    </style>
+
     <style name="Theme.EmotionPet.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="colorSurface">@color/surface_1</item>
         <item name="colorOnSurface">@color/text_primary</item>

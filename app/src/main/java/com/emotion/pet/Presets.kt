@@ -137,6 +137,21 @@ object Presets {
             keyUrl = "https://openrouter.ai/keys"
         ),
         AiProvider(
+            id = "gemini",
+            label = "Gemini",
+            // Google дава официален OpenAI-съвместим ендпойнт — работи директно с AiClient
+            baseUrl = "https://generativelanguage.googleapis.com/v1beta/openai",
+            defaultModel = "gemini-3.8-flash",
+            keyUrl = "https://aistudio.google.com/apikey"
+        ),
+        AiProvider(
+            id = "claude",
+            label = "Claude",
+            baseUrl = "https://api.anthropic.com/v1",
+            defaultModel = "claude-sonnet-5",
+            keyUrl = "https://console.anthropic.com/settings/keys"
+        ),
+        AiProvider(
             id = "custom",
             label = "Custom",
             baseUrl = "",

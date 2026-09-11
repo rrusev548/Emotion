@@ -96,6 +96,11 @@ class Prefs(context: Context) {
         get() = sp.getBoolean(K_KEEP_AWAKE, true)
         set(v) = sp.edit().putBoolean(K_KEEP_AWAKE, v).apply()
 
+    /** Желае ли потребителят плаващият балон да е активен (независимо дали разрешението е дадено). */
+    var overlayEnabled: Boolean
+        get() = sp.getBoolean(K_OVERLAY, false)
+        set(v) = sp.edit().putBoolean(K_OVERLAY, v).apply()
+
     // ---------- ИИ ----------
     var aiProvider: String
         get() = sp.getString(K_AI_PROVIDER, "openai") ?: "openai"
@@ -146,6 +151,7 @@ class Prefs(context: Context) {
         private const val K_SLEEPING = "sleeping"
         private const val K_LAST_TICK = "last_tick"
         private const val K_KEEP_AWAKE = "keep_awake"
+        private const val K_OVERLAY = "overlay_enabled"
         private const val K_AI_PROVIDER = "ai_provider"
         private const val K_AI_MODEL = "ai_model"
         private const val K_AI_KEY = "ai_key"

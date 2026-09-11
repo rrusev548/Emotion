@@ -5,13 +5,18 @@ import android.os.Looper
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.BufferedReader
+import java.net.ConnectException
 import java.net.HttpURLConnection
+import java.net.MalformedURLException
+import java.net.SocketTimeoutException
 import java.net.URL
+import java.net.UnknownHostException
 import java.util.concurrent.Executors
 
 /**
- * Минимален клиент за всеки OpenAI-съвместим /chat/completions endpoint.
- * Работи с OpenAI, Groq, OpenRouter, Ollama, LM Studio и др.
+ * Минимален клиент без външни библиотеки. По подразбиране говори с всеки
+ * OpenAI-съвместим /chat/completions endpoint (OpenAI, Groq, OpenRouter, Gemini,
+ * Ollama, LM Studio и др.); за Claude (Anthropic) ползва нативния /messages формат.
  */
 object AiClient {
 
@@ -21,6 +26,7 @@ object AiClient {
     private val main = Handler(Looper.getMainLooper())
 
     fun chat(
+        providerId: String,
         baseUrl: String,
         apiKey: String,
         model: String,
@@ -32,29 +38,47 @@ object AiClient {
             var ok = false
             var text = ""
             try {
-                val url = URL(baseUrl.trimEnd('/') + "/chat/completions")
+                val isClaude = providerId == "claude"
+                val url = URL(baseUrl.trimEnd('/') + if (isClaude) "/messages" else "/chat/completions")
                 val conn = (url.openConnection() as HttpURLConnection).apply {
                     requestMethod = "POST"
                     connectTimeout = 20_000
                     readTimeout = 60_000
                     doOutput = true
                     setRequestProperty("Content-Type", "application/json")
-                    if (apiKey.isNotBlank()) setRequestProperty("Authorization", "Bearer $apiKey")
+                    if (isClaude) {
+                        setRequestProperty("x-api-key", apiKey)
+                        setRequestProperty("anthropic-version", "2023-06-01")
+                    } else if (apiKey.isNotBlank()) {
+                        setRequestProperty("Authorization", "Bearer $apiKey")
+                    }
                 }
 
-                val messages = JSONArray()
-                if (systemPrompt.isNotBlank()) {
-                    messages.put(JSONObject().put("role", "system").put("content", systemPrompt))
+                val payload = if (isClaude) {
+                    // Anthropic Messages API: system-ът е отделно поле, не роля в messages
+                    val messages = JSONArray()
+                    history.takeLast(16).forEach { m ->
+                        messages.put(JSONObject().put("role", m.role).put("content", m.content))
+                    }
+                    JSONObject()
+                        .put("model", model)
+                        .put("max_tokens", 400)
+                        .put("messages", messages)
+                        .apply { if (systemPrompt.isNotBlank()) put("system", systemPrompt) }
+                } else {
+                    val messages = JSONArray()
+                    if (systemPrompt.isNotBlank()) {
+                        messages.put(JSONObject().put("role", "system").put("content", systemPrompt))
+                    }
+                    history.takeLast(16).forEach { m ->
+                        messages.put(JSONObject().put("role", m.role).put("content", m.content))
+                    }
+                    JSONObject()
+                        .put("model", model)
+                        .put("messages", messages)
+                        .put("temperature", 0.8)
+                        .put("max_tokens", 400)
                 }
-                history.takeLast(16).forEach { m ->
-                    messages.put(JSONObject().put("role", m.role).put("content", m.content))
-                }
-
-                val payload = JSONObject()
-                    .put("model", model)
-                    .put("messages", messages)
-                    .put("temperature", 0.8)
-                    .put("max_tokens", 400)
 
                 conn.outputStream.use { it.write(payload.toString().toByteArray(Charsets.UTF_8)) }
 
@@ -63,9 +87,15 @@ object AiClient {
                     ?.bufferedReader()?.use(BufferedReader::readText).orEmpty()
 
                 if (code in 200..299) {
-                    val content = JSONObject(raw)
-                        .optJSONArray("choices")?.optJSONObject(0)
-                        ?.optJSONObject("message")?.optString("content").orEmpty()
+                    val content = if (isClaude) {
+                        JSONObject(raw)
+                            .optJSONArray("content")?.optJSONObject(0)
+                            ?.optString("text").orEmpty()
+                    } else {
+                        JSONObject(raw)
+                            .optJSONArray("choices")?.optJSONObject(0)
+                            ?.optJSONObject("message")?.optString("content").orEmpty()
+                    }
                     if (content.isBlank()) {
                         text = "Празен отговор от модела."
                     } else {
@@ -77,10 +107,19 @@ object AiClient {
                 }
                 conn.disconnect()
             } catch (e: Exception) {
-                text = e.message ?: e.javaClass.simpleName
+                text = friendlyError(e)
             }
             main.post { onResult(ok, text) }
         }
+    }
+
+    /** Превръща честите мрежови грешки в разбираемо съобщение вместо суров стектрейс. */
+    private fun friendlyError(e: Exception): String = when (e) {
+        is UnknownHostException -> "Няма връзка с интернет (или грешен Base URL)."
+        is SocketTimeoutException -> "Изтече времето за връзка — сървърът не отговори."
+        is ConnectException -> "Връзката е отказана — провери Base URL-а и дали сървърът работи."
+        is MalformedURLException -> "Невалиден Base URL."
+        else -> e.message ?: e.javaClass.simpleName
     }
 
     private fun parseError(code: Int, raw: String): String = try {
@@ -93,12 +132,13 @@ object AiClient {
 
     /** Бърз тест, че ключът/моделът/URL-ът работят. */
     fun test(
+        providerId: String,
         baseUrl: String,
         apiKey: String,
         model: String,
         systemPrompt: String,
         onResult: (ok: Boolean, text: String) -> Unit
     ) {
-        chat(baseUrl, apiKey, model, systemPrompt, listOf(Msg("user", "ping")), onResult)
+        chat(providerId, baseUrl, apiKey, model, systemPrompt, listOf(Msg("user", "ping")), onResult)
     }
 }
