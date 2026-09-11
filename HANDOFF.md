@@ -7,7 +7,8 @@
 - **Клон на тази сесия:** `arena/01a08ea3-emotion` (разклонен от merge commit-а на PR #2). Тук е направен fix + нов release `v1.1`.
 - **PR #2** (`claude/emotion-pet-continuation-dojdfy`) вече е **MERGED** в `main`. **PR #1** (`arena/01a08c73-emotion`) също е merge-нат — не го пипай/reuse-вай.
 - **`main`** е 1 commit напред спрямо базата на този клон (автоматичен `ci: обнови UI снимките` след merge-а).
-- **Release `v1.3`** (таг `v1.3` → commit `0d6f518`): https://github.com/rrusev548/Emotion/releases/download/v1.3/EmotionPet.apk — **препоръчан** (release, подписан с keystore/release.p12, не-debuggable, ~5.1 MB). Има и debug: `.../v1.3/EmotionPet-debug.apk`. От `v1.2` нататък пакетът е `com.emotion.pet` (без `.debug` суфикс). От `v1.3`: `minSdk 21` (вместо 24) + release signing (не-debuggable).
+- **Release `v1.4`** (таг `v1.4` → commit `226289e`): https://github.com/rrusev548/Emotion/releases/download/v1.4/EmotionPet.apk — **ПРЕПОРЪЧАН и ЕДИНСТВЕН файл за сваляне** (~5.1 MB). Един ключ (release.p12) за debug+release → няма конфликт между варианти. `versionCode 5 / versionName 1.4`, пакет `com.emotion.pet`, `minSdk 21`, `targetSdk 35`.
+- **Release `v1.3`** (таг `v1.3` → commit `0d6f518`): предходен; debug и release бяха с РАЗЛИЧНИ ключове (debug.keystore vs release.p12) — възможен източник на „Приложението не е инсталирано“. Ползвай v1.4.
 - **Release `v1.2`** (таг `v1.2` → commit `90a116c`): първият с нов пакет `com.emotion.pet` (без суфикс).
 - **Release `v1.1`** (таг `v1.1` → commit `22bffbc`): стар пакет `com.emotion.pet.debug` (остарял).
 - **Public APK** (`latest-build`): https://github.com/rrusev548/Emotion/releases/download/latest-build/EmotionPet-debug.apk — обновява се само чрез `workflow_dispatch` на `android.yml` или push към `main`/tag. Push към `arena/*` клон НЕ го обновява; затова се използва таг `v*` (той създава отделен release).
@@ -43,9 +44,11 @@
 
 Всичко е push-нато в `arena/01a08ea3-emotion` + тагове `v1.1`, `v1.2`, `v1.3` (release с APK). CI зелен на клона и на таговете.
 
-**⚠️ Уточнение от потребителя (след v1.1/v1.2):** той ВСЕ ОЩЕ получава „Приложението не е инсталирано“ при инсталация (снимка на „Package installer“). Тъй като v1.2+ е със СЪВСЕМ нов пакет `com.emotion.pet`, конфликт на подписи вече НЕ е причина — значи проблемът е в устройството/свалянето, НЕ в APK-то. Действия, които са предприети в отговор (все още без потвърждение от потребителя):
-- v1.3: release-signed APK (не-debuggable) + `minSdk 21` (за да се изключат „стар Android“ и „debuggable блокиран“ хипотезите).
-- Дадени инструкции: (1) сваляне през **Chrome/Samsung Internet, НЕ през вградения браузър на чата** (там 302-редиректът към objects.githubusercontent.com може да къса файла), (2) проверка на размера в My Files, (3) изключване на **Auto Blocker** (Samsung) и Play Protect, (4) инсталация през **SAI (Split APKs Installer)** от Play Store, за да се види ТОЧНИЯ код на грешката (INSTALL_FAILED_OLDER_SDK / UPDATE_INCOMPATIBLE / PARSE_FAILED_... / INSUFFICIENT_STORAGE / USER_RESTRICTED).
+**⚠️ Уточнение от потребителя (след v1.1/v1.2/v1.3):** той ВСЕ ОЩЕ получава „Приложението не е инсталирано“ при инсталация (снимки на „Package installer“). APK-то е **верифицирано изцяло** и е валидно:
+
+- **Пълна проверка (в `docs/apk-info.txt` от CI, стъпка „Verify APK“):** `apksigner verify` → **v1 (JAR): true, v2 (APK Sig v2): true**; signer CN=Emotion Pet; `aapt2 dump badging` → `package=com.emotion.pet`, `versionCode=5`, `versionName=1.4`, `minSdk=21`, `targetSdk=35`, `launchable-activity=com.emotion.pet.MainActivity`, БЕЗ `application-debuggable` и БЕЗ `testOnly`. Файлът е **пълен и инсталируем** — проблемът е устройството, НЕ APK-то.
+- Предишна потенциална причина от наша страна — **два различни ключа** (debug.keystore за debug, release.p12 за release) за един и същ пакет `com.emotion.pet` — е **отстранена в v1.4** (един ключ за всичко).
+- Все още без потвърждение от потребителя коя от device-side причините е: (а) Samsung **Auto Blocker** включен, (б) Play Protect, (в) стара версия „Emotion Pet“ инсталирана с друг ключ (трябва деинсталиране), (г) разрешение „Инсталиране на непознати приложения“ липсва за конкретния файлов мениджър/браузър.
 
 **Следващи стъпки за новия агент/сесия (ако v1.1 пак крашва):**
 1. Поискай от потребителя **текста от crash диалога** („Копирай“ → праща го в чата). Той показва точния Java stack trace.
