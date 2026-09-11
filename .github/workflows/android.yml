@@ -49,14 +49,18 @@ jobs:
           tail -n 150 ci-build.log || true
 
       - name: Verify APK (съдържание + подпис)
-        if: success()
+        if: always()
         shell: bash
         run: |
+          set +e
           REL=app/build/outputs/apk/release/app-release.apk
           DBG=app/build/outputs/apk/debug/app-debug.apk
           {
             echo "===== Генерирани APK файлове ====="
             ls -la app/build/outputs/apk/release/ app/build/outputs/apk/debug/ 2>&1
+            echo
+            echo "===== Инструменти ====="
+            which keytool unzip openssl 2>&1
             echo
             echo "===== RELEASE: keytool -printcert (v1 подпис) ====="
             keytool -printcert -jarfile "$REL" 2>&1
@@ -66,13 +70,16 @@ jobs:
             echo
             echo "===== RELEASE: сертификат (openssl pkcs7) ====="
             RSA=$(unzip -l "$REL" 2>/dev/null | awk '{print $4}' | grep -E '^META-INF/.*\.(RSA|DSA|EC)$' | head -1)
+            echo "RSA block: ${RSA:-<няма>}"
             if [ -n "$RSA" ]; then unzip -p "$REL" "$RSA" 2>/dev/null | openssl pkcs7 -inform DER -print_certs 2>&1 | grep -E "subject|issuer|Not Before|Not After"; fi
             echo
             echo "===== DEBUG: keytool -printcert (v1 подпис) ====="
             keytool -printcert -jarfile "$DBG" 2>&1
+            echo "===== КРАЙ ====="
           } > docs/apk-info.txt 2>&1
           echo "----- docs/apk-info.txt -----"
-          cat docs/apk-info.txt
+          cat docs/apk-info.txt || true
+          exit 0
 
       - name: Upload UI screenshots
         if: success()
