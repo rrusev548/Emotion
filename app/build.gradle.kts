@@ -17,8 +17,21 @@ android {
         versionName = "1.0"
     }
 
+    signingConfigs {
+        getByName("debug") {
+            // Фиксиран debug ключ, чекнат в repo-то (keystore/debug.keystore). Без него всеки
+            // CI runner генерира различен debug ключ и APK-та от различни build-ове взаимно се
+            // отхвърлят при инсталация ("Приложението не е инсталирано" — конфликт в подписа).
+            storeFile = rootProject.file("keystore/debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
     buildTypes {
         debug {
+            signingConfig = signingConfigs.getByName("debug")
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
         }
