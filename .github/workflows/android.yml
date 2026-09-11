@@ -48,33 +48,39 @@ jobs:
           echo "=== Последни редове ==="
           tail -n 150 ci-build.log || true
 
-      - name: Verify APK (съдържание + подпис)
+      - name: Verify APK (подписи v1/v2/v3 + badging)
         if: always()
         shell: bash
         run: |
           set +e
           REL=app/build/outputs/apk/release/app-release.apk
           DBG=app/build/outputs/apk/debug/app-debug.apk
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* 2>/dev/null | sort -V | tail -1)
+          APKSIGNER="$BT/apksigner"
+          AAPT2="$BT/aapt2"
           {
             echo "===== Генерирани APK файлове ====="
             ls -la app/build/outputs/apk/release/ app/build/outputs/apk/debug/ 2>&1
             echo
             echo "===== Инструменти ====="
-            which keytool unzip openssl 2>&1
+            echo "ANDROID_HOME=$ANDROID_HOME"
+            echo "BUILD_TOOLS=$BT"
+            ls -la "$BT" 2>&1 | grep -E "apksigner|aapt2" || true
             echo
-            echo "===== RELEASE: keytool -printcert (v1 подпис) ====="
-            keytool -printcert -jarfile "$REL" 2>&1
+            echo "===== RELEASE: apksigner verify (схеми v1/v2/v3) ====="
+            "$APKSIGNER" verify --verbose --print-certs "$REL" 2>&1
             echo
-            echo "===== RELEASE: съдържание ====="
-            unzip -l "$REL" 2>&1 | grep -E "META-INF|AndroidManifest.xml|classes.dex|resources.arsc|lib/" | head -40
+            echo "===== RELEASE: aapt2 dump badging ====="
+            "$AAPT2" dump badging "$REL" 2>&1 | grep -E "^package:|^sdkVersion|^targetSdkVersion|^application-label|^launchable-activity|^uses-permission|application-debuggable|testOnly" 
             echo
-            echo "===== RELEASE: сертификат (openssl pkcs7) ====="
-            RSA=$(unzip -l "$REL" 2>/dev/null | awk '{print $4}' | grep -E '^META-INF/.*\.(RSA|DSA|EC)$' | head -1)
-            echo "RSA block: ${RSA:-<няма>}"
-            if [ -n "$RSA" ]; then unzip -p "$REL" "$RSA" 2>/dev/null | openssl pkcs7 -inform DER -print_certs 2>&1 | grep -E "subject|issuer|Not Before|Not After"; fi
+            echo "===== RELEASE: версии в манифеста ====="
+            "$AAPT2" dump badging "$REL" 2>&1 | grep -E "versionCode|versionName|minSdkVersion|targetSdkVersion"
             echo
-            echo "===== DEBUG: keytool -printcert (v1 подпис) ====="
-            keytool -printcert -jarfile "$DBG" 2>&1
+            echo "===== DEBUG: apksigner verify (схеми v1/v2/v3) ====="
+            "$APKSIGNER" verify --verbose --print-certs "$DBG" 2>&1
+            echo
+            echo "===== DEBUG: aapt2 dump badging ====="
+            "$AAPT2" dump badging "$DBG" 2>&1 | grep -E "^package:|^sdkVersion|^targetSdkVersion|^launchable-activity|application-debuggable|testOnly"
             echo "===== КРАЙ ====="
           } > docs/apk-info.txt 2>&1
           echo "----- docs/apk-info.txt -----"
