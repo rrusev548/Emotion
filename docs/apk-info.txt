@@ -1,18 +1,18 @@
 ===== Генерирани APK файлове =====
 app/build/outputs/apk/debug/:
 total 6080
-drwxr-xr-x 2 runner runner    4096 Sep 11 06:12 .
-drwxr-xr-x 4 runner runner    4096 Sep 11 06:12 ..
--rw-r--r-- 1 runner runner 6212404 Sep 11 06:11 app-debug.apk
--rw-r--r-- 1 runner runner     403 Sep 11 06:12 output-metadata.json
+drwxr-xr-x 2 runner runner    4096 Sep 11 06:17 .
+drwxr-xr-x 4 runner runner    4096 Sep 11 06:18 ..
+-rw-r--r-- 1 runner runner 6212422 Sep 11 06:17 app-debug.apk
+-rw-r--r-- 1 runner runner     403 Sep 11 06:17 output-metadata.json
 
 app/build/outputs/apk/release/:
 total 5004
-drwxr-xr-x 3 runner runner    4096 Sep 11 06:12 .
-drwxr-xr-x 4 runner runner    4096 Sep 11 06:12 ..
--rw-r--r-- 1 runner runner 5106954 Sep 11 06:12 app-release.apk
-drwxr-xr-x 4 runner runner    4096 Sep 11 06:12 baselineProfiles
--rw-r--r-- 1 runner runner     703 Sep 11 06:12 output-metadata.json
+drwxr-xr-x 3 runner runner    4096 Sep 11 06:18 .
+drwxr-xr-x 4 runner runner    4096 Sep 11 06:18 ..
+-rw-r--r-- 1 runner runner 5106950 Sep 11 06:18 app-release.apk
+drwxr-xr-x 4 runner runner    4096 Sep 11 06:18 baselineProfiles
+-rw-r--r-- 1 runner runner     703 Sep 11 06:18 output-metadata.json
 
 ===== Инструменти =====
 ANDROID_HOME=/usr/local/lib/android/sdk
@@ -94,7 +94,7 @@ WARNING: META-INF/services/kotlinx.coroutines.CoroutineExceptionHandler not prot
 WARNING: META-INF/services/kotlinx.coroutines.internal.MainDispatcherFactory not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
 
 ===== RELEASE: aapt2 dump badging =====
-package: name='com.emotion.pet' versionCode='4' versionName='1.3' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
+package: name='com.emotion.pet' versionCode='5' versionName='1.4' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
 targetSdkVersion:'35'
 uses-permission: name='android.permission.INTERNET'
 uses-permission: name='android.permission.VIBRATE'
@@ -194,7 +194,7 @@ application-label-zu:'Emotion Pet'
 launchable-activity: name='com.emotion.pet.MainActivity'  label='' icon=''
 
 ===== RELEASE: версии в манифеста =====
-package: name='com.emotion.pet' versionCode='4' versionName='1.3' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
+package: name='com.emotion.pet' versionCode='5' versionName='1.4' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
 minSdkVersion:'21'
 targetSdkVersion:'35'
 
@@ -208,15 +208,15 @@ Verified using v3.2 scheme (APK Signature Scheme v3.2): false
 Verified using v4 scheme (APK Signature Scheme v4): false
 Verified for SourceStamp: false
 Number of signers: 1
-V2 Signer: certificate DN: CN=Android Debug, O=Android, C=US
-V2 Signer: certificate SHA-256 digest: 9609b4dfd107aecdf9ce453a5f999bb831ed92f79a429a4ef3e24551d62f4eb7
-V2 Signer: certificate SHA-1 digest: 315a57c061e95464da7bb9e99f6a44b457c6d3f5
-V2 Signer: certificate MD5 digest: b577084e98a9de4e88d48d449f0d11b7
+V2 Signer: certificate DN: CN=Emotion Pet
+V2 Signer: certificate SHA-256 digest: 9a6580b30399533fcbea6db950cf361df174b4be4cf2200f2059360a5f86aa2d
+V2 Signer: certificate SHA-1 digest: 7e26bbcd7cf60f4e02a43d67d1e4e05e6842e860
+V2 Signer: certificate MD5 digest: 3821ec62e32b82f1994fa05e6a2f5b85
 V2 Signer: key algorithm: RSA
 V2 Signer: key size (bits): 2048
-V2 Signer: public key SHA-256 digest: b19c9ebce9902237816ae580a039c6777eac239c77efea41fa902aa0d6963e4a
-V2 Signer: public key SHA-1 digest: a41e6a6b937161b0f48bd9f8fce6f7cc2bbdb895
-V2 Signer: public key MD5 digest: 63e3e8f2d9e5983657ee22857f2088ea
+V2 Signer: public key SHA-256 digest: d31de5f763454e433adecd792a638db222a097a982547b9af994f26f5b8ac598
+V2 Signer: public key SHA-1 digest: 69177725084dce55f961cf355afc0d87d4a21a34
+V2 Signer: public key MD5 digest: 6272c50937ebcd25b95258357ec4a6fc
 WARNING: META-INF/com/android/build/gradle/app-metadata.properties not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
 WARNING: META-INF/androidx.activity_activity-ktx.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
 WARNING: META-INF/androidx.activity_activity.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
@@ -271,7 +271,7 @@ WARNING: META-INF/services/kotlinx.coroutines.CoroutineExceptionHandler not prot
 WARNING: META-INF/services/kotlinx.coroutines.internal.MainDispatcherFactory not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
 
 ===== DEBUG: aapt2 dump badging =====
-package: name='com.emotion.pet' versionCode='4' versionName='1.3-debug' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
+package: name='com.emotion.pet' versionCode='5' versionName='1.4-debug' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
 targetSdkVersion:'35'
 application-debuggable
 launchable-activity: name='com.emotion.pet.MainActivity'  label='' icon=''
