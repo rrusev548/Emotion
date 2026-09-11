@@ -1,18 +1,18 @@
 ===== Генерирани APK файлове =====
 app/build/outputs/apk/debug/:
-total 6080
-drwxr-xr-x 2 runner runner    4096 Sep 11 09:49 .
-drwxr-xr-x 4 runner runner    4096 Sep 11 09:50 ..
--rw-r--r-- 1 runner runner 6212424 Sep 11 09:49 app-debug.apk
--rw-r--r-- 1 runner runner     404 Sep 11 09:49 output-metadata.json
+total 6076
+drwxr-xr-x 2 runner runner    4096 Sep 11 09:55 .
+drwxr-xr-x 4 runner runner    4096 Sep 11 09:56 ..
+-rw-r--r-- 1 runner runner 6208232 Sep 11 09:55 app-debug.apk
+-rw-r--r-- 1 runner runner     404 Sep 11 09:55 output-metadata.json
 
 app/build/outputs/apk/release/:
-total 5004
-drwxr-xr-x 3 runner runner    4096 Sep 11 09:50 .
-drwxr-xr-x 4 runner runner    4096 Sep 11 09:50 ..
--rw-r--r-- 1 runner runner 5106950 Sep 11 09:50 app-release.apk
-drwxr-xr-x 4 runner runner    4096 Sep 11 09:50 baselineProfiles
--rw-r--r-- 1 runner runner     704 Sep 11 09:50 output-metadata.json
+total 5000
+drwxr-xr-x 3 runner runner    4096 Sep 11 09:56 .
+drwxr-xr-x 4 runner runner    4096 Sep 11 09:56 ..
+-rw-r--r-- 1 runner runner 5103012 Sep 11 09:56 app-release.apk
+drwxr-xr-x 4 runner runner    4096 Sep 11 09:56 baselineProfiles
+-rw-r--r-- 1 runner runner     704 Sep 11 09:56 output-metadata.json
 
 ===== RELEASE: apksigner verify (схеми v1/v2/v3) =====
 Verifies
@@ -88,12 +88,12 @@ WARNING: META-INF/services/kotlinx.coroutines.CoroutineExceptionHandler not prot
 WARNING: META-INF/services/kotlinx.coroutines.internal.MainDispatcherFactory not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
 
 ===== RELEASE: aapt2 dump badging =====
-package: name='com.emotion.pet2' versionCode='7' versionName='1.6' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
+package: name='com.emotion.pet2' versionCode='8' versionName='1.7' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
 targetSdkVersion:'35'
 launchable-activity: name='com.emotion.pet.MainActivity'  label='' icon=''
 
 ===== RELEASE: версии в манифеста =====
-package: name='com.emotion.pet2' versionCode='7' versionName='1.6' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
+package: name='com.emotion.pet2' versionCode='8' versionName='1.7' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
 minSdkVersion:'21'
 targetSdkVersion:'35'
 
