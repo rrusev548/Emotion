@@ -35,7 +35,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          gradle testDebugUnitTest assembleDebug assembleRelease --no-daemon --stacktrace --continue 2>&1 | tee ci-build.log
+          gradle testDebugUnitTest assembleDebug assembleRelease bundleRelease --no-daemon --stacktrace --continue 2>&1 | tee ci-build.log
 
       - name: Diagnostics
         if: always()
@@ -112,6 +112,7 @@ jobs:
           mkdir -p artifacts
           cp app/build/outputs/apk/debug/app-debug.apk artifacts/EmotionPet-debug.apk
           cp app/build/outputs/apk/release/app-release.apk artifacts/EmotionPet.apk
+          cp app/build/outputs/bundle/release/app-release.aab artifacts/EmotionPet.aab
 
       - name: Upload APK artifact
         if: success()
@@ -121,6 +122,7 @@ jobs:
           path: |
             artifacts/EmotionPet.apk
             artifacts/EmotionPet-debug.apk
+            artifacts/EmotionPet.aab
           if-no-files-found: error
 
       - name: Publish "latest build" release
@@ -139,9 +141,11 @@ jobs:
           prerelease: true
           body: |
             Автоматично компилиран APK от commit ${{ github.sha }}.
-            Инсталирай го на телефона си (разреши „Инсталиране от неизвестни източници“).
-            Един файл: EmotionPet.apk (release, подписан, не-debuggable).
-          files: artifacts/EmotionPet.apk
+            • EmotionPet.apk — инсталация директно на телефона (release, подписан)
+            • EmotionPet.aab — Android App Bundle за качване в Google Play
+          files: |
+            artifacts/EmotionPet.apk
+            artifacts/EmotionPet.aab
 
       # Мрежата в sandbox-а не стига до логовете на Actions, затова при грешка
       # логът се записва в самото репо, за да може да се прочете.
