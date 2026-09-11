@@ -1,137 +1,278 @@
 ===== Генерирани APK файлове =====
 app/build/outputs/apk/debug/:
 total 6080
-drwxr-xr-x 2 runner runner    4096 Sep 11 05:39 .
-drwxr-xr-x 4 runner runner    4096 Sep 11 05:40 ..
--rw-r--r-- 1 runner runner 6212404 Sep 11 05:39 app-debug.apk
--rw-r--r-- 1 runner runner     403 Sep 11 05:39 output-metadata.json
+drwxr-xr-x 2 runner runner    4096 Sep 11 06:12 .
+drwxr-xr-x 4 runner runner    4096 Sep 11 06:12 ..
+-rw-r--r-- 1 runner runner 6212404 Sep 11 06:11 app-debug.apk
+-rw-r--r-- 1 runner runner     403 Sep 11 06:12 output-metadata.json
 
 app/build/outputs/apk/release/:
 total 5004
-drwxr-xr-x 3 runner runner    4096 Sep 11 05:40 .
-drwxr-xr-x 4 runner runner    4096 Sep 11 05:40 ..
--rw-r--r-- 1 runner runner 5106952 Sep 11 05:40 app-release.apk
-drwxr-xr-x 4 runner runner    4096 Sep 11 05:40 baselineProfiles
--rw-r--r-- 1 runner runner     703 Sep 11 05:40 output-metadata.json
+drwxr-xr-x 3 runner runner    4096 Sep 11 06:12 .
+drwxr-xr-x 4 runner runner    4096 Sep 11 06:12 ..
+-rw-r--r-- 1 runner runner 5106954 Sep 11 06:12 app-release.apk
+drwxr-xr-x 4 runner runner    4096 Sep 11 06:12 baselineProfiles
+-rw-r--r-- 1 runner runner     703 Sep 11 06:12 output-metadata.json
 
 ===== Инструменти =====
-/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64/bin/keytool
-/usr/bin/unzip
-/usr/bin/openssl
+ANDROID_HOME=/usr/local/lib/android/sdk
+BUILD_TOOLS=/usr/local/lib/android/sdk/build-tools/37.0.0
+-rwxrwxrwx 1 root root 6274200 Sep  7 21:31 aapt2
+-rwxrwxrwx 1 root root    2959 Sep  7 21:31 apksigner
 
-===== RELEASE: keytool -printcert (v1 подпис) =====
-Signer #1:
+===== RELEASE: apksigner verify (схеми v1/v2/v3) =====
+Verifies
+Verified using v1 scheme (JAR signing): true
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+V2 Signer: certificate DN: CN=Emotion Pet
+V2 Signer: certificate SHA-256 digest: 9a6580b30399533fcbea6db950cf361df174b4be4cf2200f2059360a5f86aa2d
+V2 Signer: certificate SHA-1 digest: 7e26bbcd7cf60f4e02a43d67d1e4e05e6842e860
+V2 Signer: certificate MD5 digest: 3821ec62e32b82f1994fa05e6a2f5b85
+V2 Signer: key algorithm: RSA
+V2 Signer: key size (bits): 2048
+V2 Signer: public key SHA-256 digest: d31de5f763454e433adecd792a638db222a097a982547b9af994f26f5b8ac598
+V2 Signer: public key SHA-1 digest: 69177725084dce55f961cf355afc0d87d4a21a34
+V2 Signer: public key MD5 digest: 6272c50937ebcd25b95258357ec4a6fc
+WARNING: META-INF/com/android/build/gradle/app-metadata.properties not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/version-control-info.textproto not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.activity_activity-ktx.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.activity_activity.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.annotation_annotation-experimental.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.appcompat_appcompat-resources.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.appcompat_appcompat.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.arch.core_core-runtime.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.cardview_cardview.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.coordinatorlayout_coordinatorlayout.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.core_core-ktx.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.core_core-splashscreen.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.core_core.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.cursoradapter_cursoradapter.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.customview_customview-poolingcontainer.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.customview_customview.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.databinding_viewbinding.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.documentfile_documentfile.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.drawerlayout_drawerlayout.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.dynamicanimation_dynamicanimation.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.emoji2_emoji2-views-helper.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.emoji2_emoji2.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.fragment_fragment.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.interpolator_interpolator.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.legacy_legacy-support-core-utils.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.lifecycle_lifecycle-livedata-core.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.lifecycle_lifecycle-livedata.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.lifecycle_lifecycle-process.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.lifecycle_lifecycle-runtime-ktx.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.lifecycle_lifecycle-runtime.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.lifecycle_lifecycle-viewmodel-ktx.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.lifecycle_lifecycle-viewmodel-savedstate.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.lifecycle_lifecycle-viewmodel.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.loader_loader.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.localbroadcastmanager_localbroadcastmanager.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.print_print.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.profileinstaller_profileinstaller.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.recyclerview_recyclerview.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.savedstate_savedstate-ktx.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.savedstate_savedstate.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.startup_startup-runtime.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.tracing_tracing.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.transition_transition.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.vectordrawable_vectordrawable-animated.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.vectordrawable_vectordrawable.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.versionedparcelable_versionedparcelable.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.viewpager2_viewpager2.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.viewpager_viewpager.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/com.google.android.material_material.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/kotlinx_coroutines_android.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/kotlinx_coroutines_core.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/services/kotlinx.coroutines.CoroutineExceptionHandler not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/services/kotlinx.coroutines.internal.MainDispatcherFactory not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
 
-Certificate #1:
-Owner: CN=Emotion Pet
-Issuer: CN=Emotion Pet
-Serial number: 1e9edb977e03d60c6be0643942ccf6e5f2543e2c
-Valid from: Fri Sep 11 05:15:46 UTC 2026 until: Tue Jan 27 05:15:46 UTC 2054
-Certificate fingerprints:
-	 SHA1: 7E:26:BB:CD:7C:F6:0F:4E:02:A4:3D:67:D1:E4:E0:5E:68:42:E8:60
-	 SHA256: 9A:65:80:B3:03:99:53:3F:CB:EA:6D:B9:50:CF:36:1D:F1:74:B4:BE:4C:F2:20:0F:20:59:36:0A:5F:86:AA:2D
-Signature algorithm name: SHA256withRSA
-Subject Public Key Algorithm: 2048-bit RSA key
-Version: 3
+===== RELEASE: aapt2 dump badging =====
+package: name='com.emotion.pet' versionCode='4' versionName='1.3' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
+targetSdkVersion:'35'
+uses-permission: name='android.permission.INTERNET'
+uses-permission: name='android.permission.VIBRATE'
+uses-permission: name='android.permission.SYSTEM_ALERT_WINDOW'
+uses-permission: name='android.permission.FOREGROUND_SERVICE'
+uses-permission: name='android.permission.FOREGROUND_SERVICE_SPECIAL_USE'
+uses-permission: name='android.permission.RECEIVE_BOOT_COMPLETED'
+uses-permission: name='com.emotion.pet.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'
+application-label:'Emotion Pet'
+application-label-af:'Emotion Pet'
+application-label-am:'Emotion Pet'
+application-label-ar:'Emotion Pet'
+application-label-as:'Emotion Pet'
+application-label-az:'Emotion Pet'
+application-label-be:'Emotion Pet'
+application-label-bg:'Emotion Pet'
+application-label-bn:'Emotion Pet'
+application-label-bs:'Emotion Pet'
+application-label-ca:'Emotion Pet'
+application-label-cs:'Emotion Pet'
+application-label-da:'Emotion Pet'
+application-label-de:'Emotion Pet'
+application-label-el:'Emotion Pet'
+application-label-en:'Emotion Pet'
+application-label-en-AU:'Emotion Pet'
+application-label-en-CA:'Emotion Pet'
+application-label-en-GB:'Emotion Pet'
+application-label-en-IN:'Emotion Pet'
+application-label-en-XC:'Emotion Pet'
+application-label-es:'Emotion Pet'
+application-label-es-419:'Emotion Pet'
+application-label-es-US:'Emotion Pet'
+application-label-et:'Emotion Pet'
+application-label-eu:'Emotion Pet'
+application-label-fa:'Emotion Pet'
+application-label-fi:'Emotion Pet'
+application-label-fr:'Emotion Pet'
+application-label-fr-CA:'Emotion Pet'
+application-label-gl:'Emotion Pet'
+application-label-gu:'Emotion Pet'
+application-label-hi:'Emotion Pet'
+application-label-hr:'Emotion Pet'
+application-label-hu:'Emotion Pet'
+application-label-hy:'Emotion Pet'
+application-label-in:'Emotion Pet'
+application-label-is:'Emotion Pet'
+application-label-it:'Emotion Pet'
+application-label-iw:'Emotion Pet'
+application-label-ja:'Emotion Pet'
+application-label-ka:'Emotion Pet'
+application-label-kk:'Emotion Pet'
+application-label-km:'Emotion Pet'
+application-label-kn:'Emotion Pet'
+application-label-ko:'Emotion Pet'
+application-label-ky:'Emotion Pet'
+application-label-lo:'Emotion Pet'
+application-label-lt:'Emotion Pet'
+application-label-lv:'Emotion Pet'
+application-label-mk:'Emotion Pet'
+application-label-ml:'Emotion Pet'
+application-label-mn:'Emotion Pet'
+application-label-mr:'Emotion Pet'
+application-label-ms:'Emotion Pet'
+application-label-my:'Emotion Pet'
+application-label-nb:'Emotion Pet'
+application-label-ne:'Emotion Pet'
+application-label-nl:'Emotion Pet'
+application-label-or:'Emotion Pet'
+application-label-pa:'Emotion Pet'
+application-label-pl:'Emotion Pet'
+application-label-pt:'Emotion Pet'
+application-label-pt-BR:'Emotion Pet'
+application-label-pt-PT:'Emotion Pet'
+application-label-ro:'Emotion Pet'
+application-label-ru:'Emotion Pet'
+application-label-si:'Emotion Pet'
+application-label-sk:'Emotion Pet'
+application-label-sl:'Emotion Pet'
+application-label-sq:'Emotion Pet'
+application-label-sr:'Emotion Pet'
+application-label-sr-Latn:'Emotion Pet'
+application-label-sv:'Emotion Pet'
+application-label-sw:'Emotion Pet'
+application-label-ta:'Emotion Pet'
+application-label-te:'Emotion Pet'
+application-label-th:'Emotion Pet'
+application-label-tl:'Emotion Pet'
+application-label-tr:'Emotion Pet'
+application-label-uk:'Emotion Pet'
+application-label-ur:'Emotion Pet'
+application-label-uz:'Emotion Pet'
+application-label-vi:'Emotion Pet'
+application-label-zh-CN:'Emotion Pet'
+application-label-zh-HK:'Emotion Pet'
+application-label-zh-TW:'Emotion Pet'
+application-label-zu:'Emotion Pet'
+launchable-activity: name='com.emotion.pet.MainActivity'  label='' icon=''
 
-Extensions: 
+===== RELEASE: версии в манифеста =====
+package: name='com.emotion.pet' versionCode='4' versionName='1.3' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
+minSdkVersion:'21'
+targetSdkVersion:'35'
 
-#1: ObjectId: 2.5.29.35 Criticality=false
-AuthorityKeyIdentifier [
-KeyIdentifier [
-0000: 46 9B 2A A5 30 DE 95 98   1D 37 52 57 A2 D4 FB 36  F.*.0....7RW...6
-0010: 42 7A 0E 96                                        Bz..
-]
-]
+===== DEBUG: apksigner verify (схеми v1/v2/v3) =====
+Verifies
+Verified using v1 scheme (JAR signing): true
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+V2 Signer: certificate DN: CN=Android Debug, O=Android, C=US
+V2 Signer: certificate SHA-256 digest: 9609b4dfd107aecdf9ce453a5f999bb831ed92f79a429a4ef3e24551d62f4eb7
+V2 Signer: certificate SHA-1 digest: 315a57c061e95464da7bb9e99f6a44b457c6d3f5
+V2 Signer: certificate MD5 digest: b577084e98a9de4e88d48d449f0d11b7
+V2 Signer: key algorithm: RSA
+V2 Signer: key size (bits): 2048
+V2 Signer: public key SHA-256 digest: b19c9ebce9902237816ae580a039c6777eac239c77efea41fa902aa0d6963e4a
+V2 Signer: public key SHA-1 digest: a41e6a6b937161b0f48bd9f8fce6f7cc2bbdb895
+V2 Signer: public key MD5 digest: 63e3e8f2d9e5983657ee22857f2088ea
+WARNING: META-INF/com/android/build/gradle/app-metadata.properties not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.activity_activity-ktx.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.activity_activity.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.annotation_annotation-experimental.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.appcompat_appcompat-resources.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.appcompat_appcompat.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.arch.core_core-runtime.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.cardview_cardview.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.coordinatorlayout_coordinatorlayout.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.core_core-ktx.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.core_core-splashscreen.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.core_core.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.cursoradapter_cursoradapter.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.customview_customview-poolingcontainer.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.customview_customview.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.databinding_viewbinding.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.documentfile_documentfile.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.drawerlayout_drawerlayout.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.dynamicanimation_dynamicanimation.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.emoji2_emoji2-views-helper.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.emoji2_emoji2.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.fragment_fragment.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.interpolator_interpolator.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.legacy_legacy-support-core-utils.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.lifecycle_lifecycle-livedata-core.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.lifecycle_lifecycle-livedata.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.lifecycle_lifecycle-process.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.lifecycle_lifecycle-runtime-ktx.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.lifecycle_lifecycle-runtime.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.lifecycle_lifecycle-viewmodel-ktx.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.lifecycle_lifecycle-viewmodel-savedstate.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.lifecycle_lifecycle-viewmodel.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.loader_loader.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.localbroadcastmanager_localbroadcastmanager.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.print_print.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.profileinstaller_profileinstaller.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.recyclerview_recyclerview.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.savedstate_savedstate-ktx.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.savedstate_savedstate.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.startup_startup-runtime.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.tracing_tracing.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.transition_transition.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.vectordrawable_vectordrawable-animated.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.vectordrawable_vectordrawable.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.versionedparcelable_versionedparcelable.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.viewpager2_viewpager2.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/androidx.viewpager_viewpager.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/com.google.android.material_material.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/kotlinx_coroutines_android.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/kotlinx_coroutines_core.version not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/services/kotlinx.coroutines.CoroutineExceptionHandler not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/services/kotlinx.coroutines.internal.MainDispatcherFactory not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
 
-#2: ObjectId: 2.5.29.19 Criticality=true
-BasicConstraints:[
-  CA:true
-  PathLen: no limit
-]
-
-#3: ObjectId: 2.5.29.14 Criticality=false
-SubjectKeyIdentifier [
-KeyIdentifier [
-0000: 46 9B 2A A5 30 DE 95 98   1D 37 52 57 A2 D4 FB 36  F.*.0....7RW...6
-0010: 42 7A 0E 96                                        Bz..
-]
-]
-
-
-
-===== RELEASE: съдържание =====
-       56  1981-01-01 01:01   META-INF/com/android/build/gradle/app-metadata.properties
-      120  1981-01-01 01:01   META-INF/version-control-info.textproto
-  9133128  1981-01-01 01:01   classes.dex
-        6  1981-01-01 01:01   META-INF/androidx.activity_activity-ktx.version
-        6  1981-01-01 01:01   META-INF/androidx.activity_activity.version
-        6  1981-01-01 01:01   META-INF/androidx.annotation_annotation-experimental.version
-        6  1981-01-01 01:01   META-INF/androidx.appcompat_appcompat-resources.version
-        6  1981-01-01 01:01   META-INF/androidx.appcompat_appcompat.version
-       67  1981-01-01 01:01   META-INF/androidx.arch.core_core-runtime.version
-        6  1981-01-01 01:01   META-INF/androidx.cardview_cardview.version
-        6  1981-01-01 01:01   META-INF/androidx.coordinatorlayout_coordinatorlayout.version
-        7  1981-01-01 01:01   META-INF/androidx.core_core-ktx.version
-        6  1981-01-01 01:01   META-INF/androidx.core_core-splashscreen.version
-        7  1981-01-01 01:01   META-INF/androidx.core_core.version
-        6  1981-01-01 01:01   META-INF/androidx.cursoradapter_cursoradapter.version
-        6  1981-01-01 01:01   META-INF/androidx.customview_customview-poolingcontainer.version
-        6  1981-01-01 01:01   META-INF/androidx.customview_customview.version
-        5  1981-01-01 01:01   META-INF/androidx.databinding_viewbinding.version
-        6  1981-01-01 01:01   META-INF/androidx.documentfile_documentfile.version
-        6  1981-01-01 01:01   META-INF/androidx.drawerlayout_drawerlayout.version
-        6  1981-01-01 01:01   META-INF/androidx.dynamicanimation_dynamicanimation.version
-        6  1981-01-01 01:01   META-INF/androidx.emoji2_emoji2-views-helper.version
-        6  1981-01-01 01:01   META-INF/androidx.emoji2_emoji2.version
-        6  1981-01-01 01:01   META-INF/androidx.fragment_fragment.version
-        6  1981-01-01 01:01   META-INF/androidx.interpolator_interpolator.version
-        6  1981-01-01 01:01   META-INF/androidx.legacy_legacy-support-core-utils.version
-       78  1981-01-01 01:01   META-INF/androidx.lifecycle_lifecycle-livedata-core.version
-       73  1981-01-01 01:01   META-INF/androidx.lifecycle_lifecycle-livedata.version
-       72  1981-01-01 01:01   META-INF/androidx.lifecycle_lifecycle-process.version
-       76  1981-01-01 01:01   META-INF/androidx.lifecycle_lifecycle-runtime-ktx.version
-       72  1981-01-01 01:01   META-INF/androidx.lifecycle_lifecycle-runtime.version
-       78  1981-01-01 01:01   META-INF/androidx.lifecycle_lifecycle-viewmodel-ktx.version
-       85  1981-01-01 01:01   META-INF/androidx.lifecycle_lifecycle-viewmodel-savedstate.version
-       74  1981-01-01 01:01   META-INF/androidx.lifecycle_lifecycle-viewmodel.version
-        6  1981-01-01 01:01   META-INF/androidx.loader_loader.version
-        6  1981-01-01 01:01   META-INF/androidx.localbroadcastmanager_localbroadcastmanager.version
-        6  1981-01-01 01:01   META-INF/androidx.print_print.version
-        6  1981-01-01 01:01   META-INF/androidx.profileinstaller_profileinstaller.version
-        6  1981-01-01 01:01   META-INF/androidx.recyclerview_recyclerview.version
-        6  1981-01-01 01:01   META-INF/androidx.savedstate_savedstate-ktx.version
-grep: write error: Broken pipe
-
-===== RELEASE: сертификат (openssl pkcs7) =====
-RSA block: META-INF/CERT.RSA
-subject=CN = Emotion Pet
-issuer=CN = Emotion Pet
-
-===== DEBUG: keytool -printcert (v1 подпис) =====
-Signer #1:
-
-Certificate #1:
-Owner: CN=Android Debug, O=Android, C=US
-Issuer: CN=Android Debug, O=Android, C=US
-Serial number: 5215358e1697ab95
-Valid from: Fri Sep 11 02:13:47 UTC 2026 until: Tue Jan 27 02:13:47 UTC 2054
-Certificate fingerprints:
-	 SHA1: 31:5A:57:C0:61:E9:54:64:DA:7B:B9:E9:9F:6A:44:B4:57:C6:D3:F5
-	 SHA256: 96:09:B4:DF:D1:07:AE:CD:F9:CE:45:3A:5F:99:9B:B8:31:ED:92:F7:9A:42:9A:4E:F3:E2:45:51:D6:2F:4E:B7
-Signature algorithm name: SHA384withRSA
-Subject Public Key Algorithm: 2048-bit RSA key
-Version: 3
-
-Extensions: 
-
-#1: ObjectId: 2.5.29.14 Criticality=false
-SubjectKeyIdentifier [
-KeyIdentifier [
-0000: 39 61 32 57 80 95 7B E3   B8 72 4D 9C 1D 4F D7 C5  9a2W.....rM..O..
-0010: D8 E4 3C E8                                        ..<.
-]
-]
-
-
+===== DEBUG: aapt2 dump badging =====
+package: name='com.emotion.pet' versionCode='4' versionName='1.3-debug' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
+targetSdkVersion:'35'
+application-debuggable
+launchable-activity: name='com.emotion.pet.MainActivity'  label='' icon=''
 ===== КРАЙ =====
