@@ -1,0 +1,137 @@
+===== Генерирани APK файлове =====
+app/build/outputs/apk/debug/:
+total 6080
+drwxr-xr-x 2 runner runner    4096 Sep 11 05:39 .
+drwxr-xr-x 4 runner runner    4096 Sep 11 05:40 ..
+-rw-r--r-- 1 runner runner 6212404 Sep 11 05:39 app-debug.apk
+-rw-r--r-- 1 runner runner     403 Sep 11 05:39 output-metadata.json
+
+app/build/outputs/apk/release/:
+total 5004
+drwxr-xr-x 3 runner runner    4096 Sep 11 05:40 .
+drwxr-xr-x 4 runner runner    4096 Sep 11 05:40 ..
+-rw-r--r-- 1 runner runner 5106952 Sep 11 05:40 app-release.apk
+drwxr-xr-x 4 runner runner    4096 Sep 11 05:40 baselineProfiles
+-rw-r--r-- 1 runner runner     703 Sep 11 05:40 output-metadata.json
+
+===== Инструменти =====
+/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64/bin/keytool
+/usr/bin/unzip
+/usr/bin/openssl
+
+===== RELEASE: keytool -printcert (v1 подпис) =====
+Signer #1:
+
+Certificate #1:
+Owner: CN=Emotion Pet
+Issuer: CN=Emotion Pet
+Serial number: 1e9edb977e03d60c6be0643942ccf6e5f2543e2c
+Valid from: Fri Sep 11 05:15:46 UTC 2026 until: Tue Jan 27 05:15:46 UTC 2054
+Certificate fingerprints:
+	 SHA1: 7E:26:BB:CD:7C:F6:0F:4E:02:A4:3D:67:D1:E4:E0:5E:68:42:E8:60
+	 SHA256: 9A:65:80:B3:03:99:53:3F:CB:EA:6D:B9:50:CF:36:1D:F1:74:B4:BE:4C:F2:20:0F:20:59:36:0A:5F:86:AA:2D
+Signature algorithm name: SHA256withRSA
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 3
+
+Extensions: 
+
+#1: ObjectId: 2.5.29.35 Criticality=false
+AuthorityKeyIdentifier [
+KeyIdentifier [
+0000: 46 9B 2A A5 30 DE 95 98   1D 37 52 57 A2 D4 FB 36  F.*.0....7RW...6
+0010: 42 7A 0E 96                                        Bz..
+]
+]
+
+#2: ObjectId: 2.5.29.19 Criticality=true
+BasicConstraints:[
+  CA:true
+  PathLen: no limit
+]
+
+#3: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 46 9B 2A A5 30 DE 95 98   1D 37 52 57 A2 D4 FB 36  F.*.0....7RW...6
+0010: 42 7A 0E 96                                        Bz..
+]
+]
+
+
+
+===== RELEASE: съдържание =====
+       56  1981-01-01 01:01   META-INF/com/android/build/gradle/app-metadata.properties
+      120  1981-01-01 01:01   META-INF/version-control-info.textproto
+  9133128  1981-01-01 01:01   classes.dex
+        6  1981-01-01 01:01   META-INF/androidx.activity_activity-ktx.version
+        6  1981-01-01 01:01   META-INF/androidx.activity_activity.version
+        6  1981-01-01 01:01   META-INF/androidx.annotation_annotation-experimental.version
+        6  1981-01-01 01:01   META-INF/androidx.appcompat_appcompat-resources.version
+        6  1981-01-01 01:01   META-INF/androidx.appcompat_appcompat.version
+       67  1981-01-01 01:01   META-INF/androidx.arch.core_core-runtime.version
+        6  1981-01-01 01:01   META-INF/androidx.cardview_cardview.version
+        6  1981-01-01 01:01   META-INF/androidx.coordinatorlayout_coordinatorlayout.version
+        7  1981-01-01 01:01   META-INF/androidx.core_core-ktx.version
+        6  1981-01-01 01:01   META-INF/androidx.core_core-splashscreen.version
+        7  1981-01-01 01:01   META-INF/androidx.core_core.version
+        6  1981-01-01 01:01   META-INF/androidx.cursoradapter_cursoradapter.version
+        6  1981-01-01 01:01   META-INF/androidx.customview_customview-poolingcontainer.version
+        6  1981-01-01 01:01   META-INF/androidx.customview_customview.version
+        5  1981-01-01 01:01   META-INF/androidx.databinding_viewbinding.version
+        6  1981-01-01 01:01   META-INF/androidx.documentfile_documentfile.version
+        6  1981-01-01 01:01   META-INF/androidx.drawerlayout_drawerlayout.version
+        6  1981-01-01 01:01   META-INF/androidx.dynamicanimation_dynamicanimation.version
+        6  1981-01-01 01:01   META-INF/androidx.emoji2_emoji2-views-helper.version
+        6  1981-01-01 01:01   META-INF/androidx.emoji2_emoji2.version
+        6  1981-01-01 01:01   META-INF/androidx.fragment_fragment.version
+        6  1981-01-01 01:01   META-INF/androidx.interpolator_interpolator.version
+        6  1981-01-01 01:01   META-INF/androidx.legacy_legacy-support-core-utils.version
+       78  1981-01-01 01:01   META-INF/androidx.lifecycle_lifecycle-livedata-core.version
+       73  1981-01-01 01:01   META-INF/androidx.lifecycle_lifecycle-livedata.version
+       72  1981-01-01 01:01   META-INF/androidx.lifecycle_lifecycle-process.version
+       76  1981-01-01 01:01   META-INF/androidx.lifecycle_lifecycle-runtime-ktx.version
+       72  1981-01-01 01:01   META-INF/androidx.lifecycle_lifecycle-runtime.version
+       78  1981-01-01 01:01   META-INF/androidx.lifecycle_lifecycle-viewmodel-ktx.version
+       85  1981-01-01 01:01   META-INF/androidx.lifecycle_lifecycle-viewmodel-savedstate.version
+       74  1981-01-01 01:01   META-INF/androidx.lifecycle_lifecycle-viewmodel.version
+        6  1981-01-01 01:01   META-INF/androidx.loader_loader.version
+        6  1981-01-01 01:01   META-INF/androidx.localbroadcastmanager_localbroadcastmanager.version
+        6  1981-01-01 01:01   META-INF/androidx.print_print.version
+        6  1981-01-01 01:01   META-INF/androidx.profileinstaller_profileinstaller.version
+        6  1981-01-01 01:01   META-INF/androidx.recyclerview_recyclerview.version
+        6  1981-01-01 01:01   META-INF/androidx.savedstate_savedstate-ktx.version
+grep: write error: Broken pipe
+
+===== RELEASE: сертификат (openssl pkcs7) =====
+RSA block: META-INF/CERT.RSA
+subject=CN = Emotion Pet
+issuer=CN = Emotion Pet
+
+===== DEBUG: keytool -printcert (v1 подпис) =====
+Signer #1:
+
+Certificate #1:
+Owner: CN=Android Debug, O=Android, C=US
+Issuer: CN=Android Debug, O=Android, C=US
+Serial number: 5215358e1697ab95
+Valid from: Fri Sep 11 02:13:47 UTC 2026 until: Tue Jan 27 02:13:47 UTC 2054
+Certificate fingerprints:
+	 SHA1: 31:5A:57:C0:61:E9:54:64:DA:7B:B9:E9:9F:6A:44:B4:57:C6:D3:F5
+	 SHA256: 96:09:B4:DF:D1:07:AE:CD:F9:CE:45:3A:5F:99:9B:B8:31:ED:92:F7:9A:42:9A:4E:F3:E2:45:51:D6:2F:4E:B7
+Signature algorithm name: SHA384withRSA
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 3
+
+Extensions: 
+
+#1: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 39 61 32 57 80 95 7B E3   B8 72 4D 9C 1D 4F D7 C5  9a2W.....rM..O..
+0010: D8 E4 3C E8                                        ..<.
+]
+]
+
+
+===== КРАЙ =====
