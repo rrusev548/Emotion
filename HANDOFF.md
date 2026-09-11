@@ -2,68 +2,80 @@
 
 Предаване към следваща агентска сесия. Прочети това първо.
 
-## Текущо състояние
+## Къде сме в момента (едно изречение)
 
-- **Клон на тази сесия:** `arena/01a08ea3-emotion` (разклонен от merge commit-а на PR #2). Тук е направен fix + нов release `v1.1`.
-- **PR #2** (`claude/emotion-pet-continuation-dojdfy`) вече е **MERGED** в `main`. **PR #1** (`arena/01a08c73-emotion`) също е merge-нат — не го пипай/reuse-вай.
-- **`main`** е 1 commit напред спрямо базата на този клон (автоматичен `ci: обнови UI снимките` след merge-а).
-- **Release `v1.4`** (таг `v1.4` → commit `226289e`): https://github.com/rrusev548/Emotion/releases/download/v1.4/EmotionPet.apk — **ПРЕПОРЪЧАН и ЕДИНСТВЕН файл за сваляне** (~5.1 MB). Един ключ (release.p12) за debug+release → няма конфликт между варианти. `versionCode 5 / versionName 1.4`, пакет `com.emotion.pet`, `minSdk 21`, `targetSdk 35`.
-- **Release `v1.3`** (таг `v1.3` → commit `0d6f518`): предходен; debug и release бяха с РАЗЛИЧНИ ключове (debug.keystore vs release.p12) — възможен източник на „Приложението не е инсталирано“. Ползвай v1.4.
-- **Release `v1.2`** (таг `v1.2` → commit `90a116c`): първият с нов пакет `com.emotion.pet` (без суфикс).
-- **Release `v1.1`** (таг `v1.1` → commit `22bffbc`): стар пакет `com.emotion.pet.debug` (остарял).
-- **Public APK** (`latest-build`): https://github.com/rrusev548/Emotion/releases/download/latest-build/EmotionPet-debug.apk — обновява се само чрез `workflow_dispatch` на `android.yml` или push към `main`/tag. Push към `arena/*` клон НЕ го обновява; затова се използва таг `v*` (той създава отделен release).
-- Локалната среда (тази sandbox) **няма Android SDK/JDK/emulator** (и `apt-get` е блокиран — няма root) — само git/gh/curl. Валидацията минава изцяло през GitHub Actions CI. `gh workflow run` дава 403 (токенът няма `workflow` scope) → НЕ може да се пуска workflow_dispatch; използвай push/tag.
-- Мрежата в sandbox-а **не стига** до `objects.githubusercontent.com` / `release-assets.githubusercontent.com` (файловите хостове на GitHub) → APK не може да се свали/провери локално; достъпни са само api.github.com и github.com.
+Потребителят иска **готово работещо APK на телефона си (Samsung)**. Минахме целия цикъл диагностика: от „Приложението не е инсталирано“ → `INSTALL_FAILED_VERIFICATION_FAILURE` (Play Protect блокира рискови разрешения) → сега `INSTALL_FAILED_ABORTED: User rejected installing unknown source package` (SAI няма разрешение да инсталира). **Файлът вече е изцяло изправен и приет от системата — остава потребителят да даде на SAI/„Моите файлове“ разрешение „Инсталиране на неизвестни приложения“ и да натисне Install.**
 
-## Какво е направено в предишната сесия (PR #2, по ред)
+## Единственият активен файл (ползвай само него)
 
-1. **Оправен счупен build** — `LayoutInflateTest` ползваше ръчен `ContextThemeWrapper` без AppCompat factory → Material компоненти гърмяха при inflate. Вече взима `layoutInflater` от реална `Robolectric.buildActivity(MainActivity::class.java)`.
-2. **CI поправка** — "Commit UI screenshots" стъпката в `.github/workflows/android.yml` проверяваше твърдо `github.ref == 'refs/heads/arena/01a08c73-emotion'` (стар, вече merge-нат клон) → никой нов continuation branch не получаваше обновени `docs/screenshots`. Вече е `startsWith(github.ref, 'refs/heads/')`.
-3. **Стабилност**: премахнати deprecated `kotlinOptions`/`AlertDialog.setView` overload-и; по-разбираеми AI грешки (timeout/UnknownHost/ConnectException) в `AiClient.kt`.
-4. **Haptics.kt** — вибрация при досег с любимеца/действие от менюто (VIBRATE permission вече се ползва).
-5. **`PetWidgetProvider`** — widget на началния екран (аватар + статове), тап отваря приложението.
-6. **`OverlayService`** — плаващ балон над другите приложения (SYSTEM_ALERT_WINDOW, foreground service `specialUse`), тап отваря апп, влачене мести балона, задържане (500ms, само ако НЕ е местен) го спира. `BootReceiver` го рестартира след рестарт на телефона, ако е бил включен и разрешението е дадено.
-7. **Presets/AiClient** — добавени **Gemini** (официалният OpenAI-съвместим ендпойнт на Google, `gemini-3.8-flash`) и **Claude** (нативен Anthropic Messages API — различен request/response формат, разклонено в `AiClient.chat()`/`test()` през нов `providerId` параметър) до вече съществуващите OpenAI/Groq/OpenRouter/Custom.
-8. **Фиксиран debug keystore** (`keystore/debug.keystore`, чекнат в repo-то, alias `androiddebugkey`/парола `android`) — преди това всеки CI runner генерираше нов случаен debug ключ и APK-та от различни build-ове взаимно се отхвърляха при инсталация ("Приложението не е инсталирано"). Виж build.gradle.kts `signingConfigs { getByName("debug") {...} }`.
-9. **Splash screen** (`androidx.core:core-splashscreen`, `Theme.EmotionPet.Starting`) + **еднократна подкана за закачане на иконата на началния екран** (`ShortcutManager.requestPinShortcut`, API 26+) при първо пускане.
-10. Два self-review прохода (виж git log за "self-review находки") хванаха и оправиха: drag-vs-hold бъг в overlay-я, подвеждащо "включено" състояние на overlay switch-а при липсващо разрешение, липсващо тестово покритие за новите layout-и, потенциален risk с installSplashScreen под Robolectric (обвито в `runCatching`).
+- **Пакет:** `com.emotion.pet2` (СЪВСЕМ нов, от v1.6 нататък — няма конфликт с нищо старо)
+- **Версия:** `1.7`, `versionCode 8`, `minSdk 21`, `targetSdk 35`
+- **Сваляне (директно, без пренасочване — препоръчан линк):**
+  https://raw.githubusercontent.com/rrusev548/Emotion/arena/01a08ea3-emotion/artifacts/EmotionPet.apk
+- **Резервен (GitHub release):**
+  https://github.com/rrusev548/Emotion/releases/download/v1.7/EmotionPet.apk
+- **За Google Play (AAB):** https://github.com/rrusev548/Emotion/releases/download/v1.7/EmotionPet.aab
+- APK-то се commit-ва автоматично в `artifacts/EmotionPet.apk` на клона (оттам и raw линкът). Размер ~5 103 012 байта (~5,1 MB).
 
-Всичко по-горе е push-нато, CI зелено на всеки етап.
+## Какво е премахнато (и защо) — важно да се знае
 
-## ⚠️ Текущ проблем: crash при стартиране (Samsung) — статус след тази сесия
+Play Protect отхвърляше приложението (`INSTALL_FAILED_VERIFICATION_FAILURE`) заради **рискови разрешения**. В `v1.7` са премахнати:
+- 🪟 **Плаващ прозорец** (`OverlayService.kt`, `SYSTEM_ALERT_WINDOW`, special-use foreground service)
+- ⚡ **Автостарт при рестарт** (`BootReceiver.kt`, `RECEIVE_BOOT_COMPLETED`)
+- Съответните UI елементи (switch „Плаващ прозорец“ в менюто), `Prefs.overlayEnabled`, `MenuSheet.onOverlayToggle`, логиката в `MainActivity.onResume`.
 
-**Инсталационната грешка „Приложението не е инсталирано“ е РЕШЕНА** — фиксът на debug keystore-а подейства: потребителят потвърди, че вече се инсталира.
+Останали разрешения: **само `INTERNET` и `VIBRATE`** — безобидни, Play Protect вече НЕ блокира (потвърдено: кодът се смени от verification-failure към aborted).
 
-**Нов проблем:** приложението се инсталира, но **крашва при стартиране** на Samsung (One UI) телефон.
+**Ако в бъдеще върнеш overlay/boot функционалността** — тя НЕ беше проблем в кода, а е блокер за странична инсталация. Връщай я само през Google Play (там е позволено) или с ясно предупреждение, че sideload ще бъде блокиран от Play Protect.
 
-**Направено тази сесия (когато стана ясно, че крашва при старт):**
-1. **`PetView.kt`** — добавен `setLayerType(View.LAYER_TYPE_SOFTWARE, null)` в `init`. Хипотеза: Samsung крашва нативно (SIGSEGV в Skia), когато emoji се рисува с `canvas.drawText` върху hardware-accelerated Canvas (любимецът се рисува с `drawText` всяка рамка). Software слой е документираният fix за точно този клас крашове.
-2. **`CrashLog.kt` (нов)** — `Thread.setDefaultUncaughtExceptionHandler` записва Java изключенията в `filesDir/crash_log.txt`; `MainActivity.maybeReportCrash()` показва диалог с първите редове + бутон „Копирай“ при следващо пускане. Така потребителят може да прати точния stack trace без adb. (Нативните SIGSEGV не минават през този handler.)
-3. **`values-en/strings.xml`** — добавени 5 липсващи overlay ключа (`setting_overlay`, `overlay_perm_needed`, `overlay_channel_name`, `overlay_notif_title`, `overlay_notif_text`). Преди това менюто/overlay-я биха хвърлили `Resources.NotFoundException` на **английско** устройство.
-4. **`app/build.gradle.kts`** — `versionCode` 1→2, `versionName` "1.0"→"1.1" (гладък ъпгрейд със същия ключ).
+## Хронология на диагностиката (какво вече сме изключили)
 
-Всичко е push-нато в `arena/01a08ea3-emotion` + тагове `v1.1`, `v1.2`, `v1.3` (release с APK). CI зелен на клона и на таговете.
+1. **„Приложението не е инсталирано“** → изключихме конфликт на подписи: сменихме пакета на `com.emotion.pet2` (v1.6+), единен release ключ за debug+release (v1.4+).
+2. **`INSTALL_FAILED_VERIFICATION_FAILURE`** (показано от SAI) → причина Play Protect; премахнахме рисковите разрешения (v1.7).
+3. **`INSTALL_FAILED_ABORTED: User rejected installing unknown source package`** → SAI няма дадено разрешение „Инсталиране на неизвестни приложения“. Това е **последната, чисто потребителска стъпка**.
 
-**⚠️ Уточнение от потребителя (след v1.1/v1.2/v1.3):** той ВСЕ ОЩЕ получава „Приложението не е инсталирано“ при инсталация (снимки на „Package installer“). APK-то е **верифицирано изцяло** и е валидно:
+**Вече проверено и потвърдено (не преповтаряй):**
+- APK-то е валидно: `apksigner verify` → v1: true, v2: true; signer CN=Emotion Pet.
+- Манифест: пакет `com.emotion.pet2`, `versionName 1.7`, `minSdk 21`, `targetSdk 35`, `launchable-activity com.emotion.pet.MainActivity`, БЕЗ `application-debuggable` и БЕЗ `testOnly`.
+- CI зелен на клона и на тага `v1.7`.
 
-- **Пълна проверка (в `docs/apk-info.txt` от CI, стъпка „Verify APK“):** `apksigner verify` → **v1 (JAR): true, v2 (APK Sig v2): true**; signer CN=Emotion Pet; `aapt2 dump badging` → `package=com.emotion.pet`, `versionCode=5`, `versionName=1.4`, `minSdk=21`, `targetSdk=35`, `launchable-activity=com.emotion.pet.MainActivity`, БЕЗ `application-debuggable` и БЕЗ `testOnly`. Файлът е **пълен и инсталируем** — проблемът е устройството, НЕ APK-то.
-- Предишна потенциална причина от наша страна — **два различни ключа** (debug.keystore за debug, release.p12 за release) за един и същ пакет `com.emotion.pet` — е **отстранена в v1.4** (един ключ за всичко).
-- Все още без потвърждение от потребителя коя от device-side причините е: (а) Samsung **Auto Blocker** включен, (б) Play Protect, (в) стара версия „Emotion Pet“ инсталирана с друг ключ (трябва деинсталиране), (г) разрешение „Инсталиране на непознати приложения“ липсва за конкретния файлов мениджър/браузър.
+## Следващи стъпки за новия агент
 
-**Следващи стъпки за новия агент/сесия (ако v1.1 пак крашва):**
-1. Поискай от потребителя **текста от crash диалога** („Копирай“ → праща го в чата). Той показва точния Java stack trace.
-2. Ако диалог НЕ се появява, а крашът остава → почти сигурно е **нативен** crash (SIGSEGV). Тогава: накарай потребителя да пусне **bug report** (Settings → Developer options → „Take bug report“) или `adb logcat` от компютър; потърси `FATAL EXCEPTION` / `SIGSEGV` / `libskia`/`libhwui` в лога.
-3. Други кандидати за native crash при нужда: `saveLayerAlpha` върху голям canvas (в `drawBubble`), `BitmapShader` с огромна снимка за фон (`loadWallpaper` decode-ва на пълна резолюция без downsample).
+1. **Насочи потребителя към последната стъпка (30 сек):**
+   - Настройки → Приложения → **SAI** → „Инсталиране на неизвестни приложения“ → **Разреши от този източник**.
+   - После: SAI → Install APKs → `EmotionPet.apk` → Install.
+   - Алтернатива без SAI: дай разрешението на **„Моите файлове“** и инсталирай оттам.
+2. **Потвърди успешна инсталация** и попитай дали приложението **стартира**. Това е следващата възможна точка на проблем (предишният потребителски проблем „инсталира се, но крашва при старт“ още НЕ е потвърден като решен/наличен).
+3. **Ако крашне при старт:** в `v1.1` беше добавен `CrashLog` (диалог „Копирай“ при следващо пускане) + `PetView` вече рисува в software слой (фикс за Samsung SIGSEGV при drawText на emoji). Накарай потребителя да копира/прати stack trace-а. Ако диалог не излиза, а крашът остава — искай `adb logcat` или Samsung „bug report“.
+4. **Ако инсталацията пак блокира с друг код от SAI** — донеси кода, той е точната диагноза.
 
-## Известни ограничения
+## Ключове / signing (да не се пипа без причина)
 
-- Няма Android SDK/emulator в тази sandbox среда — само CI компилация + Robolectric unit тестове. Overlay/widget/splash функционалността **никога не е верифицирана на реално устройство** от агента, само от потребителя (който засега не е потвърдил успешна инсталация с новите функции).
-- Мрежата в sandbox-а не стига до GitHub Actions artifact storage (Azure blob) — screenshots се вземат само през git commit-натите `docs/screenshots/`, не през artifact download.
-- Публичният "latest-build" release се обновява **само** ако workflow-ът се пусне през `workflow_dispatch` (или push към `main`/tag) — обикновен push към continuation branch-а НЕ го пипа (виж `.github/workflows/android.yml`, стъпка "Publish latest build release"). След всеки push, който искаш веднага достъпен за потребителя без merge в main, пусни ръчно `workflow_dispatch` на `android.yml` за branch-а.
+- `keystore/release.p12` (PKCS12) — използва се за **release И debug** (единен ключ). Парола/alias: `emotionpet`.
+- `keystore/debug.keystore` — остава в репото, но вече НЕ се ползва (debug подписва с release.p12).
+- Не сменяй ключа/пакета без координация — това е източникът на всички „не се инсталира“ болки.
 
-## Roadmap (README.md, "Идеи за следващо")
+## CI механика (важно)
+
+- CI (`android.yml`): build → тестове → **верификация на APK** (apksigner + aapt2, резултат в `docs/apk-info.txt`) → commit-ва `artifacts/EmotionPet.apk` + снимки + `docs/apk-info.txt` в клона → публикува release при **tag `v*`** (или push в `main`).
+- **Sandbox-ът НЯМА Android SDK/JDK** (и `apt` е без root). Всичко се валидира в CI; чети `docs/apk-info.txt` от репото (api.github.com е достъпен).
+- **`gh workflow run` = 403** (токенът няма workflow scope) → пускай чрез push/tag, НЕ workflow_dispatch.
+- **Мрежата блокира** `objects.githubusercontent.com`, `release-assets.githubusercontent.com`, `raw.githubusercontent.com`, `codeload` → не можеш да свалиш APK локално; разчитай на `gh api` (api.github.com).
+- GitHub Pages не може да се пусне (403) — не разчитай на него.
+- Всеки push към `arena/01a08ea3-emotion` генерира CI commit „[skip ci]“ — **винаги `git fetch` + rebase/merge преди нов push**, иначе push-ът отказва (non-fast-forward).
+- Tag `v*` → release с `EmotionPet.apk` + `EmotionPet.aab`.
+
+## Технически бележки / наследство
+
+- Клон на сесията: **`arena/01a08ea3-emotion`** (само в него работи — не създавай/не push-вай други клонове).
+- `main` е 1 commit напред спрямо базата (автоматичен `ci: обнови UI снимките` след merge на PR #2).
+- PR #1 и PR #2 са merge-нати. Не ги преизползвай.
+- В `values-en/strings.xml` вече са добавени overlay-ключовете (въпреки че overlay е премахнат, преводите стоят — безвредни).
+- `docs/apk-info.txt` се обновява при всеки CI run — чети го, за да видиш текущия подпис/версия/разрешения на реално компилирания APK.
+
+## Roadmap (README „Идеи за следващо“) — след като инсталацията е стабилна
 
 - [x] Widget на home screen
-- [x] Overlay режим
-- [ ] Разучаване на нови думи/команди („хайде навън")
-- [ ] Синхронизация на образа с любима снимка чрез AI стилизация
+- [ ] Разучаване на нови думи/команди („хайде навън“)
+- [ ] AI стилизация на образа (синхрон на образа с любима снимка)
+- [ ] (евентуално) връщане на overlay/boot — само през Google Play
