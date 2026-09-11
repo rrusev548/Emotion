@@ -40,6 +40,35 @@
     <string name="chat_greeting">Здравей! Аз съм %1$s. Как си? 🐾</string>
     <string name="need_key_hint">Липсва API ключ — отговорът е от вградената ми логика.</string>
 
+    <!-- Долна навигация -->
+    <string name="nav_home">Начало</string>
+    <string name="nav_tasks">Задачи</string>
+    <string name="nav_agents">Агенти</string>
+    <string name="nav_memory">Памет</string>
+    <string name="nav_more">Още</string>
+
+    <!-- Brain Lab -->
+    <string name="brainlab_title">Смени мозъка</string>
+    <string name="brainlab_subtitle">Избери AI агент и дай нови възможности на Peta.</string>
+    <string name="brainlab_active">Активен ✓</string>
+    <string name="brainlab_select">Избери</string>
+    <string name="brainlab_switched">%1$s е новият мозък на Peta. Готов съм! 😈</string>
+
+    <!-- Задачи -->
+    <string name="tasks_title">Задачи</string>
+    <string name="tasks_subtitle">Дребни неща за деня — прост списък, без напомняния.</string>
+    <string name="tasks_hint">Нова задача…</string>
+    <string name="tasks_empty">Няма задачи. Добави първата отгоре. ✅</string>
+    <string name="tasks_add">Добави</string>
+
+    <!-- Памет -->
+    <string name="memory_title">Памет</string>
+    <string name="memory_subtitle">Каквото поискаш да запомня — виждаш го тук и можеш да го изтриеш.</string>
+    <string name="memory_hint">Запомни нещо…</string>
+    <string name="memory_empty">Все още нищо запомнено. 🧠</string>
+    <string name="memory_add">Запази</string>
+    <string name="memory_delete">Изтрий</string>
+
     <!-- Основни действия -->
     <string name="chat">Чат</string>
     <string name="menu">Меню</string>

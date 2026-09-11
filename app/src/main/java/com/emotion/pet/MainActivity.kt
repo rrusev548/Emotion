@@ -76,10 +76,10 @@ class MainActivity : AppCompatActivity(),
 
         binding.petView.onPetTap = { onPetTapped() }
         binding.petView.onPetLongPress = { showMenu() }
-        binding.menuBtn.setOnClickListener { showMenu() }
         binding.chatBtn.setOnClickListener {
             startActivity(Intent(this, ChatActivity::class.java))
         }
+        setupBottomNav()
 
         // докосване на празно място в стаята → любимецът отива там
         binding.root.setOnTouchListener { _, event ->
@@ -121,6 +121,8 @@ class MainActivity : AppCompatActivity(),
         binding.petView.applyPrefs(prefs)
         refreshHud()
         applyKeepAwake(prefs.keepAwake)
+        // MainActivity е винаги "Начало" — Задачи/Агенти/Памет отварят отделен екран отгоре
+        binding.bottomNav.menu.findItem(R.id.nav_home)?.isChecked = true
         if (prefs.overlayEnabled) {
             if (Settings.canDrawOverlays(this)) {
                 OverlayService.start(this)
@@ -155,9 +157,45 @@ class MainActivity : AppCompatActivity(),
         ViewCompat.setOnApplyWindowInsetsListener(binding.actionColumn) { v, insets ->
             val bottom = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
             v.updateLayoutParams<FrameLayout.LayoutParams> {
-                bottomMargin = bottom + Ui.dp(this@MainActivity, 18)
+                // над долната навигация (56dp) + малко въздух
+                bottomMargin = bottom + Ui.dp(this@MainActivity, 74)
             }
             insets
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(binding.bottomNav) { v, insets ->
+            val bottom = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+            v.setPadding(v.paddingLeft, v.paddingTop, v.paddingRight, bottom)
+            insets
+        }
+    }
+
+    /** Долна навигация: Начало си е тук, останалите отварят отделен екран. */
+    private fun setupBottomNav() {
+        binding.bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> true
+                R.id.nav_tasks -> {
+                    startActivity(Intent(this, TasksActivity::class.java))
+                    false
+                }
+
+                R.id.nav_agents -> {
+                    startActivity(Intent(this, BrainLabActivity::class.java))
+                    false
+                }
+
+                R.id.nav_memory -> {
+                    startActivity(Intent(this, MemoryActivity::class.java))
+                    false
+                }
+
+                R.id.nav_more -> {
+                    showMenu()
+                    false
+                }
+
+                else -> false
+            }
         }
     }
 

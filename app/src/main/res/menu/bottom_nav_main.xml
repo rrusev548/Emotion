@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home"
+        android:title="@string/nav_home" />
+    <item
+        android:id="@+id/nav_tasks"
+        android:icon="@drawable/ic_tasks"
+        android:title="@string/nav_tasks" />
+    <item
+        android:id="@+id/nav_agents"
+        android:icon="@drawable/ic_brain"
+        android:title="@string/nav_agents" />
+    <item
+        android:id="@+id/nav_memory"
+        android:icon="@drawable/ic_memory"
+        android:title="@string/nav_memory" />
+    <item
+        android:id="@+id/nav_more"
+        android:icon="@drawable/ic_apps"
+        android:title="@string/nav_more" />
+</menu>

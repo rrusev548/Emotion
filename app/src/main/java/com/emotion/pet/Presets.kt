@@ -13,12 +13,21 @@ object Presets {
         val emoji: String,
         val tagline: String,
         val personality: String,
-        val accent: Int
+        val accent: Int,
+        /** Вграден образ (вместо emoji) — рисува се в стаята, докато потребителят не качи своя снимка. */
+        val spriteRes: Int? = null
     ) {
         val accentHex: String get() = String.format("#%06X", 0xFFFFFF and accent)
     }
 
     val PETS = listOf(
+        Pet(
+            "peta", "Peta", "😈", "Един Peta, много мозъци",
+            "дяволито, будно и лоялно демонче-спътник; закачливо и уверено, но винаги на твоя страна — " +
+                "смени му мозъка от Brain Lab и той пак си остава същият",
+            Color.parseColor("#FF4438"),
+            spriteRes = R.drawable.peta_devil
+        ),
         Pet(
             "shiba", "Моки", "🐶", "Игрив и верен",
             "игрив, верен и леко ревнив; обича топки, разходки и да те посреща всеки път",

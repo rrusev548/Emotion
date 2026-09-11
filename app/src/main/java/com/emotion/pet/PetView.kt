@@ -2,6 +2,7 @@ package com.emotion.pet
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.BitmapShader
 import android.graphics.Canvas
 import android.graphics.Color
@@ -207,7 +208,7 @@ class PetView @JvmOverloads constructor(
     }
 
     private fun loadSprite(prefs: Prefs) {
-        val key = prefs.spriteType + "|" + prefs.emoji + "|" +
+        val key = prefs.spriteType + "|" + prefs.emoji + "|" + prefs.petId + "|" +
             if (prefs.spriteType == Prefs.TYPE_IMAGE) SpriteStore.file(context).length() else 0L
         if (key == loadedSpriteKey) return
         loadedSpriteKey = key
@@ -215,8 +216,10 @@ class PetView @JvmOverloads constructor(
             petBitmap = SpriteStore.loadBitmap(context, 512)
             gifDrawable = SpriteStore.loadAnimated(context)
         } else {
-            petBitmap = null
             gifDrawable = null
+            // вграден образ на character-а (напр. Peta), докато потребителят не качи своя снимка
+            val res = Presets.pet(prefs.petId).spriteRes
+            petBitmap = if (res != null) BitmapFactory.decodeResource(resources, res) else null
         }
     }
 
@@ -423,7 +426,7 @@ class PetView @JvmOverloads constructor(
         val leftBound = half + dp(10f)
         val rightBound = width - half - dp(10f)
         val topBound = dp(78f) + half
-        val bottomBound = height - dp(96f) - half
+        val bottomBound = height - dp(128f) - half
 
         if (x < leftBound) {
             x = leftBound
@@ -481,7 +484,7 @@ class PetView @JvmOverloads constructor(
         val leftBound = half + dp(14f)
         val rightBound = max(leftBound, width - half - dp(14f))
         val topBound = dp(80f) + half
-        val bottomBound = max(topBound, height - dp(100f) - half)
+        val bottomBound = max(topBound, height - dp(132f) - half)
         targetX = leftBound + rnd.nextFloat() * (rightBound - leftBound)
         targetY = topBound + rnd.nextFloat() * (bottomBound - topBound)
         resting = rnd.nextFloat() < 0.34f
@@ -503,7 +506,7 @@ class PetView @JvmOverloads constructor(
         if (sleeping) return
         val half = petSizePx / 2f
         targetX = px.coerceIn(half + dp(10f), max(half + dp(10f), width - half - dp(10f)))
-        targetY = py.coerceIn(dp(78f) + half, max(dp(78f) + half, height - dp(96f) - half))
+        targetY = py.coerceIn(dp(78f) + half, max(dp(78f) + half, height - dp(128f) - half))
         resting = false
         thrown = false
         dash = 1f
@@ -883,7 +886,7 @@ class PetView @JvmOverloads constructor(
         val left = half + dp(6f)
         val right = max(left, width - half - dp(6f))
         val top = dp(72f) + half
-        val bottom = max(top, height - dp(92f) - half)
+        val bottom = max(top, height - dp(124f) - half)
         if (x < left) x = left
         if (x > right) x = right
         if (y < top) y = top
