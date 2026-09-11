@@ -566,14 +566,6 @@
                     android:text="@string/keep_screen_on"
                     android:textColor="@color/text_primary"
                     android:textSize="14sp" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/overlaySwitch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/setting_overlay"
-                    android:textColor="@color/text_primary"
-                    android:textSize="14sp" />
             </LinearLayout>
 
             <TextView

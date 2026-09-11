@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
-import android.provider.Settings
 import android.view.MotionEvent
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -142,14 +141,6 @@ class MainActivity : AppCompatActivity(),
         binding.petView.applyPrefs(prefs)
         refreshHud()
         applyKeepAwake(prefs.keepAwake)
-        if (prefs.overlayEnabled) {
-            if (Settings.canDrawOverlays(this)) {
-                OverlayService.start(this)
-            } else {
-                // разрешението още не е дадено (или е отказано) — не лъжи превключвателя, че е включено
-                prefs.overlayEnabled = false
-            }
-        }
         handler.removeCallbacks(ticker)
         handler.removeCallbacks(chatter)
         handler.postDelayed(ticker, 30_000L)
@@ -367,25 +358,6 @@ class MainActivity : AppCompatActivity(),
 
     override fun onChoosePet() {
         showPetPicker()
-    }
-
-    override fun onOverlayToggle(enabled: Boolean) {
-        prefs.overlayEnabled = enabled
-        if (!enabled) {
-            OverlayService.stop(this)
-            return
-        }
-        if (Settings.canDrawOverlays(this)) {
-            OverlayService.start(this)
-        } else {
-            Toast.makeText(this, R.string.overlay_perm_needed, Toast.LENGTH_LONG).show()
-            startActivity(
-                Intent(
-                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:$packageName")
-                )
-            )
-        }
     }
 
     // ---- избор на любимец от галерията ----

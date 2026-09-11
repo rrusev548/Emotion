@@ -28,7 +28,6 @@ class MenuSheet : BottomSheetDialogFragment() {
         fun onResetPet()
         fun onRename()
         fun onChoosePet()
-        fun onOverlayToggle(enabled: Boolean)
     }
 
     private var _binding: SheetMenuBinding? = null
@@ -155,10 +154,6 @@ class MenuSheet : BottomSheetDialogFragment() {
         binding.keepAwakeSwitch.isChecked = prefs.keepAwake
         binding.keepAwakeSwitch.setOnCheckedChangeListener { _, checked ->
             listener?.onKeepAwake(checked)
-        }
-        binding.overlaySwitch.isChecked = prefs.overlayEnabled
-        binding.overlaySwitch.setOnCheckedChangeListener { _, checked ->
-            listener?.onOverlayToggle(checked)
         }
         binding.resetBtn.setOnClickListener { listener?.onResetPet() }
     }
