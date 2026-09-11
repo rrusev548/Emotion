@@ -7,8 +7,9 @@
 - **Клон на тази сесия:** `arena/01a08ea3-emotion` (разклонен от merge commit-а на PR #2). Тук е направен fix + нов release `v1.1`.
 - **PR #2** (`claude/emotion-pet-continuation-dojdfy`) вече е **MERGED** в `main`. **PR #1** (`arena/01a08c73-emotion`) също е merge-нат — не го пипай/reuse-вай.
 - **`main`** е 1 commit напред спрямо базата на този клон (автоматичен `ci: обнови UI снимките` след merge-а).
-- **Release `v1.2`** (таг `v1.2` → commit `90a116c`): https://github.com/rrusev548/Emotion/releases/download/v1.2/EmotionPet-debug.apk — **най-новият и препоръчан APK**. ВАЖНО: от `v1.2` нататък debug build-ът е **без `applicationIdSuffix`** → пакетът е `com.emotion.pet` (не `com.emotion.pet.debug`). Това е направено, за да се инсталира като чисто ново приложение и да се избегне „Приложението не е инсталирано“ (конфликт на подписи със старите sideload-нати debug APK-та).
-- **Release `v1.1`** (таг `v1.1` → commit `22bffbc`): предходен APK с пакет `com.emotion.pet.debug` (остарял — ползвай v1.2).
+- **Release `v1.3`** (таг `v1.3` → commit `0d6f518`): https://github.com/rrusev548/Emotion/releases/download/v1.3/EmotionPet.apk — **препоръчан** (release, подписан с keystore/release.p12, не-debuggable, ~5.1 MB). Има и debug: `.../v1.3/EmotionPet-debug.apk`. От `v1.2` нататък пакетът е `com.emotion.pet` (без `.debug` суфикс). От `v1.3`: `minSdk 21` (вместо 24) + release signing (не-debuggable).
+- **Release `v1.2`** (таг `v1.2` → commit `90a116c`): първият с нов пакет `com.emotion.pet` (без суфикс).
+- **Release `v1.1`** (таг `v1.1` → commit `22bffbc`): стар пакет `com.emotion.pet.debug` (остарял).
 - **Public APK** (`latest-build`): https://github.com/rrusev548/Emotion/releases/download/latest-build/EmotionPet-debug.apk — обновява се само чрез `workflow_dispatch` на `android.yml` или push към `main`/tag. Push към `arena/*` клон НЕ го обновява; затова се използва таг `v*` (той създава отделен release).
 - Локалната среда (тази sandbox) **няма Android SDK/JDK/emulator** (и `apt-get` е блокиран — няма root) — само git/gh/curl. Валидацията минава изцяло през GitHub Actions CI. `gh workflow run` дава 403 (токенът няма `workflow` scope) → НЕ може да се пуска workflow_dispatch; използвай push/tag.
 - Мрежата в sandbox-а **не стига** до `objects.githubusercontent.com` / `release-assets.githubusercontent.com` (файловите хостове на GitHub) → APK не може да се свали/провери локално; достъпни са само api.github.com и github.com.
@@ -40,7 +41,11 @@
 3. **`values-en/strings.xml`** — добавени 5 липсващи overlay ключа (`setting_overlay`, `overlay_perm_needed`, `overlay_channel_name`, `overlay_notif_title`, `overlay_notif_text`). Преди това менюто/overlay-я биха хвърлили `Resources.NotFoundException` на **английско** устройство.
 4. **`app/build.gradle.kts`** — `versionCode` 1→2, `versionName` "1.0"→"1.1" (гладък ъпгрейд със същия ключ).
 
-Всичко е push-нато в `arena/01a08ea3-emotion` + таг `v1.1` (release с APK). CI зелен на клона и на тага.
+Всичко е push-нато в `arena/01a08ea3-emotion` + тагове `v1.1`, `v1.2`, `v1.3` (release с APK). CI зелен на клона и на таговете.
+
+**⚠️ Уточнение от потребителя (след v1.1/v1.2):** той ВСЕ ОЩЕ получава „Приложението не е инсталирано“ при инсталация (снимка на „Package installer“). Тъй като v1.2+ е със СЪВСЕМ нов пакет `com.emotion.pet`, конфликт на подписи вече НЕ е причина — значи проблемът е в устройството/свалянето, НЕ в APK-то. Действия, които са предприети в отговор (все още без потвърждение от потребителя):
+- v1.3: release-signed APK (не-debuggable) + `minSdk 21` (за да се изключат „стар Android“ и „debuggable блокиран“ хипотезите).
+- Дадени инструкции: (1) сваляне през **Chrome/Samsung Internet, НЕ през вградения браузър на чата** (там 302-редиректът към objects.githubusercontent.com може да къса файла), (2) проверка на размера в My Files, (3) изключване на **Auto Blocker** (Samsung) и Play Protect, (4) инсталация през **SAI (Split APKs Installer)** от Play Store, за да се види ТОЧНИЯ код на грешката (INSTALL_FAILED_OLDER_SDK / UPDATE_INCOMPATIBLE / PARSE_FAILED_... / INSUFFICIENT_STORAGE / USER_RESTRICTED).
 
 **Следващи стъпки за новия агент/сесия (ако v1.1 пак крашва):**
 1. Поискай от потребителя **текста от crash диалога** („Копирай“ → праща го в чата). Той показва точния Java stack trace.
