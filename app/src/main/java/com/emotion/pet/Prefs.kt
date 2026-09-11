@@ -138,6 +138,11 @@ class Prefs(context: Context) {
         get() = sp.getBoolean(K_GREETED, false)
         set(v) = sp.edit().putBoolean(K_GREETED, v).apply()
 
+    /** Показан ли е onboarding екранът при първо пускане. */
+    var onboarded: Boolean
+        get() = sp.getBoolean(K_ONBOARDED, false)
+        set(v) = sp.edit().putBoolean(K_ONBOARDED, v).apply()
+
     companion object {
         private const val FILE = "emotion_pet"
 
@@ -169,6 +174,7 @@ class Prefs(context: Context) {
         private const val K_TASKS = "tasks_log"
         private const val K_MEMORY = "memory_log"
         private const val K_GREETED = "greeted"
+        private const val K_ONBOARDED = "onboarded"
 
         const val TYPE_EMOJI = "emoji"
         const val TYPE_IMAGE = "image"

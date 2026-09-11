@@ -58,6 +58,7 @@ class ScreenshotTest {
         prefs.sleeping = false
         prefs.keepAwake = true
         prefs.greeted = false
+        prefs.onboarded = true
         prefs.aiProvider = "groq"
         prefs.aiModel = "llama-3.3-70b-versatile"
         prefs.aiKey = "gsk_демо-ключ-за-скрийншот"

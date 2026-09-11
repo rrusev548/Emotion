@@ -93,6 +93,40 @@
     </FrameLayout>
 
     <LinearLayout
+        android:id="@+id/dueRow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="6dp"
+        android:background="@drawable/bg_chip_soft"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="6dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/dueText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textSize="12.5sp"
+            tools:text="⏰ 20 сеп, 18:00" />
+
+        <ImageView
+            android:id="@+id/dueClearBtn"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/memory_delete"
+            android:padding="6dp"
+            android:src="@drawable/ic_delete"
+            app:tint="@color/text_secondary" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
@@ -101,6 +135,25 @@
         android:paddingTop="2dp"
         android:paddingEnd="12dp"
         android:paddingBottom="12dp">
+
+        <FrameLayout
+            android:id="@+id/dueBtn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_circle_soft"
+            android:clickable="true"
+            android:contentDescription="@string/tasks_due_pick"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="⏰"
+                android:textSize="20sp" />
+        </FrameLayout>
 
         <EditText
             android:id="@+id/input"

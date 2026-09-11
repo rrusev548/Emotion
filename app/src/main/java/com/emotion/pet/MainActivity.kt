@@ -8,6 +8,7 @@ import android.os.Looper
 import android.os.SystemClock
 import android.provider.Settings
 import android.view.MotionEvent
+import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -69,6 +70,12 @@ class MainActivity : AppCompatActivity(),
         setContentView(binding.root)
         prefs = Prefs(this)
 
+        if (!prefs.onboarded) {
+            startActivity(Intent(this, OnboardingActivity::class.java))
+            finish()
+            return
+        }
+
         applyInsets()
         Needs.applyDecay(prefs)
         binding.petView.applyPrefs(prefs)
@@ -80,10 +87,15 @@ class MainActivity : AppCompatActivity(),
             startActivity(Intent(this, ChatActivity::class.java))
         }
         setupBottomNav()
+        setupQuickActions()
 
         // докосване на празно място в стаята → любимецът отива там
         binding.root.setOnTouchListener { _, event ->
             if (event.actionMasked == MotionEvent.ACTION_UP && !binding.petView.isDragging) {
+                if (binding.quickActionsScroll.visibility == View.VISIBLE) {
+                    handler.removeCallbacks(hideQuickActions)
+                    binding.quickActionsScroll.visibility = View.GONE
+                }
                 binding.petView.walkTo(event.x, event.y)
             }
             false
@@ -253,7 +265,41 @@ class MainActivity : AppCompatActivity(),
 
     // =================== действия ===================
 
+    /** Popup ред с бързи действия (Chat/Задачи/Агенти/Памет) — spec-ът го нарича "quick actions". */
+    private val hideQuickActions = Runnable { binding.quickActionsScroll.visibility = View.GONE }
+
+    private fun setupQuickActions() {
+        val actions = listOf(
+            getString(R.string.chat) to { startActivity(Intent(this, ChatActivity::class.java)) },
+            getString(R.string.nav_tasks) to { startActivity(Intent(this, TasksActivity::class.java)) },
+            getString(R.string.nav_agents) to { startActivity(Intent(this, BrainLabActivity::class.java)) },
+            getString(R.string.nav_memory) to { startActivity(Intent(this, MemoryActivity::class.java)) }
+        )
+        actions.forEach { (label, action) ->
+            val chip = Ui.chip(this, label)
+            chip.setOnClickListener {
+                handler.removeCallbacks(hideQuickActions)
+                binding.quickActionsScroll.visibility = View.GONE
+                action()
+            }
+            binding.quickActionsRow.addView(chip)
+        }
+    }
+
+    private fun toggleQuickActions() {
+        handler.removeCallbacks(hideQuickActions)
+        if (binding.quickActionsScroll.visibility == View.VISIBLE) {
+            binding.quickActionsScroll.visibility = View.GONE
+            return
+        }
+        binding.quickActionsScroll.alpha = 0f
+        binding.quickActionsScroll.visibility = View.VISIBLE
+        binding.quickActionsScroll.animate().alpha(1f).setDuration(160L).start()
+        handler.postDelayed(hideQuickActions, 4000L)
+    }
+
     private fun onPetTapped() {
+        toggleQuickActions()
         val now = SystemClock.uptimeMillis()
         if (now - lastTapAt <= 2000L) return
         lastTapAt = now

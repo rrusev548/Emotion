@@ -10,7 +10,9 @@ object TaskStore {
         val id: Long,
         val text: String,
         val done: Boolean = false,
-        val createdAt: Long = System.currentTimeMillis()
+        val createdAt: Long = System.currentTimeMillis(),
+        /** Краен срок (ms epoch) — null, ако задачата няма напомняне. */
+        val dueAt: Long? = null
     )
 
     private const val MAX_TASKS = 300
@@ -23,7 +25,8 @@ object TaskStore {
                 val o = arr.optJSONObject(i) ?: continue
                 val text = o.optString("text")
                 if (text.isNotBlank()) {
-                    out.add(Task(o.optLong("id"), text, o.optBoolean("done"), o.optLong("ts")))
+                    val due = if (o.has("due")) o.optLong("due").takeIf { it > 0 } else null
+                    out.add(Task(o.optLong("id"), text, o.optBoolean("done"), o.optLong("ts"), due))
                 }
             }
         } catch (_: Exception) {
@@ -35,20 +38,20 @@ object TaskStore {
     private fun save(prefs: Prefs, tasks: List<Task>) {
         val arr = JSONArray()
         tasks.takeLast(MAX_TASKS).forEach { t ->
-            arr.put(
-                JSONObject()
-                    .put("id", t.id)
-                    .put("text", t.text)
-                    .put("done", t.done)
-                    .put("ts", t.createdAt)
-            )
+            val o = JSONObject()
+                .put("id", t.id)
+                .put("text", t.text)
+                .put("done", t.done)
+                .put("ts", t.createdAt)
+            if (t.dueAt != null) o.put("due", t.dueAt)
+            arr.put(o)
         }
         prefs.tasksLog = arr.toString()
     }
 
-    fun add(prefs: Prefs, text: String): MutableList<Task> {
+    fun add(prefs: Prefs, text: String, dueAt: Long? = null): MutableList<Task> {
         val list = load(prefs)
-        list.add(Task(System.currentTimeMillis(), text))
+        list.add(Task(System.currentTimeMillis(), text, dueAt = dueAt))
         save(prefs, list)
         return list
     }

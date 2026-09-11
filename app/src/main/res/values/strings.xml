@@ -40,6 +40,12 @@
     <string name="chat_greeting">Здравей! Аз съм %1$s. Как си? 🐾</string>
     <string name="need_key_hint">Липсва API ключ — отговорът е от вградената ми логика.</string>
 
+    <!-- Onboarding -->
+    <string name="onboarding_title">Запознай се с Peta</string>
+    <string name="onboarding_body">Peta е твоят постоянен AI спътник. Един и същ герой — а мозъкът зад него можеш да смениш по всяко време от Brain Lab.</string>
+    <string name="onboarding_notif_hint">🔔 Известия — за да ти напомня за задачи с крайен срок.</string>
+    <string name="onboarding_continue">Започваме</string>
+
     <!-- Долна навигация -->
     <string name="nav_home">Начало</string>
     <string name="nav_tasks">Задачи</string>
@@ -52,7 +58,8 @@
     <string name="brainlab_subtitle">Избери AI агент и дай нови възможности на Peta.</string>
     <string name="brainlab_active">Активен ✓</string>
     <string name="brainlab_select">Избери</string>
-    <string name="brainlab_switched">%1$s е новият мозък на Peta. Готов съм! 😈</string>
+    <string name="brainlab_installing">Инсталирам %1$s…</string>
+    <string name="brainlab_ready">Готов съм! 😈</string>
 
     <!-- Задачи -->
     <string name="tasks_title">Задачи</string>
@@ -60,6 +67,9 @@
     <string name="tasks_hint">Нова задача…</string>
     <string name="tasks_empty">Няма задачи. Добави първата отгоре. ✅</string>
     <string name="tasks_add">Добави</string>
+    <string name="tasks_due_pick">Краен срок</string>
+    <string name="tasks_reminder_channel">Напомняния за задачи</string>
+    <string name="tasks_reminder_title">⏰ Peta ти напомня</string>
 
     <!-- Памет -->
     <string name="memory_title">Памет</string>

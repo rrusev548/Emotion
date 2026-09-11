@@ -60,7 +60,8 @@ class LayoutInflateTest {
             "activity_tasks" to R.layout.activity_tasks,
             "item_task" to R.layout.item_task,
             "activity_memory" to R.layout.activity_memory,
-            "item_memory" to R.layout.item_memory
+            "item_memory" to R.layout.item_memory,
+            "activity_onboarding" to R.layout.activity_onboarding
         )
         val failures = mutableListOf<String>()
         layouts.forEach { (name, id) ->

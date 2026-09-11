@@ -19,14 +19,31 @@
         android:layout_height="wrap_content"
         android:buttonTint="@color/accent" />
 
-    <TextView
-        android:id="@+id/text"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textColor="@color/text_primary"
-        android:textSize="15sp"
-        tools:text="Купи храна за любимеца" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textSize="15sp"
+            tools:text="Купи храна за любимеца" />
+
+        <TextView
+            android:id="@+id/dueText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:visibility="gone"
+            tools:text="⏰ 20 сеп, 18:00"
+            tools:visibility="visible" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/deleteBtn"
