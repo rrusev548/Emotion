@@ -8,7 +8,6 @@ import android.os.Looper
 import android.os.SystemClock
 import android.provider.Settings
 import android.view.MotionEvent
-import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -20,7 +19,6 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -28,9 +26,11 @@ import androidx.core.view.updateLayoutParams
 import com.emotion.pet.databinding.ActivityMainBinding
 
 /** Основен екран: стаята с любимеца, HUD-ът и бързите бутони. */
-class MainActivity : AppCompatActivity(),
+class MainActivity : PetOverlayActivity(),
     MenuSheet.Listener,
     PetPickerSheet.Listener {
+
+    override val showMiniPet: Boolean = false
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var prefs: Prefs
@@ -87,15 +87,10 @@ class MainActivity : AppCompatActivity(),
             startActivity(Intent(this, ChatActivity::class.java))
         }
         setupBottomNav()
-        setupQuickActions()
 
         // докосване на празно място в стаята → любимецът отива там
         binding.root.setOnTouchListener { _, event ->
             if (event.actionMasked == MotionEvent.ACTION_UP && !binding.petView.isDragging) {
-                if (binding.quickActionsScroll.visibility == View.VISIBLE) {
-                    handler.removeCallbacks(hideQuickActions)
-                    binding.quickActionsScroll.visibility = View.GONE
-                }
                 binding.petView.walkTo(event.x, event.y)
             }
             false
@@ -135,13 +130,11 @@ class MainActivity : AppCompatActivity(),
         applyKeepAwake(prefs.keepAwake)
         // MainActivity е винаги "Начало" — Задачи/Агенти/Памет отварят отделен екран отгоре
         binding.bottomNav.menu.findItem(R.id.nav_home)?.isChecked = true
-        if (prefs.overlayEnabled) {
-            if (Settings.canDrawOverlays(this)) {
-                OverlayService.start(this)
-            } else {
-                // разрешението още не е дадено (или е отказано) — не лъжи превключвателя, че е включено
-                prefs.overlayEnabled = false
-            }
+        if (prefs.overlayEnabled && !Settings.canDrawOverlays(this)) {
+            // разрешението още не е дадено (или е отказано) — не лъжи превключвателя, че е включено
+            // (самото пускане/спиране на OverlayService вече е грижа на PetOverlayActivity —
+            // докато сме вътре в приложението, MiniPetOverlay е достатъчен, edge-peek балонът е за извън него)
+            prefs.overlayEnabled = false
         }
         handler.removeCallbacks(ticker)
         handler.removeCallbacks(chatter)
@@ -265,41 +258,7 @@ class MainActivity : AppCompatActivity(),
 
     // =================== действия ===================
 
-    /** Popup ред с бързи действия (Chat/Задачи/Агенти/Памет) — spec-ът го нарича "quick actions". */
-    private val hideQuickActions = Runnable { binding.quickActionsScroll.visibility = View.GONE }
-
-    private fun setupQuickActions() {
-        val actions = listOf(
-            getString(R.string.chat) to { startActivity(Intent(this, ChatActivity::class.java)) },
-            getString(R.string.nav_tasks) to { startActivity(Intent(this, TasksActivity::class.java)) },
-            getString(R.string.nav_agents) to { startActivity(Intent(this, BrainLabActivity::class.java)) },
-            getString(R.string.nav_memory) to { startActivity(Intent(this, MemoryActivity::class.java)) }
-        )
-        actions.forEach { (label, action) ->
-            val chip = Ui.chip(this, label)
-            chip.setOnClickListener {
-                handler.removeCallbacks(hideQuickActions)
-                binding.quickActionsScroll.visibility = View.GONE
-                action()
-            }
-            binding.quickActionsRow.addView(chip)
-        }
-    }
-
-    private fun toggleQuickActions() {
-        handler.removeCallbacks(hideQuickActions)
-        if (binding.quickActionsScroll.visibility == View.VISIBLE) {
-            binding.quickActionsScroll.visibility = View.GONE
-            return
-        }
-        binding.quickActionsScroll.alpha = 0f
-        binding.quickActionsScroll.visibility = View.VISIBLE
-        binding.quickActionsScroll.animate().alpha(1f).setDuration(160L).start()
-        handler.postDelayed(hideQuickActions, 4000L)
-    }
-
     private fun onPetTapped() {
-        toggleQuickActions()
         val now = SystemClock.uptimeMillis()
         if (now - lastTapAt <= 2000L) return
         lastTapAt = now
@@ -438,9 +397,7 @@ class MainActivity : AppCompatActivity(),
             OverlayService.stop(this)
             return
         }
-        if (Settings.canDrawOverlays(this)) {
-            OverlayService.start(this)
-        } else {
+        if (!Settings.canDrawOverlays(this)) {
             Toast.makeText(this, R.string.overlay_perm_needed, Toast.LENGTH_LONG).show()
             startActivity(
                 Intent(
@@ -449,6 +406,8 @@ class MainActivity : AppCompatActivity(),
                 )
             )
         }
+        // балонът се показва едва щом напуснеш приложението (виж PetOverlayActivity) —
+        // докато си вътре, вече виждаш Peta в стаята/MiniPetOverlay, не ни трябват и двата наведнъж
     }
 
     // ---- избор на любимец от галерията ----

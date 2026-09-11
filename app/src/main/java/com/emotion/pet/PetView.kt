@@ -374,6 +374,9 @@ class PetView @JvmOverloads constructor(
             vy *= 0.84f
             zzzPhase += dt / 900f
         } else if (thrown) {
+            // гравитация — докато лети, вика надолу; заедно с bounce-а в collideWalls()
+            // прави хвърлянето да пада и се търкулва като истински физически обект
+            vy = (vy + dp(GRAVITY_DP_PER_S2) * dt / 1000f).coerceAtMost(dp(TERMINAL_VELOCITY_DP))
             // инерция + триене; отскача до спиране
             val friction = Math.pow(if (bounceEnabled) 0.988 else 0.93, df.toDouble()).toFloat()
             vx *= friction
@@ -904,4 +907,13 @@ class PetView @JvmOverloads constructor(
     }
 
     private fun dp(value: Float): Float = value * resources.displayMetrics.density
+
+    companion object {
+        /**
+         * Гравитационно ускорение (dp/s²) и таван на скоростта на падане — споделени с
+         * [MiniPetOverlay], за да пада физически еднакво навсякъде из приложението.
+         */
+        const val GRAVITY_DP_PER_S2 = 1400f
+        const val TERMINAL_VELOCITY_DP = 2200f
+    }
 }

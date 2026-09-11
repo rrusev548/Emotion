@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.emotion.pet.databinding.ActivityTasksBinding
@@ -21,7 +20,7 @@ import java.util.Calendar
 import java.util.Locale
 
 /** Списък със задачи — добави/отметни/изтрий, с по избор краен срок и локално напомняне. */
-class TasksActivity : AppCompatActivity() {
+class TasksActivity : PetOverlayActivity() {
 
     private lateinit var binding: ActivityTasksBinding
     private lateinit var prefs: Prefs

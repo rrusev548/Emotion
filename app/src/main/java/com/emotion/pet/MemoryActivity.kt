@@ -5,14 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.emotion.pet.databinding.ActivityMemoryBinding
 import com.emotion.pet.databinding.ItemMemoryBinding
 
 /** Каквото потребителят иска Peta да помни — прост списък със записки, изтриваеми поотделно. */
-class MemoryActivity : AppCompatActivity() {
+class MemoryActivity : PetOverlayActivity() {
 
     private lateinit var binding: ActivityMemoryBinding
     private lateinit var prefs: Prefs
