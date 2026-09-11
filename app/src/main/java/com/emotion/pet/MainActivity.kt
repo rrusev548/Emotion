@@ -13,9 +13,14 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.Toast
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.graphics.drawable.Icon
+import android.os.Build
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
@@ -57,6 +62,8 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // ако нещо в SplashScreen compat пътя гръмне (напр. под Robolectric), не бива да събаря Activity-то
+        runCatching { installSplashScreen() }
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -85,10 +92,28 @@ class MainActivity : AppCompatActivity(),
         if (!prefs.greeted) {
             prefs.greeted = true
             handler.postDelayed(
-                { sayNow(getString(R.string.chat_greeting, prefs.petName)) },
+                {
+                    sayNow(getString(R.string.chat_greeting, prefs.petName))
+                    // до тук прозорецът вече реално се вижда — някои лаунчъри
+                    // отказват requestPinShortcut, ако е повикан твърде рано в onCreate
+                    offerHomeScreenShortcut()
+                },
                 900L
             )
         }
+    }
+
+    /** При първо пускане — едно системно предложение да се закачи икона на началния екран. */
+    private fun offerHomeScreenShortcut() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
+        val manager = getSystemService(ShortcutManager::class.java) ?: return
+        if (!manager.isRequestPinShortcutSupported) return
+        val shortcut = ShortcutInfo.Builder(this, "main_shortcut")
+            .setShortLabel(getString(R.string.app_name))
+            .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
+            .setIntent(Intent(this, MainActivity::class.java).setAction(Intent.ACTION_MAIN))
+            .build()
+        runCatching { manager.requestPinShortcut(shortcut, null) }
     }
 
     override fun onResume() {
