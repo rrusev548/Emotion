@@ -48,6 +48,7 @@ class PetPickerSheet : BottomSheetDialogFragment() {
                 prefs.nameCustomized = false
             }
             prefs.emoji = pet.emoji
+            prefs.emojiCustomized = false
             prefs.spriteType = Prefs.TYPE_EMOJI
             SpriteStore.clear(requireContext())
             listener?.onPetChosen(pet)

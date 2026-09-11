@@ -38,6 +38,7 @@ class MiniPetOverlay(
     private val sizePx = dp(56f)
     private var petBitmap: Bitmap? = null
     private var emoji: String = "😈"
+    private var accent: Int = Color.RED
 
     private var dragging = false
     private var dragMoved = false
@@ -49,6 +50,8 @@ class MiniPetOverlay(
     private var downAt = 0L
     private var squash = 0f
     private var squashAxis = 0
+    private var idlePhase = 0f
+    private val blink = PetBlink()
 
     private val bodyPaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
     private val emojiPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -74,6 +77,7 @@ class MiniPetOverlay(
         val prefs = Prefs(context)
         val pet = Presets.pet(prefs.petId)
         emoji = prefs.emoji.ifBlank { pet.emoji }
+        accent = pet.accent
         val key = prefs.spriteType + "|" + prefs.petId + "|" +
             if (prefs.spriteType == Prefs.TYPE_IMAGE) SpriteStore.file(context).length() else 0L
         petBitmap = if (key == SpriteCache.key) {
@@ -121,6 +125,9 @@ class MiniPetOverlay(
     }
 
     private fun step(dt: Float) {
+        idlePhase += dt / 1000f
+        blink.step(SystemClock.uptimeMillis())
+
         if (dragging || width == 0 || height == 0) return
 
         squash *= Math.pow(0.86, (dt / 16.67).coerceIn(0.2, 3.0)).toFloat()
@@ -267,13 +274,15 @@ class MiniPetOverlay(
 
         val sx = if (squashAxis == 0) 1f + 0.22f * squash else 1f - 0.30f * squash
         val sy = if (squashAxis == 0) 1f - 0.30f * squash else 1f + 0.22f * squash
+        val idleBreath = if (!dragging) PetMotion.idleBreath(idlePhase, s) else 0f
 
         canvas.save()
-        canvas.translate(State.x, State.y)
+        canvas.translate(State.x, State.y - idleBreath)
         canvas.scale(sx, sy)
         val bmp = petBitmap
         if (bmp != null) {
             canvas.drawBitmap(bmp, null, RectF(-half, -half, half, half), bodyPaint)
+            blink.draw(canvas, half, accent, SystemClock.uptimeMillis())
         } else {
             emojiPaint.textSize = s * 0.86f
             val fm = emojiPaint.fontMetrics

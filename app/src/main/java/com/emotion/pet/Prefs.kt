@@ -35,11 +35,23 @@ class Prefs(context: Context) {
         set(v) = sp.edit().putString(K_SPRITE_TYPE, v).apply()
 
     var emoji: String
-        get() = sp.getString(K_EMOJI, Presets.EMOJIS.first()) ?: Presets.EMOJIS.first()
+        get() {
+            // Peta (и всеки бъдещ character с вграден образ) си има един консистентен вид —
+            // докато потребителят сам не избере друго emoji, не позволяваме на стар/случаен
+            // запис в prefs да го разминава с показаната картинка (виж emojiCustomized).
+            val pet = Presets.pet(petId)
+            if (spriteType == TYPE_EMOJI && pet.spriteRes != null && !emojiCustomized) return pet.emoji
+            return sp.getString(K_EMOJI, Presets.EMOJIS.first()) ?: Presets.EMOJIS.first()
+        }
         set(v) = sp.edit().putString(K_EMOJI, v).apply()
 
+    /** true, ако потребителят сам е избрал друго emoji от списъка (не автоматичния вид на любимеца). */
+    var emojiCustomized: Boolean
+        get() = sp.getBoolean(K_EMOJI_CUSTOM, false)
+        set(v) = sp.edit().putBoolean(K_EMOJI_CUSTOM, v).apply()
+
     var sizeDp: Int
-        get() = sp.getInt(K_SIZE, 110)
+        get() = sp.getInt(K_SIZE, 150)
         set(v) = sp.edit().putInt(K_SIZE, v.coerceIn(MIN_SIZE, MAX_SIZE)).apply()
 
     var speed: Float
@@ -153,6 +165,7 @@ class Prefs(context: Context) {
         private const val K_PARTICLES = "particles"
         private const val K_SPRITE_TYPE = "sprite_type"
         private const val K_EMOJI = "emoji"
+        private const val K_EMOJI_CUSTOM = "emoji_custom"
         private const val K_SIZE = "size_dp"
         private const val K_SPEED = "speed"
         private const val K_MIRROR = "mirrored"
