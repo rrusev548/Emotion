@@ -140,11 +140,8 @@ jobs:
           body: |
             Автоматично компилиран APK от commit ${{ github.sha }}.
             Инсталирай го на телефона си (разреши „Инсталиране от неизвестни източници“).
-            • EmotionPet.apk — препоръчан (release, подписан, не-debuggable)
-            • EmotionPet-debug.apk — debug вариант
-          files: |
-            artifacts/EmotionPet.apk
-            artifacts/EmotionPet-debug.apk
+            Един файл: EmotionPet.apk (release, подписан, не-debuggable).
+          files: artifacts/EmotionPet.apk
 
       # Мрежата в sandbox-а не стига до логовете на Actions, затова при грешка
       # логът се записва в самото репо, за да може да се прочете.
