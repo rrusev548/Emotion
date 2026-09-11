@@ -13,8 +13,8 @@ android {
         applicationId = "com.emotion.pet"
         minSdk = 24
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 3
+        versionName = "1.2"
     }
 
     signingConfigs {
@@ -32,7 +32,10 @@ android {
     buildTypes {
         debug {
             signingConfig = signingConfigs.getByName("debug")
-            applicationIdSuffix = ".debug"
+            // Без applicationIdSuffix: приложението винаги е "com.emotion.pet".
+            // Старите sideload-нати APK-та бяха "com.emotion.pet.debug" и блокираха
+            // инсталацията с „Приложението не е инсталирано“ (конфликт на подписи).
+            // С нов пакет инсталацията минава като чисто ново приложение.
             versionNameSuffix = "-debug"
         }
         release {
