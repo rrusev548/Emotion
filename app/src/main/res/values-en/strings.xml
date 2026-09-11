@@ -16,6 +16,11 @@
     <string name="section_motion">Motion</string>
     <string name="setting_bounce">🐾 Bounce off walls</string>
     <string name="setting_particles">✨ Sparkles &amp; particles</string>
+    <string name="setting_overlay">🪟 Floating window (over other apps)</string>
+    <string name="overlay_perm_needed">Allow “Display over other apps” for Emotion Pet, then turn the floating window back on.</string>
+    <string name="overlay_channel_name">Floating pet</string>
+    <string name="overlay_notif_title">Your pet floats over other apps</string>
+    <string name="overlay_notif_text">Tap to open the app. Hold the bubble to turn it off.</string>
 
     <string name="tile_feed">Feed</string>
     <string name="tile_play">Play</string>

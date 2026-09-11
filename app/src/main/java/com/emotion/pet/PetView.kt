@@ -39,6 +39,14 @@ class PetView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
+    init {
+        // Samsung и някои други устройства крашват нативно (SIGSEGV в Skia),
+        // когато emoji се рисува с drawText върху hardware-accelerated Canvas.
+        // Software слой за целия изглед е най-надеждният начин да се избегне това.
+        // Анимацията тук е лека — няколко кръга + текст — така че няма проблем с производителността.
+        setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+    }
+
     // ---------- външни реакции ----------
     var onPetTap: (() -> Unit)? = null
     var onPetLongPress: (() -> Unit)? = null

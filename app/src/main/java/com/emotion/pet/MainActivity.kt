@@ -62,12 +62,16 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // първо — закачи crash логъра, за да хващаме изключенията още от самото начало
+        CrashLog.install(this)
         // ако нещо в SplashScreen compat пътя гръмне (напр. под Robolectric), не бива да събаря Activity-то
         runCatching { installSplashScreen() }
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         prefs = Prefs(this)
+
+        maybeReportCrash()
 
         applyInsets()
         Needs.applyDecay(prefs)
@@ -101,6 +105,23 @@ class MainActivity : AppCompatActivity(),
                 900L
             )
         }
+    }
+
+    /** Ако при предишното пускане е имало crash — покажи го, за да може да се копира/сподели. */
+    private fun maybeReportCrash() {
+        val text = CrashLog.read(this) ?: return
+        CrashLog.clear(this)
+        val lines = text.lines()
+        val short = if (lines.size > 12) lines.take(12).joinToString("\n") + "\n…" else text
+        AlertDialog.Builder(this)
+            .setTitle("Възникна грешка при последното пускане")
+            .setMessage(short)
+            .setPositiveButton("Копирай") { _, _ ->
+                CrashLog.copyToClipboard(this, text)
+                Toast.makeText(this, "Копирано — прати ми текста в чата", Toast.LENGTH_LONG).show()
+            }
+            .setNegativeButton("Затвори", null)
+            .show()
     }
 
     /** При първо пускане — едно системно предложение да се закачи икона на началния екран. */
