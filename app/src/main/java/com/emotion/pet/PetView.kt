@@ -147,7 +147,7 @@ class PetView @JvmOverloads constructor(
         strokeWidth = dp(1.2f)
     }
     private val bubbleTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#211836")
+        color = Color.parseColor("#F3EDFF")
         textSize = dp(14.5f)
     }
     private val zzzPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { textAlign = Paint.Align.CENTER }
@@ -806,9 +806,9 @@ class PetView @JvmOverloads constructor(
         val oldAlpha = canvas.saveLayerAlpha(
             0f, 0f, width.toFloat(), height.toFloat(), (255 * bubbleAlpha).toInt()
         )
-        bubblePaint.color = Color.parseColor("#F5F2FC")
+        bubblePaint.color = Color.parseColor("#E3160F2B")
         canvas.drawRoundRect(rect, dp(18f), dp(18f), bubblePaint)
-        bubbleStroke.color = Color.argb(120, Color.red(accent), Color.green(accent), Color.blue(accent))
+        bubbleStroke.color = Color.argb(150, Color.red(accent), Color.green(accent), Color.blue(accent))
         canvas.drawRoundRect(rect, dp(18f), dp(18f), bubbleStroke)
 
         val inset = dp(16f)
