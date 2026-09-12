@@ -6,7 +6,6 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.emotion.pet.databinding.ActivityBrainLabBinding
 import com.emotion.pet.databinding.ItemAgentBinding
@@ -15,7 +14,7 @@ import com.emotion.pet.databinding.ItemAgentBinding
  * "Един Peta, много мозъци" — избор на активния AI агент. Самите настройки
  * (API ключ, модел, base URL) си остават в AiSheet, отворен оттук с ⚙.
  */
-class BrainLabActivity : AppCompatActivity() {
+class BrainLabActivity : PetOverlayActivity() {
 
     private lateinit var binding: ActivityBrainLabBinding
     private lateinit var prefs: Prefs

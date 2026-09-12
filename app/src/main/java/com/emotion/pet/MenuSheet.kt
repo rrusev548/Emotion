@@ -105,6 +105,7 @@ class MenuSheet : BottomSheetDialogFragment() {
         binding.emojiList.adapter = EmojiAdapter(Presets.EMOJIS, prefs.emoji) { emoji ->
             prefs.spriteType = Prefs.TYPE_EMOJI
             prefs.emoji = emoji
+            prefs.emojiCustomized = true
             SpriteStore.clear(requireContext())
             listener?.onAppearanceChanged()
         }

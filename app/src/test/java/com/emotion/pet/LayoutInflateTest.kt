@@ -54,7 +54,6 @@ class LayoutInflateTest {
             "item_emoji" to R.layout.item_emoji,
             "item_pet" to R.layout.item_pet,
             "widget_pet" to R.layout.widget_pet,
-            "overlay_pet" to R.layout.overlay_pet,
             "activity_brain_lab" to R.layout.activity_brain_lab,
             "item_agent" to R.layout.item_agent,
             "activity_tasks" to R.layout.activity_tasks,

@@ -106,6 +106,8 @@ class PetView @JvmOverloads constructor(
     private var bounceCount = 0
     private var glowPhase = 0f
     private var ambientPhase = 0f
+    private var idlePhase = 0f
+    private val blink = PetBlink()
 
     private val rnd = Random(System.nanoTime())
 
@@ -145,7 +147,7 @@ class PetView @JvmOverloads constructor(
         strokeWidth = dp(1.2f)
     }
     private val bubbleTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#211836")
+        color = Color.parseColor("#F3EDFF")
         textSize = dp(14.5f)
     }
     private val zzzPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { textAlign = Paint.Align.CENTER }
@@ -157,6 +159,9 @@ class PetView @JvmOverloads constructor(
     private var blobShaders = HashMap<Int, RadialGradient>()
     private var floorShader: RadialGradient? = null
     private var floorKey = ""
+    private var vignetteShader: RadialGradient? = null
+    private var vignetteKey = ""
+    private val vignettePaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var lastHitAt = 0L
     private var lastHitAxis = -1
     private var ambient = emptyList<FloatArray>()
@@ -337,6 +342,10 @@ class PetView @JvmOverloads constructor(
 
         glowPhase += dt / 1000f * 1.4f
         ambientPhase += dt / 1000f * 0.25f
+        idlePhase += dt / 1000f
+
+        // мигане — прави любимеца жив дори когато стои напълно неподвижен
+        blink.step(now)
 
         // ударни вълни и искри
         if (rings.isNotEmpty()) rings.removeAll { now - it.started > 520L }
@@ -374,6 +383,9 @@ class PetView @JvmOverloads constructor(
             vy *= 0.84f
             zzzPhase += dt / 900f
         } else if (thrown) {
+            // гравитация — докато лети, вика надолу; заедно с bounce-а в collideWalls()
+            // прави хвърлянето да пада и се търкулва като истински физически обект
+            vy = (vy + dp(GRAVITY_DP_PER_S2) * dt / 1000f).coerceAtMost(dp(TERMINAL_VELOCITY_DP))
             // инерция + триене; отскача до спиране
             val friction = Math.pow(if (bounceEnabled) 0.988 else 0.93, df.toDouble()).toFloat()
             vx *= friction
@@ -541,6 +553,24 @@ class PetView @JvmOverloads constructor(
         if (sleeping) drawZzz(canvas)
         drawEffects(canvas)
         drawBubble(canvas)
+        drawVignette(canvas)
+    }
+
+    /** Леко потъмняване по ръбовете — прави стаята да изглежда по-дълбока и премиум, не плоска. */
+    private fun drawVignette(canvas: Canvas) {
+        if (wallpaper != null) return
+        val key = "$width x$height"
+        if (vignetteShader == null || vignetteKey != key) {
+            vignetteKey = key
+            val radius = max(width, height) * 0.78f
+            vignetteShader = RadialGradient(
+                width / 2f, height / 2f, radius,
+                intArrayOf(Color.TRANSPARENT, Color.parseColor("#4D000000")),
+                floatArrayOf(0.6f, 1f), Shader.TileMode.CLAMP
+            )
+        }
+        vignettePaint.shader = vignetteShader
+        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), vignettePaint)
     }
 
     private fun drawRoom(canvas: Canvas) {
@@ -652,15 +682,17 @@ class PetView @JvmOverloads constructor(
         val s = petSizePx
         val sp = speed()
         val walking = sp > 12f && !dragging
+        val idleBreath = if (!walking && !sleeping && !dragging) PetMotion.idleBreath(idlePhase, s) else 0f
         val bob = when {
             walking -> abs(sin(legPhase * 3.2f)) * s * (if (thrown) 0.05f else 0.035f)
             sleeping -> sin(zzzPhase * 2f) * s * 0.012f
-            else -> 0f
+            else -> idleBreath
         }
         val lean = when {
             thrown -> (vx / 2200f).coerceIn(-0.18f, 0.18f) * 57.3f
             walking -> dir * 4.5f
-            else -> 0f
+            dragging || sleeping -> 0f
+            else -> sin(idlePhase * 0.7f) * 1.6f
         }
         val half = s / 2f
 
@@ -683,6 +715,7 @@ class PetView @JvmOverloads constructor(
 
             petBitmap != null -> {
                 canvas.drawBitmap(petBitmap!!, null, RectF(-half, -half, half, half), spritePaint)
+                blink.draw(canvas, half, accent, SystemClock.uptimeMillis())
             }
 
             else -> {
@@ -773,9 +806,9 @@ class PetView @JvmOverloads constructor(
         val oldAlpha = canvas.saveLayerAlpha(
             0f, 0f, width.toFloat(), height.toFloat(), (255 * bubbleAlpha).toInt()
         )
-        bubblePaint.color = Color.parseColor("#F5F2FC")
+        bubblePaint.color = Color.parseColor("#E3160F2B")
         canvas.drawRoundRect(rect, dp(18f), dp(18f), bubblePaint)
-        bubbleStroke.color = Color.argb(120, Color.red(accent), Color.green(accent), Color.blue(accent))
+        bubbleStroke.color = Color.argb(150, Color.red(accent), Color.green(accent), Color.blue(accent))
         canvas.drawRoundRect(rect, dp(18f), dp(18f), bubbleStroke)
 
         val inset = dp(16f)
@@ -904,4 +937,13 @@ class PetView @JvmOverloads constructor(
     }
 
     private fun dp(value: Float): Float = value * resources.displayMetrics.density
+
+    companion object {
+        /**
+         * Гравитационно ускорение (dp/s²) и таван на скоростта на падане — споделени с
+         * [MiniPetOverlay], за да пада физически еднакво навсякъде из приложението.
+         */
+        const val GRAVITY_DP_PER_S2 = 1400f
+        const val TERMINAL_VELOCITY_DP = 2200f
+    }
 }
