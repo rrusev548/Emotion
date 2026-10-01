@@ -31,6 +31,7 @@
     <string name="action_wake">🌞 Wake up</string>
     <string name="ai_free_model">🎁 Free model: %1$s</string>
     <string name="ai_base_required">Base URL is required for the Custom provider.</string>
+    <string name="ai_wolf_base_required">A WOLF server Base URL is required.</string>
     <string name="ai_no_key_url">This provider has no key link.</string>
     <string name="ai_test_prompt">Say \u201chello\u201d in one word.</string>
     <string name="default_pet_name">Mochi</string>
@@ -92,7 +93,7 @@
     <string name="ai_provider">Provider</string>
     <string name="ai_model">Model</string>
     <string name="ai_api_key">API key</string>
-    <string name="ai_base_url">Base URL (Custom)</string>
+    <string name="ai_base_url">Base URL (Custom/WOLF)</string>
     <string name="ai_personality">Personality</string>
     <string name="ai_personality_hint">Caring, playful and a little sarcastic.</string>
     <string name="ai_saved">Saved ✓</string>
@@ -101,7 +102,7 @@
     <string name="ai_test_ok">Connection works ✓</string>
     <string name="ai_test_fail">Error: %1$s</string>
     <string name="ai_clear_chat">🗑 Clear chat</string>
-    <string name="ai_key_note">The key is stored only on this device and used directly by the app — it never touches our servers.</string>
+    <string name="ai_key_note">The key is stored only on this device. With WOLF, it is sent only to the configured WOLF server.</string>
     <string name="ai_get_key">Get a key →</string>
     <string name="ai_no_key_title">No API key</string>
     <string name="ai_no_key_body">Add a key and we\'ll chat with a real AI. Until then I answer with my own tiny brain. 🙂</string>

@@ -58,6 +58,11 @@ class BrainLabActivity : AppCompatActivity() {
         // веднага пазим избора — ако потребителят излезе преди анимацията да свърши
         // (Back, onDestroy), Peta пак трябва реално да е с новия мозък, не само визуално.
         prefs.aiProvider = provider.id
+        if (provider.defaultModel.isNotBlank() &&
+            (prefs.aiModel.isBlank() || Presets.PROVIDERS.any { it.defaultModel == prefs.aiModel })
+        ) {
+            prefs.aiModel = provider.defaultModel
+        }
         adapter.updateSelected(provider.id)
 
         val overlay = binding.swapOverlay
@@ -112,6 +117,7 @@ class BrainLabActivity : AppCompatActivity() {
         "openrouter" -> "🧭"
         "gemini" -> "✦"
         "claude" -> "📚"
+        "wolf" -> "🐺"
         else -> "➕"
     }
 
@@ -121,6 +127,7 @@ class BrainLabActivity : AppCompatActivity() {
         "openrouter" -> "Отворен избор на модели"
         "gemini" -> "Проучване · Мултимодален"
         "claude" -> "Анализ · Писане"
+        "wolf" -> "Бизнес агент · Одобрения"
         else -> "Свържи свой API"
     }
 

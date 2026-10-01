@@ -161,6 +161,14 @@ object Presets {
             keyUrl = "https://console.anthropic.com/settings/keys"
         ),
         AiProvider(
+            id = "wolf",
+            label = "WOLF",
+            // OpenAI-compatible bridge; enter the deployed URL up to
+            // /api/mobile/v1 in the AI settings screen.
+            baseUrl = "",
+            defaultModel = "wolf"
+        ),
+        AiProvider(
             id = "custom",
             label = "Custom",
             baseUrl = "",
@@ -174,7 +182,7 @@ object Presets {
 
     fun effectiveBaseUrl(prefs: Prefs): String {
         val p = provider(prefs.aiProvider)
-        return if (prefs.aiProvider == "custom") prefs.aiBaseUrl else p.baseUrl
+        return if (prefs.aiProvider == "custom" || prefs.aiProvider == "wolf") prefs.aiBaseUrl else p.baseUrl
     }
 
     fun effectiveModel(prefs: Prefs): String {

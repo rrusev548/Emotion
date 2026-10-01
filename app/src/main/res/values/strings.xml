@@ -31,6 +31,7 @@
     <string name="action_wake">🌞 Събуди</string>
     <string name="ai_free_model">🎁 Безплатен модел: %1$s</string>
     <string name="ai_base_required">За Custom доставчик Base URL е задължителен.</string>
+    <string name="ai_wolf_base_required">За WOLF е нужен Base URL на сървъра.</string>
     <string name="ai_no_key_url">За този доставчик няма линк за ключ.</string>
     <string name="ai_test_prompt">Кажи „здравей“ с една дума.</string>
     <string name="default_pet_name">Моки</string>
@@ -140,7 +141,7 @@
     <string name="ai_provider">Доставчик</string>
     <string name="ai_model">Модел</string>
     <string name="ai_api_key">API ключ</string>
-    <string name="ai_base_url">Base URL (за Custom)</string>
+    <string name="ai_base_url">Base URL (за Custom/WOLF)</string>
     <string name="ai_personality">Характер</string>
     <string name="ai_personality_hint">Грижовен, закачлив и леко саркастичен.</string>
     <string name="ai_saved">Запазено ✓</string>
@@ -149,7 +150,7 @@
     <string name="ai_test_ok">Връзката работи ✓</string>
     <string name="ai_test_fail">Грешка: %1$s</string>
     <string name="ai_clear_chat">🗑 Изчисти чата</string>
-    <string name="ai_key_note">Ключът се пази само на това устройство и се използва директно от приложението — не минава през наш сървър.</string>
+    <string name="ai_key_note">Ключът се пази само на това устройство. При WOLF се изпраща само към конфигурирания WOLF сървър.</string>
     <string name="ai_get_key">Вземи ключ →</string>
     <string name="ai_no_key_title">Няма API ключ</string>
     <string name="ai_no_key_body">Добави ключ, за да говорим с истински ИИ. Дотогава отговарям сам, с моя малък мозък. 🙂</string>

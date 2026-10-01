@@ -27,6 +27,12 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          # `tools` was removed from Google's SDK repository; the action's
+          # historical default now fails before Gradle can start. The hosted
+          # runner already provides the platform/build-tools used by this
+          # project, while platform-tools is all this workflow needs to add.
+          packages: 'platform-tools'
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
