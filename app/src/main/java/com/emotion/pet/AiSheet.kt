@@ -16,7 +16,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 /**
  * Настройки на ИИ: доставчик, модел, ключ. Ключът се пази локално
- * в SharedPreferences и се използва директно от приложението.
+ * в SharedPreferences и се използва директно от приложението или към
+ * конфигурирания WOLF bridge.
  */
 class AiSheet : BottomSheetDialogFragment() {
 
@@ -129,7 +130,7 @@ class AiSheet : BottomSheetDialogFragment() {
     private fun updateProviderUi(petName: String) {
         val provider = Presets.provider(providerId)
         binding.baseUrlGroup.visibility =
-            if (providerId == "custom") View.VISIBLE else View.GONE
+            if (providerId == "custom" || providerId == "wolf") View.VISIBLE else View.GONE
         binding.modelInput.hint = provider.defaultModel.ifBlank { "напр. llama3.1" }
         binding.freeModelBtn.visibility =
             if (provider.freeModel != null) View.VISIBLE else View.GONE
@@ -149,8 +150,8 @@ class AiSheet : BottomSheetDialogFragment() {
     private fun save(prefs: Prefs): Boolean {
         val provider = Presets.provider(providerId)
         val base = binding.baseUrlInput.text.toString().trim()
-        if (providerId == "custom" && base.isBlank()) {
-            toast(getString(R.string.ai_base_required))
+        if ((providerId == "custom" || providerId == "wolf") && base.isBlank()) {
+            toast(getString(if (providerId == "wolf") R.string.ai_wolf_base_required else R.string.ai_base_required))
             return false
         }
         prefs.aiProvider = providerId

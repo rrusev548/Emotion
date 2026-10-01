@@ -148,3 +148,14 @@ app/src/main/java/com/emotion/pet/
 - [ ] Синхронизация на образа с любима снимка чрез AI стилизация
 
 Кажи какво искаш и го добавяме. 🐾
+
+## WOLF agent bridge
+
+Emotion can use the WOLF agent from [`rrusev548/wolf`](https://github.com/rrusev548/wolf) as one of its Brain Lab providers.
+
+1. On the WOLF server, set the runtime secret `WOLF_MOBILE_CHAT_TOKEN` (for example `openssl rand -hex 32`) and deploy/restart the API.
+2. In Emotion, open **Menu → AI settings**, choose **WOLF**, and enter the WOLF API base URL up to `/api/mobile/v1`, for example `https://wolf.example.com/api/mobile/v1`.
+3. Enter the same bearer token in the **API key** field, keep the model as `wolf`, press **Save**, then **Test connection**.
+4. Chat messages are sent to WOLF's guarded `/api/mobile/v1/chat/completions` bridge. The WOLF brain run is saved on the server for audit; payments and other high-risk actions remain approval-gated.
+
+The token is stored locally with the other AI credentials and is never committed to the repository. Use HTTPS for any deployed WOLF URL; plain HTTP is appropriate only for local development on a trusted network.
